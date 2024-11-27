@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class P_Character_Move : MonoBehaviour
+public class P_Jump_ : MonoBehaviour
 {
-    [Header("=== Movement Settings ===")]
-    [SerializeField] float speed;
-
+    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-
+    // Update is called once per frame
     void Update()
     {
         
