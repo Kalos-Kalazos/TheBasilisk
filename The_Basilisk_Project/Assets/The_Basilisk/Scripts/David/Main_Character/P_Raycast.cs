@@ -4,46 +4,44 @@ using UnityEngine;
 
 public class P_Raycast : MonoBehaviour
 {
-    [Header("Raycast Settings")]
-    [SerializeField] private GameObject raycastOrigin;  // El GameObject desde donde se lanzará el raycast
-    [SerializeField] private Camera cameraToFollow;    // Cámara que determina la dirección del raycast
-    [SerializeField] private float raycastDistance = 100f;  // Distancia máxima del raycast
+    [SerializeField] private GameObject raycastOrigin;
+    [SerializeField] private Camera cameraToFollow;
+    [SerializeField] private float raycastDistance = 100f;
 
-    [Header("Raycast Debug")]
-    [SerializeField] private Color rayColor = Color.red; // Color del rayo para depuración
+    [SerializeField] private Color rayColor = Color.red;
 
-    void Update()
+    private Vector3 raycastDirection;
+
+    private void FixedUpdate()
     {
-        FireRaycast();
+        PerformRaycast();
     }
 
-    void FireRaycast()
+    void PerformRaycast()
     {
-        // Asegúrate de que raycastOrigin y cameraToFollow estén asignados
         if (raycastOrigin != null && cameraToFollow != null)
         {
-            // Obtenemos la dirección hacia la que la cámara está mirando
-            Vector3 rayDirection = cameraToFollow.transform.forward;
+            raycastDirection = cameraToFollow.transform.forward;
 
-            // Disparamos el raycast desde el GameObject asignado (raycastOrigin)
-            Ray ray = new Ray(raycastOrigin.transform.position, rayDirection);
+            Ray ray = new Ray(raycastOrigin.transform.position, raycastDirection);
+            Debug.Log("Raycast fired from: " + raycastOrigin.transform.position + " in direction: " + raycastDirection);
 
-            // Hacemos el raycast y vemos si colisiona con algo
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, raycastDistance))
             {
-                // Si el raycast colisiona con algo, podemos hacer algo con el objeto golpeado
                 Debug.Log("Raycast hit: " + hit.collider.name);
-
-                // Aquí podrías agregar lógicas adicionales (como aplicar efectos, activar algo, etc.)
             }
 
-            // Para depuración, dibujamos el rayo en la escena
-            Debug.DrawRay(raycastOrigin.transform.position, rayDirection * raycastDistance, rayColor);
+            Debug.DrawRay(raycastOrigin.transform.position, raycastDirection * raycastDistance, rayColor);
         }
         else
         {
             Debug.LogError("Raycast origin or camera is not assigned.");
         }
+    }
+
+    public Vector3 GetRaycastDirection()
+    {
+        return raycastDirection;
     }
 }

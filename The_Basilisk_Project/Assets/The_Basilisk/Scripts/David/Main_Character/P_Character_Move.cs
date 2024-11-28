@@ -4,70 +4,55 @@ using UnityEngine.InputSystem;
 
 public class P_Character_Move : MonoBehaviour
 {
-    InputsPlayer PlayerInputs; // Referencia a la clase de entradas personalizadas.
-
-    [SerializeField] public float PlayerSpeed;
-    [SerializeField] public float MoveSpeed = 10f;
-    [SerializeField] public float SprintSpeed = 20f;
-    [SerializeField] private CharacterController MyCC;
-    [SerializeField] public Animator Camera_Animation;
-    [SerializeField] private bool iswalking;
-
+    private InputsPlayer playerInputs;
     private P_Raycast raycastScript;
+    private CharacterController myCC;
     private Vector3 inputVector;
     private Vector3 movementVector;
     private float myGravity = -10f;
+    private bool isWalking;
 
-    public Transform cameraTransform; // Referencia al transform de la cámara
+    [SerializeField] private float playerSpeed;
+    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float sprintSpeed = 20f;
+    [SerializeField] private Animator cameraAnimation;
+    [SerializeField] private Transform cameraTransform;
 
     private void Awake()
     {
-        // Instanciamos y asignamos las acciones de entrada
-        PlayerInputs = new InputsPlayer();
-
-        // Configuramos las entradas de movimiento
-        PlayerInputs.Player.Move.performed += ctx => MoveInput(ctx.ReadValue<Vector2>());
-        PlayerInputs.Player.Move.canceled += ctx => MoveInput(Vector2.zero);
-
-        // Configuramos la acción de sprint
-        PlayerInputs.Player.Sprint.started += ctx => Sprint(true);  // Empieza a esprintar
-        PlayerInputs.Player.Sprint.canceled += ctx => Sprint(false);  // Deja de esprintar
+        playerInputs = new InputsPlayer();
+        playerInputs.Player.Move.performed += ctx => MoveInput(ctx.ReadValue<Vector2>());
+        playerInputs.Player.Move.canceled += ctx => MoveInput(Vector2.zero);
+        playerInputs.Player.Sprint.started += ctx => Sprint(true);
+        playerInputs.Player.Sprint.canceled += ctx => Sprint(false);
     }
 
     private void OnEnable()
     {
-        // Habilitamos las entradas
-        PlayerInputs.Enable();
+        playerInputs.Enable();
     }
 
     private void OnDisable()
     {
-        // Deshabilitamos las entradas
-        PlayerInputs.Disable();
+        playerInputs.Disable();
     }
 
-    void Start()
+    private void Start()
     {
-        // Conseguimos el CharacterController
-        MyCC = GetComponent<CharacterController>();
-
-        // Conseguimos el transform de la cámara, suponiendo que está en el mismo objeto o está asignado
-        cameraTransform = Camera.main.transform;  // Usamos Camera.main para obtener la cámara principal
+        myCC = GetComponent<CharacterController>();
+        raycastScript = FindObjectOfType<P_Raycast>();
+        cameraTransform = Camera.main.transform;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        // Mover al jugador y actualizar la animación
         MovePlayer();
-        CheckForHead();
-
-        // Actualiza la animación de caminar
-        Camera_Animation.SetBool("isWalking", iswalking);
+        CheckForWalking();
+        cameraAnimation.SetBool("isWalking", isWalking);
     }
 
-    void MoveInput(Vector2 input)
+    private void MoveInput(Vector2 input)
     {
-        // Si la entrada es cero, no hacemos nada
         if (input == Vector2.zero)
         {
             inputVector = Vector3.zero;
@@ -75,57 +60,28 @@ public class P_Character_Move : MonoBehaviour
             return;
         }
 
-        // Obtener la dirección de la cámara (sin la componente Y, ya que es para la altura)
-        Vector3 cameraForward = cameraTransform.forward;
-        Vector3 cameraRight = cameraTransform.right;
+        Vector3 raycastDirection = raycastScript.GetRaycastDirection();
+        raycastDirection.y = 0f;
+        raycastDirection.Normalize();
 
-        // Queremos asegurarnos de que el movimiento no tiene componente Y (vertical) 
-        cameraForward.y = 0f; // Evitar que el personaje se mueva verticalmente
-        cameraRight.y = 0f;
-
-        // Normalizamos las direcciones para evitar velocidad extra al moverse diagonalmente
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        // Crear el vector de movimiento en función de las teclas de entrada (W, A, S, D) y la cámara
-        inputVector = cameraForward * input.y + cameraRight * input.x;
-
-        // Normalizamos el vector de movimiento para mantener velocidad constante
+        inputVector = raycastDirection * input.y + cameraTransform.right * input.x;
         inputVector.Normalize();
 
-        // Aplica la velocidad de movimiento y la gravedad
-        movementVector = (inputVector * PlayerSpeed) + (Vector3.up * myGravity);
+        movementVector = (inputVector * playerSpeed) + (Vector3.up * myGravity);
     }
 
-    void MovePlayer()
+    private void MovePlayer()
     {
-        // Mueve al jugador usando CharacterController
-        MyCC.Move(movementVector * Time.deltaTime);
+        myCC.Move(movementVector * Time.deltaTime);
     }
 
-    void CheckForHead()
+    private void CheckForWalking()
     {
-        // Si la velocidad es mayor que un umbral, el jugador está caminando
-        if (MyCC.velocity.magnitude > 0.1f)
-        {
-            iswalking = true;
-        }
-        else
-        {
-            iswalking = false;
-        }
+        isWalking = myCC.velocity.magnitude > 0.1f;
     }
 
-    void Sprint(bool isSprinting)
+    private void Sprint(bool isSprinting)
     {
-        // Si el jugador está sprintando, cambia la velocidad
-        if (isSprinting)
-        {
-            PlayerSpeed = SprintSpeed;
-        }
-        else
-        {
-            PlayerSpeed = MoveSpeed;
-        }
+        playerSpeed = isSprinting ? sprintSpeed : moveSpeed;
     }
 }

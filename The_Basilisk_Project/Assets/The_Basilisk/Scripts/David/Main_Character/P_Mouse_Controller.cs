@@ -16,12 +16,11 @@ public class P_Mouse_Controller : MonoBehaviour
     [SerializeField] private float currentLookingPosX;
     [SerializeField] private float currentLookingPosY;
 
-    [SerializeField] private float minVerticalAngle = -60f;  // Ángulo mínimo para la rotación en Y
-    [SerializeField] private float maxVerticalAngle = 60f;   // Ángulo máximo para la rotación en Y
+    [SerializeField] private float minVerticalAngle = -60f;
+    [SerializeField] private float maxVerticalAngle = 60f;
 
     void Start()
     {
-        // Bloquea el cursor en el centro de la pantalla
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -33,14 +32,12 @@ public class P_Mouse_Controller : MonoBehaviour
         MovePlayer();
     }
 
-    // Obtiene la entrada del ratón
     void GetInput()
     {
         xMousePos = Input.GetAxisRaw("Mouse X");
         yMousePos = Input.GetAxisRaw("Mouse Y");
     }
 
-    // Modifica la entrada para aplicar la sensibilidad y el suavizado
     void ModifyInput()
     {
         xMousePos *= sensitivity * smoothing;
@@ -50,17 +47,14 @@ public class P_Mouse_Controller : MonoBehaviour
         smoothedMousePosY = Mathf.Lerp(smoothedMousePosY, yMousePos, 1f / smoothing);
     }
 
-    // Mueve la cámara
     void MovePlayer()
     {
-        // Rotación horizontal (alrededor del eje Y)
         currentLookingPosX += smoothedMousePosX;
         transform.localRotation = Quaternion.AngleAxis(currentLookingPosX, Vector3.up);
 
-        // Rotación vertical (alrededor del eje X)
-        currentLookingPosY -= smoothedMousePosY; // Invertir el movimiento del eje Y para que sea hacia arriba cuando mueves el ratón hacia arriba
-        currentLookingPosY = Mathf.Clamp(currentLookingPosY, minVerticalAngle, maxVerticalAngle); // Limita el ángulo de rotación vertical
+        currentLookingPosY -= smoothedMousePosY;
+        currentLookingPosY = Mathf.Clamp(currentLookingPosY, minVerticalAngle, maxVerticalAngle);
 
-        Camera.main.transform.localRotation = Quaternion.Euler(currentLookingPosY, 0f, 0f); // Aplica la rotación vertical a la cámara
+        Camera.main.transform.localRotation = Quaternion.Euler(currentLookingPosY, 0f, 0f);
     }
 }
