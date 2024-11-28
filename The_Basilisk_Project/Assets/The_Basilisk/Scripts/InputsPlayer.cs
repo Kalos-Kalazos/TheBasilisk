@@ -28,6 +28,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             ""id"": ""b64fdddc-9864-4959-9bda-40267f1da159"",
             ""actions"": [
                 {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""824c7398-bc97-4204-9844-d538be29877c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""7e7dfd76-6986-4fac-acd7-c264c3d7250d"",
@@ -71,15 +80,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""43b47b81-f586-4461-87f6-c1dc7909a8a4"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -194,6 +194,17 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""b3ba0633-7a08-46aa-8655-e1caf6862381"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""2D Vector"",
                     ""id"": ""fd4ea4a6-02ec-4218-8659-ab4488fd4eab"",
                     ""path"": ""2DVector"",
@@ -247,17 +258,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""caa14f9b-000d-4e24-9282-d15b78c552af"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -843,12 +843,12 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_ShootSingle = m_Player.FindAction("ShootSingle", throwIfNotFound: true);
         m_Player_FlameThrow = m_Player.FindAction("FlameThrow", throwIfNotFound: true);
         m_Player_Recharge = m_Player.FindAction("Recharge", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -922,22 +922,22 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
+    private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_ShootSingle;
     private readonly InputAction m_Player_FlameThrow;
     private readonly InputAction m_Player_Recharge;
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Jump;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
         public PlayerActions(@InputsPlayer wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @ShootSingle => m_Wrapper.m_Player_ShootSingle;
         public InputAction @FlameThrow => m_Wrapper.m_Player_FlameThrow;
         public InputAction @Recharge => m_Wrapper.m_Player_Recharge;
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -947,6 +947,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
@@ -962,13 +965,13 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
@@ -984,9 +987,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1169,12 +1169,12 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
+        void OnSprint(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnShootSingle(InputAction.CallbackContext context);
         void OnFlameThrow(InputAction.CallbackContext context);
         void OnRecharge(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
