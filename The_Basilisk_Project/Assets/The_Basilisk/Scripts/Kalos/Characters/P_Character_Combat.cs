@@ -13,15 +13,17 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] int currentAmmoSingle;
     [SerializeField] int ammoSingle;
     [SerializeField] int maxAmmoSingle;
+    [SerializeField] float fireRate;
+    [SerializeField] float shootingRange;
     [SerializeField] int ammoFlame;
     [SerializeField] int maxAmmoFlame;
     [SerializeField] float fireCooldown;
-    [SerializeField] float fireRate;
     [SerializeField] float flameRate;
     [SerializeField] float flameRange;
     [SerializeField] int damage;
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject flameThrowTrigger;
+    [SerializeField] float impulsitoBala;
 
     void Start()
     {
@@ -53,14 +55,29 @@ public class P_Character_Combat : MonoBehaviour
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
         {
             damage = 10;
-            GameObject bullet = P_ObjectPooling.SharedInstance.GetPooledBullet();
-            if (bullet != null)
+
+            Ray ray = new Ray(shootingPoint.position, shootingPoint.forward);
+            RaycastHit hit;
+
+            if(Physics.Raycast(ray, out hit, shootingRange))
             {
-                bullet.transform.position = shootingPoint.transform.position;
-                bullet.transform.rotation = shootingPoint.transform.rotation;
-                bullet.GetComponent<P_Bullets>().damageBullet = damage;
-                bullet.SetActive(true);
+                Debug.DrawRay(ray.origin, ray.direction * shootingRange, Color.red, fireRate);
+
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    //hit.GetComponent<P_Enemy>().TakeDamage(damage);
+                    if (hit.rigidbody != null)
+                    {
+                        Vector3 forceDirection = hit.point - shootingPoint.position;
+                        forceDirection.Normalize();
+                        hit.rigidbody.AddForce(forceDirection * impulsitoBala, ForceMode.Impulse);
+                    }
+                    //VFX Sangre
+                }
+                //else VFX Bujero de bala
+
             }
+
             currentAmmoSingle--;
             fireCooldown = fireRate;
         }
