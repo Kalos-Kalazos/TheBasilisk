@@ -313,7 +313,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: fa3e1d2f200e9ed40904c2404e589bd8,
         type: 3}
       propertyPath: m_TagString
-      value: Climb
+      value: Climbable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -334,20 +334,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6143565867813330661}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &298665415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298665399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fa7a6d2b131d9f4a966dd1df5f41ba8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGrounded: 0
-  canClimb: 0
 --- !u!65 &298665416
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1222,6 +1208,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionId
+      value: aa209517-028f-4eb5-9825-f214a2e7fa3d
+      objectReference: {fileID: 0}
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_ActionId
+      value: 43b47b81-f586-4461-87f6-c1dc7909a8a4
+      objectReference: {fileID: 0}
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionName
+      value: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[15].m_ActionName
+      value: Player/Jump[/Keyboard/space]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1215329587843759934, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      propertyPath: verticalSpeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1215329587843759934, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
       propertyPath: cameraAnimation
@@ -1322,14 +1333,12 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7428346679854089805, guid: 28f8d6b89a536b740baf6054e70e28c7, type: 3}
+    - {fileID: 7173699226426310960, guid: 28f8d6b89a536b740baf6054e70e28c7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7880558382190280187, guid: 28f8d6b89a536b740baf6054e70e28c7,
-        type: 3}
-      insertIndex: 7
-      addedObject: {fileID: 298665415}
     - targetCorrespondingSourceObject: {fileID: 7880558382190280187, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
       insertIndex: -1
