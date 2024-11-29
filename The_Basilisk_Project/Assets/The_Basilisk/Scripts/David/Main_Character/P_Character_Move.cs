@@ -15,20 +15,22 @@ public class P_Character_Move : MonoBehaviour
 
     [SerializeField] public float playerSpeed = 10f;
     [SerializeField] public Transform cameraTransform;
-
+    
     [SerializeField] public float groundCheckDistance = 0.1f;
     [SerializeField] public float climbSpeed = 3f;
     [SerializeField] public bool isClimbing = false;
+    [SerializeField] public float jumpHeight = 2f;
 
     private Vector2 moveInput;
-
-    public bool isGrounded;
+    private bool isGrounded;
+    private bool isJumping = false;
 
     private void Awake()
     {
         playerInputs = new InputsPlayer();
         playerInputs.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerInputs.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        playerInputs.Player.Jump.performed += ctx => Jump();
     }
 
     private void OnEnable()
@@ -49,16 +51,17 @@ public class P_Character_Move : MonoBehaviour
 
     private void Update()
     {
-        if (!isClimbing)
+        isGrounded = myCC.isGrounded;
+
+        if (isClimbing)
         {
-            isGrounded = myCC.isGrounded;
-            MovePlayer();
-            ApplyGravity();
-            CheckForWalking();
+            ClimbPlayer();
         }
         else
         {
-            ClimbPlayer();
+            MovePlayer();
+            ApplyGravity();
+            CheckForWalking();
         }
     }
 
@@ -95,18 +98,28 @@ public class P_Character_Move : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (isGrounded)
+        if (isGrounded && !isClimbing)
         {
             verticalSpeed = -1f;
         }
-        else
+        else if (!isGrounded && !isClimbing)
         {
             verticalSpeed += gravity * Time.deltaTime;
         }
+    }
 
-        if (verticalSpeed < -50f)
+    private void Jump()
+    {
+        if (isGrounded && !isClimbing)
         {
-            verticalSpeed = -50f;
+            jumpHeight = 100f;
+            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+        else if (isClimbing)
+        {
+            jumpHeight = 2f;
+            isClimbing = false;
+            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
@@ -124,14 +137,25 @@ public class P_Character_Move : MonoBehaviour
         if (other.CompareTag("Climbable"))
         {
             isClimbing = false;
+            verticalSpeed = 0f;
         }
     }
 
     private void ClimbPlayer()
     {
         float climbDirection = moveInput.y;
-        movementVector = Vector3.up * climbDirection * climbSpeed;
-        movementVector.y = 0;
-        myCC.Move(movementVector * Time.deltaTime);
+
+        if (climbDirection != 0)
+        {
+            movementVector = Vector3.up * climbDirection * climbSpeed;
+            movementVector.x = 0f;
+            movementVector.z = 0f;
+            myCC.Move(movementVector * Time.deltaTime);
+        }
+        else
+        {
+            movementVector = Vector3.zero;
+            myCC.Move(movementVector * Time.deltaTime);
+        }
     }
 }
