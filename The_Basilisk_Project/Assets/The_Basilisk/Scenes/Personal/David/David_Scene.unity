@@ -355,6 +355,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &298665425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298665399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6dba2dd14b952044a121d557446b782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playermovement: {fileID: 0}
+  characterController: {fileID: 0}
+  normalHeight: 4
+  crouchHeight: 0.5
+  crouchSpeed: 2
+  isCrouching: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1210,6 +1228,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_ActionId
       value: aa209517-028f-4eb5-9825-f214a2e7fa3d
       objectReference: {fileID: 0}
@@ -1220,6 +1243,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_ActionId
+      value: 173bdd2b-9e08-4964-adb0-b1a247b86194
+      objectReference: {fileID: 0}
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_ActionName
       value: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
       objectReference: {fileID: 0}
@@ -1227,6 +1255,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[15].m_ActionName
       value: Player/Jump[/Keyboard/space]
+      objectReference: {fileID: 0}
+    - target: {fileID: 920271655030826043, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_ActionName
+      value: Player/Crouch[/Keyboard/c]
       objectReference: {fileID: 0}
     - target: {fileID: 1215329587843759934, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
@@ -1330,6 +1363,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9010248583507701961, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
+      propertyPath: m_Height
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9010248583507701961, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -1339,6 +1377,10 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7880558382190280187, guid: 28f8d6b89a536b740baf6054e70e28c7,
+        type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 298665425}
     - targetCorrespondingSourceObject: {fileID: 7880558382190280187, guid: 28f8d6b89a536b740baf6054e70e28c7,
         type: 3}
       insertIndex: -1
