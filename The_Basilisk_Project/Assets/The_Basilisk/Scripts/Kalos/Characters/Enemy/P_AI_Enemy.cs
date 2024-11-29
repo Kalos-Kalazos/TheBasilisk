@@ -60,19 +60,19 @@ public class P_AI_Enemy : MonoBehaviour
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        if (/*angleToTarget < maxDetectionAngle && */distanceToPlayer <= detectionRange)
+        if (distanceToPlayer <= detectionRange)
         {
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
             float angleToTarget = Vector3.Angle(transform.forward, directionToPlayer);
 
-            if (angleToTarget < maxDetectionAngle / 2)
+            if (angleToTarget <= maxDetectionAngle)
             {
                 if (HasVision(player))
                 {
                     isChasing = true;
                 }
             }
-            isChasing = true;
+            else isChasing = false;
         }
     }
 
