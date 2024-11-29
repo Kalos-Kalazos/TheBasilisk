@@ -34,7 +34,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6552900218581402831}
   - {fileID: 1970755230836125688}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -126,15 +125,17 @@ MonoBehaviour:
   currentAmmoSingle: 30
   ammoSingle: 100
   maxAmmoSingle: 100
+  fireRate: 0.2
+  shootingRange: 0
   ammoFlame: 100
   maxAmmoFlame: 100
   fireCooldown: 0
-  fireRate: 0.2
   flameRate: 0.05
   flameRange: 2
   damage: 1
   shootingPoint: {fileID: 7928982380051524225}
   flameThrowTrigger: {fileID: 9191040870636045853}
+  impulsitoBala: 0
 --- !u!114 &7549597334198869588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,13 +291,13 @@ Transform:
   m_GameObject: {fileID: 2434190259106783776}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 0.120000064, z: 1.08}
+  m_LocalPosition: {x: 0.48, y: -0.61, z: 0.74}
   m_LocalScale: {x: 0.34653, y: 0.3962416, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7928982380051524225}
   - {fileID: 8392082367141482514}
-  m_Father: {fileID: 5367913234803210868}
+  m_Father: {fileID: 1970755230836125688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3395458015895254898
 MeshFilter:
@@ -538,7 +539,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.7300001, z: 0.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6552900218581402831}
   m_Father: {fileID: 5367913234803210868}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8963197517487956047
