@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,8 +20,18 @@ public class P_Mouse_Controller : MonoBehaviour
     [SerializeField] private float minVerticalAngle = -60f;
     [SerializeField] private float maxVerticalAngle = 60f;
 
+    [Header("References")]
+    [SerializeField] CinemachineVirtualCamera virtualCamera;
+
+    private Transform cameraTransform;
+
     void Start()
     {
+        if (virtualCamera != null)
+        {
+            cameraTransform = virtualCamera.transform;
+        }
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -55,6 +66,6 @@ public class P_Mouse_Controller : MonoBehaviour
         currentLookingPosY -= smoothedMousePosY;
         currentLookingPosY = Mathf.Clamp(currentLookingPosY, minVerticalAngle, maxVerticalAngle);
 
-        Camera.main.transform.localRotation = Quaternion.Euler(currentLookingPosY, 0f, 0f);
+        cameraTransform.localRotation = Quaternion.Euler(currentLookingPosY, 0f, 0f);
     }
 }
