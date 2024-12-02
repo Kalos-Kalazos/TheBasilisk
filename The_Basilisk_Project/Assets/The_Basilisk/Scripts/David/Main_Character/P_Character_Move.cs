@@ -15,7 +15,7 @@ public class P_Character_Move : MonoBehaviour
 
     [SerializeField] public float playerSpeed = 10f;
     [SerializeField] public Transform cameraTransform;
-    
+
     [SerializeField] public float groundCheckDistance = 0.1f;
     [SerializeField] public float climbSpeed = 3f;
     [SerializeField] public bool isClimbing = false;
@@ -24,6 +24,9 @@ public class P_Character_Move : MonoBehaviour
     private Vector2 moveInput;
     private bool isGrounded;
     private bool isJumping = false;
+
+    // Limitar la velocidad de caída (opcional)
+    [SerializeField] private float maxFallSpeed = -20f;
 
     private void Awake()
     {
@@ -87,7 +90,7 @@ public class P_Character_Move : MonoBehaviour
             movementVector = inputVector * playerSpeed;
         }
 
-        movementVector.y = verticalSpeed;
+        movementVector.y = verticalSpeed; // Aplicamos la velocidad vertical (gravedad o salto)
         myCC.Move(movementVector * Time.deltaTime);
     }
 
@@ -98,28 +101,40 @@ public class P_Character_Move : MonoBehaviour
 
     private void ApplyGravity()
     {
+        // Si estamos en el suelo, mantenemos la velocidad vertical baja para no hundirnos en el suelo
         if (isGrounded && !isClimbing)
         {
-            verticalSpeed = -1f;
+            if (verticalSpeed < 0)
+            {
+                verticalSpeed = -1f; // Una pequeña velocidad negativa para mantener al personaje en el suelo
+            }
         }
         else if (!isGrounded && !isClimbing)
         {
+            // Si estamos en el aire, aplicamos la gravedad
             verticalSpeed += gravity * Time.deltaTime;
+
+            // Limitar la velocidad de caída
+            if (verticalSpeed < maxFallSpeed)
+            {
+                verticalSpeed = maxFallSpeed;
+            }
         }
     }
 
     private void Jump()
     {
+        // Si estamos en el suelo y no estamos escalando, realizamos el salto
         if (isGrounded && !isClimbing)
         {
-            jumpHeight = 100f;
-            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity); // Calculamos la velocidad vertical para el salto
         }
-        else if (isClimbing)
+
+        // Si estamos escalando y presionamos el botón de salto, dejamos de escalar y saltamos
+        if (isClimbing && Input.GetButtonDown("Jump"))
         {
-            jumpHeight = 2f;
             isClimbing = false;
-            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity); // Calculamos la velocidad del salto
         }
     }
 
@@ -128,7 +143,7 @@ public class P_Character_Move : MonoBehaviour
         if (other.CompareTag("Climbable"))
         {
             isClimbing = true;
-            verticalSpeed = 0f;
+            verticalSpeed = 0f; // Si tocamos una superficie escalable, detenemos el movimiento vertical
         }
     }
 
@@ -137,7 +152,7 @@ public class P_Character_Move : MonoBehaviour
         if (other.CompareTag("Climbable"))
         {
             isClimbing = false;
-            verticalSpeed = 0f;
+            verticalSpeed = 0f; // Si dejamos de escalar, detenemos el movimiento vertical
         }
     }
 
