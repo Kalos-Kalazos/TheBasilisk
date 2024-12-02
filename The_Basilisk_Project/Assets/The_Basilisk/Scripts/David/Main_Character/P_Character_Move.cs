@@ -15,7 +15,6 @@ public class P_Character_Move : MonoBehaviour
 
     [SerializeField] public float playerSpeed = 10f;
     [SerializeField] public Transform cameraTransform;
-    
     [SerializeField] public float groundCheckDistance = 0.1f;
     [SerializeField] public float climbSpeed = 3f;
     [SerializeField] public bool isClimbing = false;
@@ -24,6 +23,8 @@ public class P_Character_Move : MonoBehaviour
     private Vector2 moveInput;
     private bool isGrounded;
     private bool isJumping = false;
+
+    [SerializeField] private float maxFallSpeed = -20f;
 
     private void Awake()
     {
@@ -100,11 +101,19 @@ public class P_Character_Move : MonoBehaviour
     {
         if (isGrounded && !isClimbing)
         {
-            verticalSpeed = -1f;
+            if (verticalSpeed < 0)
+            {
+                verticalSpeed = -1f;
+            }
         }
         else if (!isGrounded && !isClimbing)
         {
             verticalSpeed += gravity * Time.deltaTime;
+
+            if (verticalSpeed < maxFallSpeed)
+            {
+                verticalSpeed = maxFallSpeed;
+            }
         }
     }
 
@@ -112,12 +121,11 @@ public class P_Character_Move : MonoBehaviour
     {
         if (isGrounded && !isClimbing)
         {
-            jumpHeight = 100f;
             verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        else if (isClimbing)
+
+        if (isClimbing && Input.GetButtonDown("Jump"))
         {
-            jumpHeight = 2f;
             isClimbing = false;
             verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
