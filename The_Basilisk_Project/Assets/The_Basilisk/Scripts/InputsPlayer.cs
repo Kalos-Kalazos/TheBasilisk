@@ -89,6 +89,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HookGrapple"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac2ad5e5-7be7-43c4-a3a3-68aa702d54ea"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -276,6 +285,17 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a9a5b49-abbb-4e33-9a9e-01386d4cc923"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HookGrapple"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -870,6 +890,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_HookGrapple = m_Player.FindAction("HookGrapple", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -950,6 +971,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_HookGrapple;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
@@ -961,6 +983,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @HookGrapple => m_Wrapper.m_Player_HookGrapple;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -991,6 +1014,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Crouch.started += instance.OnCrouch;
             @Crouch.performed += instance.OnCrouch;
             @Crouch.canceled += instance.OnCrouch;
+            @HookGrapple.started += instance.OnHookGrapple;
+            @HookGrapple.performed += instance.OnHookGrapple;
+            @HookGrapple.canceled += instance.OnHookGrapple;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1016,6 +1042,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Crouch.started -= instance.OnCrouch;
             @Crouch.performed -= instance.OnCrouch;
             @Crouch.canceled -= instance.OnCrouch;
+            @HookGrapple.started -= instance.OnHookGrapple;
+            @HookGrapple.performed -= instance.OnHookGrapple;
+            @HookGrapple.canceled -= instance.OnHookGrapple;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1205,6 +1234,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnHookGrapple(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
