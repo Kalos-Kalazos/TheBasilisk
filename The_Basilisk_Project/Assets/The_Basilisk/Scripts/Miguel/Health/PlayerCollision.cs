@@ -7,7 +7,7 @@ public class PlayerCollision : MonoBehaviour
 
     public BatterySystem batterySystem; // Referencia al sistema de bateria
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {

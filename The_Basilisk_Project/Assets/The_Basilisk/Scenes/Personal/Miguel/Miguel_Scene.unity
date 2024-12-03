@@ -1206,11 +1206,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batteryPiles:
-  - {fileID: 764764763}
-  - {fileID: 1328530309}
-  - {fileID: 1684862304}
-  - {fileID: 401816203}
   - {fileID: 292685190}
+  - {fileID: 401816203}
+  - {fileID: 1684862304}
+  - {fileID: 1328530309}
+  - {fileID: 764764763}
   totalPiles: 5
 --- !u!1 &1263998821
 GameObject:
@@ -1301,6 +1301,7 @@ GameObject:
   - component: {fileID: 1276602831}
   - component: {fileID: 1276602830}
   - component: {fileID: 1276602834}
+  - component: {fileID: 1276602835}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -1323,7 +1324,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1410,6 +1411,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batterySystem: {fileID: 1215897100}
+--- !u!54 &1276602835
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276602829}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1328530307
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,7 +1821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1861,6 +1889,7 @@ GameObject:
   - component: {fileID: 2087571248}
   - component: {fileID: 2087571247}
   - component: {fileID: 2087571246}
+  - component: {fileID: 2087571250}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -1883,7 +1912,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1957,6 +1986,33 @@ Transform:
   - {fileID: 678329993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!54 &2087571250
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087571245}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
