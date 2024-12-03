@@ -26,7 +26,7 @@ public class P_Character_Move : MonoBehaviour
 
     private Vector2 moveInput;
     private bool isGrounded;
-    private bool canJump = true; // Control global del salto
+    private bool canJump = true; 
 
     [SerializeField] private float maxFallSpeed = -20f;
 
