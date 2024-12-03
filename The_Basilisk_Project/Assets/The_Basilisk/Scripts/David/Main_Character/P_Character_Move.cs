@@ -46,7 +46,6 @@ public class P_Character_Move : MonoBehaviour
     private void Start()
     {
         myCC = GetComponent<CharacterController>();
-        cameraTransform = Camera.main.transform;
     }
 
     private void Update()
