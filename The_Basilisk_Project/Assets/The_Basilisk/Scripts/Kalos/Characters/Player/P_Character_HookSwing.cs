@@ -23,9 +23,9 @@ public class P_Character_HookSwing : MonoBehaviour
     [SerializeField] float extendSpeed;
 
     [Header("=== Prediction ===")]
-    [SerializeField] RaycastHit predictionHit;
+    public RaycastHit predictionHit;
     [SerializeField] float predictionRadius;
-    [SerializeField] Transform predictionPoint;
+    public Transform predictionPoint;
 
     SpringJoint joint;
 
@@ -34,6 +34,8 @@ public class P_Character_HookSwing : MonoBehaviour
     //Grapple bools
     public bool activeGrapple, swinging, shortenCable;
     [SerializeField] InputAction shortenCableInput;
+
+    private bool shouldEnableController = true;
 
     void Start()
     {
@@ -53,6 +55,11 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void Update()
     {
+        if (!shouldEnableController)
+        {
+            controller.enabled = false;
+        }
+
         if (swinging)
         {
             pm.playerSpeed = pm.swingSpeed;
@@ -66,8 +73,6 @@ public class P_Character_HookSwing : MonoBehaviour
             AirMovement();
 
         ChecForSwingPoints();
-
-        pGrapple.grapplePoint = predictionHit.point;
     }
 
     private void LateUpdate()
@@ -127,13 +132,16 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void AirMovement()
     {
-        //right
-        if (pm.moveInput.x >= 0) rb.AddForce(orientation.right * horizontalForce * Time.deltaTime);
-        //left
-        if (pm.moveInput.x < 0) rb.AddForce(-orientation.right * horizontalForce * Time.deltaTime);
+        if (swinging)
+        {
+            //right
+            if (pm.moveInput.x > 0) rb.AddForce(orientation.right * horizontalForce * Time.deltaTime);
+            //left
+            if (pm.moveInput.x < 0) rb.AddForce(-orientation.right * horizontalForce * Time.deltaTime);
 
-        //forward
-        if (pm.moveInput.x >= 0) rb.AddForce(orientation.forward * forwardForce * Time.deltaTime);
+            //forward
+            if (pm.moveInput.x > 0) rb.AddForce(orientation.forward * forwardForce * Time.deltaTime);
+        }
 
         //shorten cable
         if (shortenCable)
@@ -199,6 +207,20 @@ public class P_Character_HookSwing : MonoBehaviour
         if (joint != null)
         {
             Destroy(joint);
+        }
+
+        shouldEnableController = false;
+        StartCoroutine(ReenableCharacterController());
+    }
+    private IEnumerator ReenableCharacterController()
+    {
+        yield return new WaitForSeconds(1f);
+        shouldEnableController = true;
+
+        if(!pGrapple.activeGrapple && !swinging)
+        {
+            controller.enabled = true;
+            rb.isKinematic = true;
         }
     }
 

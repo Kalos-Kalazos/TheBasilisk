@@ -14,6 +14,7 @@ public class P_Character_HookGrappling : MonoBehaviour
     [SerializeField] Transform gunTip;
     [SerializeField] LayerMask isGrappleable;
     [SerializeField] LineRenderer lr;
+    P_Character_HookSwing pSwing;
 
     [Header("=== Grappling Settings ===")]
     [SerializeField] float maxGrappleDistance;
@@ -38,6 +39,8 @@ public class P_Character_HookGrappling : MonoBehaviour
         controller = GetComponent<CharacterController>();
 
         orientation = GetComponent<Transform>();
+
+        pSwing = GetComponent<P_Character_HookSwing>();
     }
 
     private void Update()
@@ -85,11 +88,13 @@ public class P_Character_HookGrappling : MonoBehaviour
         {
             grapplePoint = hit.point;
             Invoke(nameof(ExecuteGrapple), grappleDelay);
+            pSwing.predictionPoint.gameObject.SetActive(false);
         }
         else
         {
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelay);
+            pSwing.predictionPoint.gameObject.SetActive(false);
         }
 
         lr.enabled = true;
