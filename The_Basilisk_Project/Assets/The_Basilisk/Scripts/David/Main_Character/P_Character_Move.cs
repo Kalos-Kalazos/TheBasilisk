@@ -82,6 +82,8 @@ public class P_Character_Move : MonoBehaviour
 
     private void MovePlayer()
     {
+        if(!myCC.enabled) return;
+
         if (moveInput == Vector2.zero && pGrapple.activeGrapple && pSwing.swinging)
         {
             movementVector = Vector3.zero;
@@ -133,7 +135,7 @@ public class P_Character_Move : MonoBehaviour
 
     private void Jump()
     {
-        if (pGrapple.activeGrapple) return;
+        if (pGrapple.activeGrapple || pSwing.swinging) return;
 
         if (isGrounded && !isClimbing)
         if (isGrounded && !isClimbing && canJump)
@@ -182,6 +184,8 @@ public class P_Character_Move : MonoBehaviour
 
     private void ClimbPlayer()
     {
+        if (!myCC.enabled) return;
+
         float climbDirection = moveInput.y;
 
         if (climbDirection != 0)
