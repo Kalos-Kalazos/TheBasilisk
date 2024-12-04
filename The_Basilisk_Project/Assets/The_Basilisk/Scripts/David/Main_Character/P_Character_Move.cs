@@ -8,23 +8,26 @@ public class P_Character_Move : MonoBehaviour
     public CharacterController myCC;
     public Vector3 inputVector;
     public Vector3 movementVector;
+    P_Character_HookGrappling pGrapple;
+    P_Character_HookSwing pSwing;
 
     public float gravity = -9.81f;
     public float verticalSpeed = 0f;
     public bool isWalking;
 
     [SerializeField] public float playerSpeed = 10f;
+    [SerializeField] public float swingSpeed;
     [SerializeField] public Transform cameraTransform;
     [SerializeField] public float groundCheckDistance = 0.1f;
     [SerializeField] public float climbSpeed = 3f;
     [SerializeField] public bool isClimbing = false;
     [SerializeField] public float jumpHeight = 2f;
 
-    private Vector2 moveInput;
+    public Vector2 moveInput;
     private bool isGrounded;
     private bool isJumping = false;
 
-    [SerializeField] private float maxFallSpeed = -20f;
+    private float maxFallSpeed = -20f;
 
     private void Awake()
     {
@@ -48,6 +51,8 @@ public class P_Character_Move : MonoBehaviour
     {
         myCC = GetComponent<CharacterController>();
         cameraTransform = Camera.main.transform;
+        pGrapple = GetComponent<P_Character_HookGrappling>();
+        pSwing = GetComponent<P_Character_HookSwing>();
     }
 
     private void Update()
@@ -68,7 +73,7 @@ public class P_Character_Move : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (moveInput == Vector2.zero)
+        if (moveInput == Vector2.zero && pGrapple.activeGrapple && pSwing.swinging)
         {
             movementVector = Vector3.zero;
         }
@@ -119,6 +124,8 @@ public class P_Character_Move : MonoBehaviour
 
     private void Jump()
     {
+        if (pGrapple.activeGrapple) return;
+
         if (isGrounded && !isClimbing)
         {
             verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
