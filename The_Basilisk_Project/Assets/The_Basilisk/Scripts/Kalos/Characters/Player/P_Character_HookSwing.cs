@@ -250,6 +250,8 @@ public class P_Character_HookSwing : MonoBehaviour
     private P_Character_Move pm;
     private P_Character_HookGrappling pGrapple;
     private CharacterController controller;
+    Rigidbody rb;
+
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform cam;
     [SerializeField] private Transform gunTip;
@@ -274,8 +276,6 @@ public class P_Character_HookSwing : MonoBehaviour
     public bool swinging;
     public bool shortenCable;
 
-    [SerializeField] private InputAction shortenCableInput;
-
     private bool shouldEnableController = true;
 
     void Start()
@@ -283,14 +283,14 @@ public class P_Character_HookSwing : MonoBehaviour
         pm = GetComponent<P_Character_Move>();
         controller = GetComponent<CharacterController>();
         pGrapple = GetComponent<P_Character_HookGrappling>();
+        rb = GetComponent<Rigidbody>();
 
         if (!cam || !gunTip || !predictionPoint || !lr)
         {
             Debug.LogError("error");
         }
 
-        shortenCableInput.performed += ctx => shortenCable = true;
-        shortenCableInput.canceled += ctx => shortenCable = false;
+        lr.enabled = false;
     }
 
     void Update()
@@ -306,15 +306,17 @@ public class P_Character_HookSwing : MonoBehaviour
         }
         else
         {
-            pm.swingSpeed = pm.playerSpeed;
+            pm.playerSpeed = 10;
         }
 
         if (joint != null)
         {
-            AirMovement();
+            //AirMovement();
         }
 
         CheckForSwingPoints();
+
+        pGrapple.grapplePoint = predictionHit.point;
     }
 
     private void LateUpdate()
@@ -331,6 +333,18 @@ public class P_Character_HookSwing : MonoBehaviour
         else if (context.canceled)
         {
             StopSwing();
+        }
+    }
+
+    public void ShortenCable(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            shortenCable = true;
+        }
+        else if (context.canceled)
+        {
+            shortenCable = false;
         }
     }
 
@@ -372,17 +386,13 @@ public class P_Character_HookSwing : MonoBehaviour
     {
         if (swinging)
         {
-            Vector3 moveDirection = Vector3.zero;
-
             if (pm.moveInput.x > 0)
-                moveDirection += orientation.right * horizontalForce * Time.deltaTime;
+                rb.AddForce(orientation.right, ForceMode.Impulse);
             if (pm.moveInput.x < 0)
-                moveDirection -= orientation.right * horizontalForce * Time.deltaTime;
+                rb.AddForce(-orientation.right, ForceMode.Impulse);
 
             if (pm.moveInput.y > 0)
-                moveDirection += orientation.forward * forwardForce * Time.deltaTime;
-
-            controller.Move(moveDirection);
+                rb.AddForce(orientation.up, ForceMode.Impulse);
         }
 
         if (shortenCable)
@@ -400,6 +410,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         swinging = true;
         controller.enabled = false;
+        rb.isKinematic = false;
 
         swingPoint = predictionHit.point;
         predictionPoint.gameObject.SetActive(false);
@@ -412,10 +423,11 @@ public class P_Character_HookSwing : MonoBehaviour
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
 
-        joint.spring = 4.5f;
-        joint.damper = 7f;
-        joint.massScale = 4.5f;
+        joint.spring = 5f;
+        joint.damper = 8f;
+        joint.massScale = 5f;
 
+        lr.enabled = true;
         lr.positionCount = 2;
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);
@@ -429,6 +441,7 @@ public class P_Character_HookSwing : MonoBehaviour
     void StopSwing()
     {
         swinging = false;
+        lr.enabled = false;
 
         if (joint != null)
         {
@@ -441,17 +454,16 @@ public class P_Character_HookSwing : MonoBehaviour
 
     private IEnumerator ReenableCharacterController()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
 
         shouldEnableController = true;
         controller.enabled = true;
+        rb.isKinematic = true;
     }
 
-    void DrawRope()
+    public void DrawRope()
     {
-        if (!joint) return;
-
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, swingPoint, Time.deltaTime * 8f);
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, swingPoint, Time.deltaTime * 5f);
 
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);

@@ -114,6 +114,8 @@ public class P_Character_Move : MonoBehaviour
 
     private void ApplyGravity()
     {
+        if (!myCC.enabled) return;
+
         if (!isGrounded)
         {
             yVelocity += gravity * Time.deltaTime;
@@ -133,6 +135,8 @@ public class P_Character_Move : MonoBehaviour
 
     private void ToggleCrouch()
     {
+        if (!myCC.enabled) return;
+
         if (isGrounded)
         {
             isCrouched = !isCrouched;

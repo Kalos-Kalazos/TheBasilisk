@@ -310,7 +310,6 @@ GameObject:
   - component: {fileID: 8376570211923619842}
   - component: {fileID: 6366025735205406215}
   - component: {fileID: 8008483644990774842}
-  - component: {fileID: 8847278923752891425}
   m_Layer: 0
   m_Name: Player_Full
   m_TagString: Player
@@ -420,30 +419,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb107a5062e01bc47ab381f41fd0ac3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  orientation: {fileID: 8641827973010234334}
   cam: {fileID: 5401737867104136323}
   gunTip: {fileID: 4508128706927574435}
   isGrappleable:
     serializedVersion: 2
     m_Bits: 8
-  lr: {fileID: 8847278923752891425}
-  maxSwingDistance: 30
+  lr: {fileID: 674221998566214132}
+  maxSwingDistance: 40
   horizontalForce: 2000
   forwardForce: 3000
-  extendSpeed: 5
+  extendSpeed: 50
   predictionRadius: 3
   predictionPoint: {fileID: 2038908584707217064}
   activeGrapple: 0
   swinging: 0
   shortenCable: 0
-  shortenCableInput:
-    m_Name: Shorten Cable Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: f78f20ed-c924-41b0-9188-5fea7217c7e1
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!114 &3786220294138258427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,11 +452,10 @@ MonoBehaviour:
   isGrappleable:
     serializedVersion: 2
     m_Bits: 8
-  lr: {fileID: 674221998566214132}
-  maxGrappleDistance: 30
+  maxGrappleDistance: 40
   grappleDelay: 0.25
   grapplingCD: 1
-  overshootYAxis: 1
+  overshootYAxis: 0.5
   grapplePoint: {x: 0, y: 0, z: 0}
   activeGrapple: 0
 --- !u!114 &4084664674138524202
@@ -530,23 +520,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCC: {fileID: 0}
-  inputVector: {x: 0, y: 0, z: 0}
+  inputVector: {x: 0, y: 0}
   movementVector: {x: 0, y: 0, z: 0}
   gravity: -9.81
-  verticalSpeed: 0
+  yVelocity: 0
   isWalking: 0
   isCrouched: 0
   playerSpeed: 10
-  swingSpeed: 0
   crouchSpeed: 2
+  swingSpeed: 10
   cameraTransform: {fileID: 0}
-  groundCheckDistance: 0.1
-  climbSpeed: 3
-  isClimbing: 0
   jumpHeight: 2
   characterHeightStandUp: 2
   characterHeightCrouched: 1
-  moveInput: {x: 0, y: 0}
+  groundCheckDistance: 0.1
 --- !u!114 &8376570211923619842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,6 +696,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 96f38faa-54df-4430-9d16-7ff8118cbd9a
     m_ActionName: Player/HookSwing[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7299139288417386312}
+        m_TargetAssemblyTypeName: P_Character_HookSwing, Assembly-CSharp
+        m_MethodName: ShortenCable
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ccfe3cf0-e05a-4671-9096-b31793c47861
+    m_ActionName: Player/ShortenCable[/Keyboard/s]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -767,110 +770,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!120 &8847278923752891425
-LineRenderer:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2327349257849007338}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 0
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
-  m_Parameters:
-    serializedVersion: 3
-    widthMultiplier: 0.1
-    widthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    colorGradient:
-      serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
-      key4: {r: 0, g: 0, b: 0, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
-      key6: {r: 0, g: 0, b: 0, a: 0}
-      key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 0
-      ctime1: 65535
-      ctime2: 0
-      ctime3: 0
-      ctime4: 0
-      ctime5: 0
-      ctime6: 0
-      ctime7: 0
-      atime0: 0
-      atime1: 65535
-      atime2: 0
-      atime3: 0
-      atime4: 0
-      atime5: 0
-      atime6: 0
-      atime7: 0
-      m_Mode: 0
-      m_ColorSpace: -1
-      m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
-    numCornerVertices: 0
-    numCapVertices: 0
-    alignment: 0
-    textureMode: 0
-    textureScale: {x: 1, y: 1}
-    shadowBias: 0.5
-    generateLightingData: 0
-  m_MaskInteraction: 0
-  m_UseWorldSpace: 1
-  m_Loop: 0
-  m_ApplyActiveColorSpace: 1
 --- !u!1 &3819001230921023500
 GameObject:
   m_ObjectHideFlags: 0
