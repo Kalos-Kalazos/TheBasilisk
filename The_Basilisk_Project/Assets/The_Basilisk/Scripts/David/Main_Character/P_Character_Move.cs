@@ -6,38 +6,35 @@ public class P_Character_Move : MonoBehaviour
 {
     public InputsPlayer playerInputs;
     public CharacterController myCC;
-    public Vector3 inputVector;
+    public Vector2 inputVector; 
     public Vector3 movementVector;
-    P_Character_HookGrappling pGrapple;
-    P_Character_HookSwing pSwing;
+    private P_Character_HookGrappling pGrapple;
+    private P_Character_HookSwing pSwing;
 
     public float gravity = -9.81f;
-    public float verticalSpeed = 0f;
+    public float yVelocity = 0f;
     public bool isWalking;
     public bool isCrouched;
 
     [SerializeField] public float playerSpeed = 10f;
-    [SerializeField] public float swingSpeed;
     [SerializeField] public float crouchSpeed = 2f;
+    [SerializeField] public float swingSpeed;
     [SerializeField] public Transform cameraTransform;
-    [SerializeField] public float groundCheckDistance = 0.1f;
-    [SerializeField] public float climbSpeed = 3f;
-    [SerializeField] public bool isClimbing = false;
     [SerializeField] public float jumpHeight = 2f;
     [SerializeField] public float characterHeightStandUp = 2.0f;
     [SerializeField] public float characterHeightCrouched = 1.0f;
+    [SerializeField] public float groundCheckDistance = 0.1f;
 
-    public Vector2 moveInput;
     private bool isGrounded;
-    private bool canJump = true; 
+    private bool canJump = true;
 
-    private float maxFallSpeed = -20f;
+    public Vector2 moveInput { get { return inputVector; } }
 
     private void Awake()
     {
         playerInputs = new InputsPlayer();
-        playerInputs.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        playerInputs.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        playerInputs.Player.Move.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
+        playerInputs.Player.Move.canceled += ctx => inputVector = Vector2.zero;
         playerInputs.Player.Jump.performed += ctx => Jump();
         playerInputs.Player.Crouch.performed += ctx => ToggleCrouch();
     }
@@ -55,54 +52,58 @@ public class P_Character_Move : MonoBehaviour
     private void Start()
     {
         myCC = GetComponent<CharacterController>();
-        cameraTransform = Camera.main.transform;
         pGrapple = GetComponent<P_Character_HookGrappling>();
         pSwing = GetComponent<P_Character_HookSwing>();
-        if (!myCC) Debug.LogError("CharacterController no encontrado en el objeto.");
 
         cameraTransform = Camera.main?.transform;
+        if (!myCC) Debug.LogError("CharacterController no encontrado en el objeto.");
         if (!cameraTransform) Debug.LogError("Cámara principal no encontrada.");
     }
 
     private void Update()
     {
-        isGrounded = myCC.isGrounded;
+        CheckGrounded();
 
-        if (isClimbing)
+        
+        if (pGrapple != null && pGrapple.activeGrapple ||
+            pSwing != null && pSwing.swinging)
         {
-            ClimbPlayer();
+           
+            return;
         }
-        else
+
+        MovePlayer();
+        ApplyGravity();
+        CheckForWalking();
+    }
+
+    private void CheckGrounded()
+    {
+        isGrounded = myCC.isGrounded || Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + myCC.skinWidth);
+        if (isGrounded && yVelocity < 0)
         {
-            MovePlayer();
-            ApplyGravity();
-            CheckForWalking();
+            yVelocity = -1f; 
         }
     }
 
     private void MovePlayer()
     {
-        if (moveInput == Vector2.zero && pGrapple.activeGrapple && pSwing.swinging)
-        {
-            movementVector = Vector3.zero;
-        }
-        else
-        {
-            Vector3 forwardDirection = cameraTransform.forward;
-            forwardDirection.y = 0f;
-            forwardDirection.Normalize();
+        if (!myCC.enabled) return;
 
-            Vector3 rightDirection = cameraTransform.right;
-            rightDirection.y = 0f;
-            rightDirection.Normalize();
+        Vector3 forward = cameraTransform.forward;
+        forward.y = 0;
+        forward.Normalize();
 
-            inputVector = forwardDirection * moveInput.y + rightDirection * moveInput.x;
-            inputVector.Normalize();
+        Vector3 right = cameraTransform.right;
+        right.y = 0;
+        right.Normalize();
 
-            movementVector = inputVector * playerSpeed;
-        }
+        Vector3 movementDirection = forward * inputVector.y + right * inputVector.x;
+        movementDirection.Normalize();
 
-        movementVector.y = verticalSpeed;
+        movementVector = movementDirection * (isCrouched ? crouchSpeed : playerSpeed);
+        movementVector.y = yVelocity;
+
         myCC.Move(movementVector * Time.deltaTime);
     }
 
@@ -113,52 +114,35 @@ public class P_Character_Move : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (isGrounded && !isClimbing)
-        {
-            if (verticalSpeed < 0)
-            {
-                verticalSpeed = -1f;
-            }
-        }
-        else if (!isGrounded && !isClimbing)
-        {
-            verticalSpeed += gravity * Time.deltaTime;
+        if (!myCC.enabled) return;
 
-            if (verticalSpeed < maxFallSpeed)
-            {
-                verticalSpeed = maxFallSpeed;
-            }
+        if (!isGrounded)
+        {
+            yVelocity += gravity * Time.deltaTime;
         }
     }
 
     private void Jump()
     {
-        if (pGrapple.activeGrapple) return;
+        if (pGrapple != null && pGrapple.activeGrapple ||
+            pSwing != null && pSwing.swinging) return;
 
-        if (isGrounded && !isClimbing)
-        if (isGrounded && !isClimbing && canJump)
+        if (isGrounded && !isCrouched && canJump)
         {
-            verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            yVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
     private void ToggleCrouch()
     {
+        if (!myCC.enabled) return;
+
         if (isGrounded)
         {
             isCrouched = !isCrouched;
             canJump = !isCrouched;
 
-            if (isCrouched)
-            {
-                playerSpeed = crouchSpeed;
-                myCC.height = characterHeightCrouched;
-            }
-            else
-            {
-                playerSpeed = 10f;
-                myCC.height = characterHeightStandUp;
-            }
+            myCC.height = isCrouched ? characterHeightCrouched : characterHeightStandUp;
         }
     }
 
@@ -166,8 +150,8 @@ public class P_Character_Move : MonoBehaviour
     {
         if (other.CompareTag("Climbable"))
         {
-            isClimbing = true;
-            verticalSpeed = 0f;
+            isGrounded = true;
+            yVelocity = 0f;
         }
     }
 
@@ -175,24 +159,7 @@ public class P_Character_Move : MonoBehaviour
     {
         if (other.CompareTag("Climbable"))
         {
-            isClimbing = false;
-            verticalSpeed = -1f;
-        }
-    }
-
-    private void ClimbPlayer()
-    {
-        float climbDirection = moveInput.y;
-
-        if (climbDirection != 0)
-        {
-            movementVector = Vector3.up * climbDirection * climbSpeed;
-            myCC.Move(movementVector * Time.deltaTime);
-        }
-        else
-        {
-            movementVector = Vector3.zero;
-            myCC.Move(movementVector * Time.deltaTime);
+            isGrounded = false;
         }
     }
 }
