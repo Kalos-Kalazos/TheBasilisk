@@ -107,6 +107,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShortenCable"",
+                    ""type"": ""Button"",
+                    ""id"": ""ccfe3cf0-e05a-4671-9096-b31793c47861"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -310,12 +319,67 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a87a5765-877f-44dd-855a-40f0b224fa2b"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HookGrapple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bcff26cd-1ae8-4323-b2bb-fda015205b9d"",
+                    ""path"": ""<Keyboard>/rightShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HookGrapple"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""c5fd4a8a-4933-44b2-ab16-eaa6c8bd8f8f"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HookSwing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8218c86a-1997-4f31-ada8-d839dad4c5ec"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HookSwing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""505a3fa2-184d-43f3-9f1a-b38c57bc332d"",
+                    ""path"": ""<Keyboard>/rightShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HookSwing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""95ccb9b3-e668-4a13-8def-34113d61fa14"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShortenCable"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -912,6 +976,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_HookGrapple = m_Player.FindAction("HookGrapple", throwIfNotFound: true);
         m_Player_HookSwing = m_Player.FindAction("HookSwing", throwIfNotFound: true);
+        m_Player_ShortenCable = m_Player.FindAction("ShortenCable", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -994,6 +1059,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_HookGrapple;
     private readonly InputAction m_Player_HookSwing;
+    private readonly InputAction m_Player_ShortenCable;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
@@ -1007,6 +1073,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @HookGrapple => m_Wrapper.m_Player_HookGrapple;
         public InputAction @HookSwing => m_Wrapper.m_Player_HookSwing;
+        public InputAction @ShortenCable => m_Wrapper.m_Player_ShortenCable;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1043,6 +1110,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @HookSwing.started += instance.OnHookSwing;
             @HookSwing.performed += instance.OnHookSwing;
             @HookSwing.canceled += instance.OnHookSwing;
+            @ShortenCable.started += instance.OnShortenCable;
+            @ShortenCable.performed += instance.OnShortenCable;
+            @ShortenCable.canceled += instance.OnShortenCable;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1074,6 +1144,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @HookSwing.started -= instance.OnHookSwing;
             @HookSwing.performed -= instance.OnHookSwing;
             @HookSwing.canceled -= instance.OnHookSwing;
+            @ShortenCable.started -= instance.OnShortenCable;
+            @ShortenCable.performed -= instance.OnShortenCable;
+            @ShortenCable.canceled -= instance.OnShortenCable;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1265,6 +1338,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnHookGrapple(InputAction.CallbackContext context);
         void OnHookSwing(InputAction.CallbackContext context);
+        void OnShortenCable(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
