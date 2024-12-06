@@ -311,7 +311,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         if (joint != null)
         {
-            //AirMovement();
+            AirMovement();
         }
 
         CheckForSwingPoints();
@@ -387,12 +387,14 @@ public class P_Character_HookSwing : MonoBehaviour
         if (swinging)
         {
             if (pm.moveInput.x > 0)
-                rb.AddForce(orientation.right, ForceMode.Impulse);
+                rb.AddForce(orientation.right * horizontalForce, ForceMode.Impulse);
             if (pm.moveInput.x < 0)
-                rb.AddForce(-orientation.right, ForceMode.Impulse);
+                rb.AddForce(-orientation.right * horizontalForce, ForceMode.Impulse);
 
             if (pm.moveInput.y > 0)
-                rb.AddForce(orientation.up, ForceMode.Impulse);
+                rb.AddForce(orientation.forward * forwardForce, ForceMode.Impulse);
+            if (pm.moveInput.y < 0)
+                rb.AddForce(-orientation.forward * forwardForce, ForceMode.Impulse);
         }
 
         if (shortenCable)
@@ -423,9 +425,9 @@ public class P_Character_HookSwing : MonoBehaviour
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
 
-        joint.spring = 5f;
-        joint.damper = 8f;
-        joint.massScale = 5f;
+        joint.spring = 10f;
+        joint.damper = 4f;
+        joint.massScale = 4f;
 
         lr.enabled = true;
         lr.positionCount = 2;
