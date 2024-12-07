@@ -303,7 +303,6 @@ GameObject:
   - component: {fileID: 9212272521909171394}
   - component: {fileID: 3495406851479108429}
   - component: {fileID: 7299139288417386312}
-  - component: {fileID: 3786220294138258427}
   - component: {fileID: 4084664674138524202}
   - component: {fileID: 6819125273741211098}
   - component: {fileID: 7058975770686918494}
@@ -429,35 +428,12 @@ MonoBehaviour:
   maxSwingDistance: 40
   horizontalForce: 0.5
   forwardForce: 0.5
-  extendSpeed: 5
+  extendSpeed: 10
   predictionRadius: 3
   predictionPoint: {fileID: 2038908584707217064}
   activeGrapple: 0
   swinging: 0
   shortenCable: 0
---- !u!114 &3786220294138258427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2327349257849007338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfa4cd6f317b5444802f0ab07699cda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 5401737867104136323}
-  gunTip: {fileID: 4508128706927574435}
-  isGrappleable:
-    serializedVersion: 2
-    m_Bits: 8
-  maxGrappleDistance: 40
-  grappleDelay: 0.25
-  grapplingCD: 1
-  overshootYAxis: 0.5
-  grapplePoint: {x: 0, y: 0, z: 0}
-  activeGrapple: 0
 --- !u!114 &4084664674138524202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,22 +640,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 173bdd2b-9e08-4964-adb0-b1a247b86194
     m_ActionName: Player/Crouch[/Keyboard/c]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3786220294138258427}
-        m_TargetAssemblyTypeName: P_Character_HookGrappling, Assembly-CSharp
-        m_MethodName: LaunchGrapple
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: ac2ad5e5-7be7-43c4-a3a3-68aa702d54ea
-    m_ActionName: Player/HookGrapple[/Mouse/middleButton]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7299139288417386312}

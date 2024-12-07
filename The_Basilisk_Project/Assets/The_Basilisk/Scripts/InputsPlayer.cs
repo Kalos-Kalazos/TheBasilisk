@@ -91,16 +91,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""HookGrapple"",
-                    ""type"": ""Button"",
-                    ""id"": ""ac2ad5e5-7be7-43c4-a3a3-68aa702d54ea"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""HookSwing"",
+                    ""name"": ""Hook"",
                     ""type"": ""Button"",
                     ""id"": ""96f38faa-54df-4430-9d16-7ff8118cbd9a"",
                     ""expectedControlType"": ""Button"",
@@ -112,6 +103,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""name"": ""ShortenCable"",
                     ""type"": ""Button"",
                     ""id"": ""ccfe3cf0-e05a-4671-9096-b31793c47861"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Retract"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ae4905c-653c-4747-9102-1fbf923ccec4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -308,45 +308,12 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6a9a5b49-abbb-4e33-9a9e-01386d4cc923"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""HookGrapple"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a87a5765-877f-44dd-855a-40f0b224fa2b"",
-                    ""path"": ""<Keyboard>/j"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""HookGrapple"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bcff26cd-1ae8-4323-b2bb-fda015205b9d"",
-                    ""path"": ""<Keyboard>/rightShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""HookGrapple"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""c5fd4a8a-4933-44b2-ab16-eaa6c8bd8f8f"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HookSwing"",
+                    ""action"": ""Hook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -357,7 +324,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HookSwing"",
+                    ""action"": ""Hook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -368,18 +335,29 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HookSwing"",
+                    ""action"": ""Hook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""95ccb9b3-e668-4a13-8def-34113d61fa14"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShortenCable"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9704e1d1-db96-449a-a851-0e3ccde0e36e"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Retract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -974,9 +952,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
-        m_Player_HookGrapple = m_Player.FindAction("HookGrapple", throwIfNotFound: true);
-        m_Player_HookSwing = m_Player.FindAction("HookSwing", throwIfNotFound: true);
+        m_Player_Hook = m_Player.FindAction("Hook", throwIfNotFound: true);
         m_Player_ShortenCable = m_Player.FindAction("ShortenCable", throwIfNotFound: true);
+        m_Player_Retract = m_Player.FindAction("Retract", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1057,9 +1035,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Crouch;
-    private readonly InputAction m_Player_HookGrapple;
-    private readonly InputAction m_Player_HookSwing;
+    private readonly InputAction m_Player_Hook;
     private readonly InputAction m_Player_ShortenCable;
+    private readonly InputAction m_Player_Retract;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
@@ -1071,9 +1049,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
-        public InputAction @HookGrapple => m_Wrapper.m_Player_HookGrapple;
-        public InputAction @HookSwing => m_Wrapper.m_Player_HookSwing;
+        public InputAction @Hook => m_Wrapper.m_Player_Hook;
         public InputAction @ShortenCable => m_Wrapper.m_Player_ShortenCable;
+        public InputAction @Retract => m_Wrapper.m_Player_Retract;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1104,15 +1082,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Crouch.started += instance.OnCrouch;
             @Crouch.performed += instance.OnCrouch;
             @Crouch.canceled += instance.OnCrouch;
-            @HookGrapple.started += instance.OnHookGrapple;
-            @HookGrapple.performed += instance.OnHookGrapple;
-            @HookGrapple.canceled += instance.OnHookGrapple;
-            @HookSwing.started += instance.OnHookSwing;
-            @HookSwing.performed += instance.OnHookSwing;
-            @HookSwing.canceled += instance.OnHookSwing;
+            @Hook.started += instance.OnHook;
+            @Hook.performed += instance.OnHook;
+            @Hook.canceled += instance.OnHook;
             @ShortenCable.started += instance.OnShortenCable;
             @ShortenCable.performed += instance.OnShortenCable;
             @ShortenCable.canceled += instance.OnShortenCable;
+            @Retract.started += instance.OnRetract;
+            @Retract.performed += instance.OnRetract;
+            @Retract.canceled += instance.OnRetract;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1138,15 +1116,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Crouch.started -= instance.OnCrouch;
             @Crouch.performed -= instance.OnCrouch;
             @Crouch.canceled -= instance.OnCrouch;
-            @HookGrapple.started -= instance.OnHookGrapple;
-            @HookGrapple.performed -= instance.OnHookGrapple;
-            @HookGrapple.canceled -= instance.OnHookGrapple;
-            @HookSwing.started -= instance.OnHookSwing;
-            @HookSwing.performed -= instance.OnHookSwing;
-            @HookSwing.canceled -= instance.OnHookSwing;
+            @Hook.started -= instance.OnHook;
+            @Hook.performed -= instance.OnHook;
+            @Hook.canceled -= instance.OnHook;
             @ShortenCable.started -= instance.OnShortenCable;
             @ShortenCable.performed -= instance.OnShortenCable;
             @ShortenCable.canceled -= instance.OnShortenCable;
+            @Retract.started -= instance.OnRetract;
+            @Retract.performed -= instance.OnRetract;
+            @Retract.canceled -= instance.OnRetract;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1336,9 +1314,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
-        void OnHookGrapple(InputAction.CallbackContext context);
-        void OnHookSwing(InputAction.CallbackContext context);
+        void OnHook(InputAction.CallbackContext context);
         void OnShortenCable(InputAction.CallbackContext context);
+        void OnRetract(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
