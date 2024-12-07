@@ -22,6 +22,8 @@ public class P_Character_HookSwing : MonoBehaviour
     [SerializeField] private float forwardForce = 10f;
     [SerializeField] private float shortenSpeed = 5f;
     [SerializeField] float overshootYAxis = 1f;
+    [SerializeField] float grapplingCD = 0.1f;
+    float grapplingCDTimer;
 
     [Header("=== Prediction ===")]
     public RaycastHit predictionHit;
@@ -57,6 +59,15 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void Update()
     {
+        #region --GrapplingCooldown
+        if (grapplingCDTimer > 0)
+        {
+            grapplingCDTimer -= Time.deltaTime;
+        }
+
+        if (grapplingCDTimer < 0) grapplingCDTimer = 0;
+        #endregion
+
         if (!shouldEnableController)
         {
             controller.enabled = false;
@@ -186,7 +197,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void StartSwing()
     {
-        if (predictionHit.point == Vector3.zero) return;
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0) return;
 
         ResetRestrictions();
 
@@ -206,9 +217,9 @@ public class P_Character_HookSwing : MonoBehaviour
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
 
-        joint.spring = 10f;
-        joint.damper = 4f;
-        joint.massScale = 4f;
+        joint.spring = 20f;
+        joint.damper = 2f;
+        joint.massScale = 6f;
         /*
         lr.enabled = true;
         lr.positionCount = 2;
@@ -258,6 +269,8 @@ public class P_Character_HookSwing : MonoBehaviour
         {
             Destroy(joint);
         }
+
+        grapplingCDTimer = grapplingCD;
     }
 
     private void OnCollisionEnter(Collision collision)

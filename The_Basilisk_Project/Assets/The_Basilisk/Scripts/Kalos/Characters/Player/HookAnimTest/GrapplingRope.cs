@@ -30,7 +30,7 @@ public class GrapplingRope : MonoBehaviour
         if (grapplingGun.activeGrapple)
             lr.enabled = true;
         else 
-            lr.enabled = false;
+           lr.enabled = false;
     }
 
     private void LateUpdate()
@@ -45,17 +45,16 @@ public class GrapplingRope : MonoBehaviour
         {
             currentGrapplePosition = grapplingGun.gunTip.position;
             spring.Reset();
-            if(lr.positionCount > 0)
+            if (lr.positionCount > 0)
                 lr.positionCount = 0;
             return;
         }
 
-        if(lr.positionCount == 0)
+        if (lr.positionCount == 0)
         {
             spring.SetVelocity(velocity);
             lr.positionCount = quality + 1;
         }
-
 
         spring.SetDamper(damper);
         spring.SetStrength(strength);
@@ -63,14 +62,20 @@ public class GrapplingRope : MonoBehaviour
 
         var grapplePoint = grapplingGun.swingPoint;
         var gunTipPosition = grapplingGun.gunTip.position;
-        var up = Quaternion.LookRotation((grapplePoint - gunTipPosition).normalized) * Vector3.up;
+        var direction = (grapplePoint - gunTipPosition).normalized;
+        var up = Quaternion.LookRotation(direction) * Vector3.up;
 
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 5f);
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 10f);
 
         for (int i = 0; i < quality + 1; i++)
         {
             var delta = i / (float)quality;
-            var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI * spring.Value * affectCurve.Evaluate(delta));
+
+            float dynamicWaveHeight = Mathf.Clamp(waveHeight, 0.1f, Mathf.Abs(Vector3.Distance(gunTipPosition, grapplePoint)) / 10f);
+            var offset = up * dynamicWaveHeight * Mathf.Sin(delta * waveCount * Mathf.PI * spring.Value * affectCurve.Evaluate(delta));
+
+            if (velocity > 10f)
+                offset += direction * Mathf.Sin(Time.time * velocity) * 0.1f;
 
             lr.SetPosition(i, Vector3.Lerp(gunTipPosition, currentGrapplePosition, delta) + offset);
         }
