@@ -63,10 +63,10 @@ public class P_Character_HookGrappling : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    /*private void LateUpdate()
     {
         pSwing.DrawRope();
-    }
+    }*/
 
     public void LaunchGrapple(InputAction.CallbackContext context)
     {
