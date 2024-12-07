@@ -13,7 +13,6 @@ public class P_Character_HookGrappling : MonoBehaviour
     [SerializeField] Transform cam;
     [SerializeField] Transform gunTip;
     [SerializeField] LayerMask isGrappleable;
-    [SerializeField] LineRenderer lr;
     P_Character_HookSwing pSwing;
 
     [Header("=== Grappling Settings ===")]
@@ -64,17 +63,17 @@ public class P_Character_HookGrappling : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    /*private void LateUpdate()
     {
-        if (grappling)
-            lr.SetPosition(0, gunTip.position);
-    }
+        pSwing.DrawRope();
+    }*/
 
     public void LaunchGrapple(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.performed)
             StartGrapple();
     }
+
     private void StartGrapple()
     {
         if (grapplingCDTimer > 0) return;
@@ -83,7 +82,7 @@ public class P_Character_HookGrappling : MonoBehaviour
 
         freeze = true;
 
-        RaycastHit hit;
+        /*RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, isGrappleable))
         {
             grapplePoint = hit.point;
@@ -95,11 +94,10 @@ public class P_Character_HookGrappling : MonoBehaviour
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelay);
             pSwing.predictionPoint.gameObject.SetActive(false);
-        }
-
-        lr.enabled = true;
-        lr.SetPosition(0, gunTip.position);
-        lr.SetPosition(1, grapplePoint);
+        }*/
+        grapplePoint = pSwing.predictionHit.point;
+        Invoke(nameof(ExecuteGrapple), grappleDelay);
+        pSwing.predictionPoint.gameObject.SetActive(false);
     }
 
     private void ExecuteGrapple()
@@ -116,6 +114,9 @@ public class P_Character_HookGrappling : MonoBehaviour
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
 
         JumpToPosition(grapplePoint, highestPointOnArc);
+
+        Invoke(nameof(StopGrapple), 1f);
+        Invoke(nameof(ResetRestrictions), 1f);
     }
 
     private void StopGrapple()
@@ -124,8 +125,6 @@ public class P_Character_HookGrappling : MonoBehaviour
         grappling = false;
 
         grapplingCDTimer = grapplingCD;
-
-        lr.enabled = false;
 
         controller.enabled = true;
 
@@ -140,7 +139,7 @@ public class P_Character_HookGrappling : MonoBehaviour
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
 
-        Invoke(nameof(ResetRestrictions), 3f);
+        Invoke(nameof(ResetRestrictions), 2f);
     }
 
     private Vector3 velocityToSet;
