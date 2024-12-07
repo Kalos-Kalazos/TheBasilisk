@@ -70,7 +70,7 @@ public class P_Character_HookGrappling : MonoBehaviour
 
     public void LaunchGrapple(InputAction.CallbackContext context)
     {
-        if (context.canceled)
+        if (context.performed)
             StartGrapple();
     }
 
@@ -95,19 +95,9 @@ public class P_Character_HookGrappling : MonoBehaviour
             Invoke(nameof(StopGrapple), grappleDelay);
             pSwing.predictionPoint.gameObject.SetActive(false);
         }*/
-
-        if (pSwing.predictionPoint.gameObject.activeInHierarchy)
-        {
-            grapplePoint = pSwing.predictionHit.point;
-            Invoke(nameof(ExecuteGrapple), grappleDelay);
-            pSwing.predictionPoint.gameObject.SetActive(false);
-        }
-        else
-        {
-            grapplePoint = cam.position + cam.forward * maxGrappleDistance;
-            Invoke(nameof(StopGrapple), grappleDelay);
-            pSwing.predictionPoint.gameObject.SetActive(false);
-        }
+        grapplePoint = pSwing.predictionHit.point;
+        Invoke(nameof(ExecuteGrapple), grappleDelay);
+        pSwing.predictionPoint.gameObject.SetActive(false);
     }
 
     private void ExecuteGrapple()

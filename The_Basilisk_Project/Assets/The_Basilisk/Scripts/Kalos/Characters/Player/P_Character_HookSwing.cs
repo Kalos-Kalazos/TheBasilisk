@@ -248,7 +248,6 @@ public class P_Character_HookSwing : MonoBehaviour
 {
     [Header("=== References ===")]
     private P_Character_Move pm;
-    private P_Character_HookGrappling pGrapple;
     private CharacterController controller;
     Rigidbody rb;
 
@@ -262,7 +261,7 @@ public class P_Character_HookSwing : MonoBehaviour
     [SerializeField] private float maxSwingDistance = 20f;
     [SerializeField] private float horizontalForce = 10f;
     [SerializeField] private float forwardForce = 10f;
-    [SerializeField] private float extendSpeed = 5f;
+    [SerializeField] private float shortenSpeed = 5f;
 
     [Header("=== Prediction ===")]
     public RaycastHit predictionHit;
@@ -282,7 +281,6 @@ public class P_Character_HookSwing : MonoBehaviour
     {
         pm = GetComponent<P_Character_Move>();
         controller = GetComponent<CharacterController>();
-        pGrapple = GetComponent<P_Character_HookGrappling>();
         rb = GetComponent<Rigidbody>();
 
         if (!cam || !gunTip || !predictionPoint || !lr)
@@ -309,14 +307,12 @@ public class P_Character_HookSwing : MonoBehaviour
             pm.playerSpeed = 10;
         }
 
-        if (joint != null)
+        if (swinging)
         {
             AirMovement();
         }
 
         CheckForSwingPoints();
-
-        pGrapple.grapplePoint = predictionHit.point;
     }
 
     private void LateUpdate()
@@ -333,6 +329,14 @@ public class P_Character_HookSwing : MonoBehaviour
         else if (context.canceled)
         {
             StopSwing();
+        }
+    }
+
+    public void Retract(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            JumpToPosition();
         }
     }
 
@@ -377,11 +381,12 @@ public class P_Character_HookSwing : MonoBehaviour
         else
         {
             predictionPoint.gameObject.SetActive(false);
+            predictionPoint.position = cam.position + cam.forward * maxSwingDistance;
         }
 
         predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
-
+    
     void AirMovement()
     {
         if (swinging)
@@ -400,7 +405,7 @@ public class P_Character_HookSwing : MonoBehaviour
         if (shortenCable)
         {
             float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
-            joint.maxDistance = Mathf.Max(joint.maxDistance - extendSpeed * Time.deltaTime, distanceFromPoint * 0.5f);
+            joint.maxDistance = Mathf.Max(joint.maxDistance - shortenSpeed * Time.deltaTime, distanceFromPoint * 0.5f);
         }
     }
 
@@ -434,29 +439,65 @@ public class P_Character_HookSwing : MonoBehaviour
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);
     }
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        activeGrapple = true;
+
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        Invoke(nameof(ResetRestrictions), 2f);
+    }
+
+    private Vector3 velocityToSet;
+    private void SetVelocity()
+    {
+        rb.velocity = velocityToSet;
+    }
+
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ * (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
+        + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
+    }
 
     public void ResetRestrictions()
     {
         swinging = false;
+
+        shouldEnableController = false;
     }
 
     void StopSwing()
     {
-        swinging = false;
         lr.enabled = false;
 
         if (joint != null)
         {
             Destroy(joint);
         }
+    }
 
-        shouldEnableController = false;
-        StartCoroutine(ReenableCharacterController());
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (swinging)
+        {
+            ResetRestrictions();
+
+            StartCoroutine(ReenableCharacterController());
+        }
     }
 
     private IEnumerator ReenableCharacterController()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
 
         shouldEnableController = true;
         controller.enabled = true;
