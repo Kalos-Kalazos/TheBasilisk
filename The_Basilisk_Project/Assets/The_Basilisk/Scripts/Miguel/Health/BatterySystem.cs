@@ -11,12 +11,25 @@ public class BatterySystem : MonoBehaviour
 
     private int currentPiles; //Numero actual de pilas disponibles
 
+    public int batteryCount = 0; //Contador de pilas
+
+    //public Text batteryText; //UI Text para mostrar el numero de pilas
+
     // Start is called before the first frame update
     void Start()
     {
 
         currentPiles = totalPiles; //Inicializamos con todas las pilas
-        UpdateBatteryUI();
+        UpdateBatteryUI(); //actualizar la interfaz del inicio
+
+
+    }
+
+    public void AddBattery()
+    {
+
+        batteryCount++;
+        UpdateBatteryUI();// actualiza la UI cuando recoge una pila
 
 
     }
@@ -41,6 +54,9 @@ public class BatterySystem : MonoBehaviour
 
 
         }
+
+        //batteryText.text = "PickUp_Medikit:" + batteryCount.ToString();
+
 
     }
 
