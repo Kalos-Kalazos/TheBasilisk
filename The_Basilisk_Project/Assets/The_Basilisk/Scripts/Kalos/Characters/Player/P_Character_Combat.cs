@@ -65,7 +65,8 @@ public class P_Character_Combat : MonoBehaviour
 
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    //hit.GetComponent<P_Enemy>().TakeDamage(damage);
+                    hit.collider.GetComponent<P_AI_Enemy>().TakeDamage(damage);
+                    //!cuidao con nav mesh!
                     if (hit.rigidbody != null)
                     {
                         Vector3 forceDirection = hit.point - shootingPoint.position;
@@ -127,7 +128,7 @@ public class P_Character_Combat : MonoBehaviour
         {
             if (hit.CompareTag("Enemy"))
             {
-                //hit.GetComponent<P_Enemy>().TakeDamage(damage);
+                hit.GetComponent<P_AI_Enemy>().TakeDamage(damage);
             }
         }
 

@@ -47,6 +47,11 @@ public class P_AI_Enemy : MonoBehaviour
             Patrol();
             DetectPlayer();
         }
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Patrol()
@@ -128,6 +133,11 @@ public class P_AI_Enemy : MonoBehaviour
                 enemy.OnAlert();
             }
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (damage > 0) health--;
     }
 
     void OnAlert()

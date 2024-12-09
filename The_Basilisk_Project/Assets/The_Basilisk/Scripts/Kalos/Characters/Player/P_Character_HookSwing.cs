@@ -275,7 +275,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (swinging)
+        if (swinging && collision.collider.CompareTag("Ground"))
         {
             ResetRestrictions();
 
