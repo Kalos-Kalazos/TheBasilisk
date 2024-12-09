@@ -28,7 +28,7 @@ public class BatterySystem : MonoBehaviour
     public void AddBattery()
     {
 
-        batteryCount++;
+        currentPiles++;
         UpdateBatteryUI();// actualiza la UI cuando recoge una pila
 
 
