@@ -69,18 +69,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HookGrapple",
+                    "name": "Hook",
                     "type": "Button",
-                    "id": "ac2ad5e5-7be7-43c4-a3a3-68aa702d54ea",
+                    "id": "96f38faa-54df-4430-9d16-7ff8118cbd9a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HookSwing",
+                    "name": "ShortenCable",
                     "type": "Button",
-                    "id": "96f38faa-54df-4430-9d16-7ff8118cbd9a",
+                    "id": "ccfe3cf0-e05a-4671-9096-b31793c47861",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Retract",
+                    "type": "Button",
+                    "id": "8ae4905c-653c-4747-9102-1fbf923ccec4",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -277,23 +286,56 @@
                 },
                 {
                     "name": "",
-                    "id": "6a9a5b49-abbb-4e33-9a9e-01386d4cc923",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "HookGrapple",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "c5fd4a8a-4933-44b2-ab16-eaa6c8bd8f8f",
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HookSwing",
+                    "action": "Hook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8218c86a-1997-4f31-ada8-d839dad4c5ec",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "505a3fa2-184d-43f3-9f1a-b38c57bc332d",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95ccb9b3-e668-4a13-8def-34113d61fa14",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShortenCable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9704e1d1-db96-449a-a851-0e3ccde0e36e",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Retract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
