@@ -171,7 +171,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
-    
+
     void AirMovement()
     {
         if (!activeGrapple) return;
