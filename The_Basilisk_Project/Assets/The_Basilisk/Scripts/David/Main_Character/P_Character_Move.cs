@@ -145,7 +145,7 @@ public class P_Character_Move : MonoBehaviour
             myCC.height = isCrouched ? characterHeightCrouched : characterHeightStandUp;
         }
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Climbable"))
@@ -161,5 +161,5 @@ public class P_Character_Move : MonoBehaviour
         {
             isGrounded = false;
         }
-    }
+    }*/
 }

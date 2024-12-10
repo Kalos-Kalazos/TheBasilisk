@@ -41,7 +41,7 @@ public class GrapplingRope : MonoBehaviour
 
     public void DrawRope()
     {
-        if (!grapplingGun.swinging)
+        if (!grapplingGun.activeGrapple)
         {
             currentGrapplePosition = grapplingGun.gunTip.position;
             spring.Reset();
@@ -60,12 +60,12 @@ public class GrapplingRope : MonoBehaviour
         spring.SetStrength(strength);
         spring.Update(Time.deltaTime);
 
-        var grapplePoint = grapplingGun.swingPoint;
+        var grapplePoint = grapplingGun.predictionHit.point;
         var gunTipPosition = grapplingGun.gunTip.position;
         var direction = (grapplePoint - gunTipPosition).normalized;
         var up = Quaternion.LookRotation(direction) * Vector3.up;
 
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 10f);
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 12f);
 
         for (int i = 0; i < quality + 1; i++)
         {
@@ -73,9 +73,6 @@ public class GrapplingRope : MonoBehaviour
 
             float dynamicWaveHeight = Mathf.Clamp(waveHeight, 0.1f, Mathf.Abs(Vector3.Distance(gunTipPosition, grapplePoint)) / 10f);
             var offset = up * dynamicWaveHeight * Mathf.Sin(delta * waveCount * Mathf.PI * spring.Value * affectCurve.Evaluate(delta));
-
-            if (velocity > 10f)
-                offset += direction * Mathf.Sin(Time.time * velocity) * 0.1f;
 
             lr.SetPosition(i, Vector3.Lerp(gunTipPosition, currentGrapplePosition, delta) + offset);
         }
