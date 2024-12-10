@@ -20,7 +20,9 @@ public class P_AI_Enemy : MonoBehaviour
     [Header("=== Enemy Detection Settings ===")]
     [SerializeField] float detectionRange = 20;
     [SerializeField] Transform player;
+    [SerializeField] GameObject tempPP;
     [SerializeField] bool isChasing = false;
+    [SerializeField] bool isChecking = false;
     [SerializeField] float maxDetectionAngle = 45;
     [SerializeField] float alertRadius = 50;
 
@@ -44,8 +46,20 @@ public class P_AI_Enemy : MonoBehaviour
         }
         else
         {
-            Patrol();
-            DetectPlayer();
+            if (isChecking)
+            {
+                GoCheck(tempPP);
+            }
+            else
+            {
+                Patrol();
+                DetectPlayer();
+            }
+        }
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -55,6 +69,25 @@ public class P_AI_Enemy : MonoBehaviour
         {
             currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
             agent.destination = patrolPoints[currentPatrolIndex].position;
+        }
+    }
+
+    void GoCheck(GameObject tempPP)
+    {
+        if (!tempPP.activeInHierarchy && !isChecking) return;
+
+        agent.destination = tempPP.transform.position;
+
+        float distanceToPoint = Vector3.Distance(transform.position, player.position);
+
+        if (distanceToPoint < 0.2f)
+        {
+            if (patrolPoints.Length > 0)
+            {
+                agent.destination = patrolPoints[currentPatrolIndex].position;
+                isChecking = false;
+                tempPP.SetActive(false);
+            }
         }
     }
 
@@ -128,6 +161,21 @@ public class P_AI_Enemy : MonoBehaviour
                 enemy.OnAlert();
             }
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (damage > 0) health--;
+
+        if (tempPP != null && !isChasing)
+        {
+            tempPP.transform.position = player.position;
+            tempPP.transform.rotation = player.rotation;
+            tempPP.SetActive(true);
+
+            isChecking = true;
+        }
+
     }
 
     void OnAlert()
