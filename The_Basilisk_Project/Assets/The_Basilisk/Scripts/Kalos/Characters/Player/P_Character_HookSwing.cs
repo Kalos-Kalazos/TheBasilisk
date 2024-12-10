@@ -10,24 +10,24 @@ public class P_Character_HookSwing : MonoBehaviour
     private CharacterController controller;
     Rigidbody rb;
 
-    [SerializeField] private Transform orientation;
-    [SerializeField] private Transform cam;
+    [SerializeField] Transform orientation;
+    [SerializeField] Transform cam;
     public Transform gunTip;
-    [SerializeField] private LayerMask isGrappleable;
-    [SerializeField] private LineRenderer lr;
+    [SerializeField] LayerMask isGrappleable;
+    [SerializeField] LineRenderer lr;
 
     [Header("=== Swing Settings ===")]
-    [SerializeField] private float maxSwingDistance = 20f;
-    [SerializeField] private float horizontalForce = 10f;
-    [SerializeField] private float forwardForce = 10f;
-    [SerializeField] private float shortenSpeed = 5f;
+    [SerializeField] float maxSwingDistance = 20f;
+    [SerializeField] float horizontalForce = 10f;
+    [SerializeField] float forwardForce = 10f;
+    [SerializeField] float shortenSpeed = 5f;
     [SerializeField] float overshootYAxis = 1f;
     [SerializeField] float grapplingCD = 0.1f;
     float grapplingCDTimer;
 
     [Header("=== Prediction ===")]
     public RaycastHit predictionHit;
-    [SerializeField] private float predictionRadius = 1f;
+    [SerializeField] float predictionRadius = 1f;
     public Transform predictionPoint;
 
     private SpringJoint joint;
@@ -37,6 +37,7 @@ public class P_Character_HookSwing : MonoBehaviour
     public bool activeGrapple;
     public bool swinging;
     public bool shortenCable;
+    public bool shootGrapple;
 
     private bool shouldEnableController = true;
 
@@ -217,9 +218,9 @@ public class P_Character_HookSwing : MonoBehaviour
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
 
-        joint.spring = 20f;
+        joint.spring = 15f;
         joint.damper = 2f;
-        joint.massScale = 6f;
+        joint.massScale = 4f;
         /*
         lr.enabled = true;
         lr.positionCount = 2;
@@ -290,6 +291,7 @@ public class P_Character_HookSwing : MonoBehaviour
         shouldEnableController = true;
         controller.enabled = true;
         rb.isKinematic = true;
+        StopSwing();
     }
 
     /*public void DrawRope()
