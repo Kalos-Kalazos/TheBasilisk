@@ -7,13 +7,13 @@ public class P_ObjectPooling : MonoBehaviour
     public static P_ObjectPooling SharedInstance;
 
     [Header("=== Pool Settings ===")]
-    //Enemy
+    //Enemy Patrol Point EPP
     [SerializeField]
-    List<GameObject> pooledEnemies;
+    List<GameObject> pooledEPP;
     [SerializeField]
-    GameObject enemyToPool;
+    GameObject eppToPool;
     [SerializeField]
-    int amountToPoolE;
+    int amountToPoolEPP;
 
     void Awake()
     {
@@ -22,23 +22,23 @@ public class P_ObjectPooling : MonoBehaviour
 
     void Start()
     {
-        pooledEnemies = new List<GameObject>();
-        GameObject tmpE;
-        for (int i = 0; i < amountToPoolE; i++)
+        pooledEPP = new List<GameObject>();
+        GameObject tmpEPP;
+        for (int i = 0; i < amountToPoolEPP; i++)
         {
-            tmpE = Instantiate(enemyToPool);
-            tmpE.SetActive(false);
-            pooledEnemies.Add(tmpE);
+            tmpEPP = Instantiate(eppToPool);
+            tmpEPP.SetActive(false);
+            pooledEPP.Add(tmpEPP);
         }
 
     }
-    public GameObject GetPooledBullet()
+    public GameObject GetPooledTempPP()
     {
-        for (int i = 0; i < amountToPoolE; i++)
+        for (int i = 0; i < amountToPoolEPP; i++)
         {
-            if (!pooledEnemies[i].activeInHierarchy)
+            if (!pooledEPP[i].activeInHierarchy)
             {
-                return pooledEnemies[i];
+                return pooledEPP[i];
             }
         }
         return null;

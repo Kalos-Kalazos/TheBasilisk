@@ -10,13 +10,13 @@ public class P_Character_Combat : MonoBehaviour
     #endregion
 
     [Header("Combat Settings")]
-    [SerializeField] int currentAmmoSingle;
-    [SerializeField] int ammoSingle;
-    [SerializeField] int maxAmmoSingle;
+    public int currentAmmoSingle;
+    public int ammoSingle;
+    public int maxAmmoSingle;
     [SerializeField] float fireRate;
     [SerializeField] float shootingRange;
-    [SerializeField] int ammoFlame;
-    [SerializeField] int maxAmmoFlame;
+    public int ammoFlame;
+    public int maxAmmoFlame;
     [SerializeField] float fireCooldown;
     [SerializeField] float flameRate;
     [SerializeField] float flameRange;
@@ -24,11 +24,6 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject flameThrowTrigger;
     [SerializeField] float impulsitoBala;
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -63,17 +58,20 @@ public class P_Character_Combat : MonoBehaviour
             {
                 Debug.DrawRay(ray.origin, ray.direction * shootingRange, Color.red, fireRate);
 
-                if (hit.collider.CompareTag("Enemy"))
+                if(hit.collider != null)
                 {
-                    hit.collider.GetComponent<P_AI_Enemy>().TakeDamage(damage);
-                    //!cuidao con nav mesh!
-                    if (hit.rigidbody != null)
+                    if (hit.collider.CompareTag("Enemy"))
                     {
-                        Vector3 forceDirection = hit.point - shootingPoint.position;
-                        forceDirection.Normalize();
-                        hit.rigidbody.AddForce(forceDirection * impulsitoBala, ForceMode.Impulse);
+                        hit.collider.GetComponent<P_AI_Enemy>().TakeDamage(damage);
+                        //!cuidao con nav mesh!
+                        if (hit.rigidbody != null)
+                        {
+                            Vector3 forceDirection = hit.point - shootingPoint.position;
+                            forceDirection.Normalize();
+                            hit.rigidbody.AddForce(forceDirection * impulsitoBala, ForceMode.Impulse);
+                        }
+                        //VFX Sangre
                     }
-                    //VFX Sangre
                 }
                 //else VFX Bujero de bala
 
