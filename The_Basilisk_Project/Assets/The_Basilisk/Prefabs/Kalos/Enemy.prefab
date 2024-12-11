@@ -101,19 +101,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   speedChase: 10
+  speedDefault: 3.5
   damage: 10
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  patrolPoints: []
   currentPatrolIndex: 0
   agent: {fileID: 0}
   detectionRange: 15
   player: {fileID: 0}
+  tempPP: {fileID: 0}
   isChasing: 0
+  isChecking: 0
   maxDetectionAngle: 45
+  alertRadius: 50
 --- !u!136 &218419842556213996
 CapsuleCollider:
   m_ObjectHideFlags: 0
