@@ -8,6 +8,7 @@ public class WeaponController : MonoBehaviour
 
     public int simpleAmmo = 30; //municion del disparo simple
     public int flamethrowerAmmo = 50; //municion para el lanzallamas
+    
 
     public int simpleMagazines = 5; //cargadores disponibles para el disparo simple
     public int flamethrowerMagazines = 3; //cargadores disponibles para el lanzallamas
@@ -15,6 +16,13 @@ public class WeaponController : MonoBehaviour
     //UI Texts
     public Text ammoText; //Muestra la municion
     public Text magazinesText; //Muestra los cargadores disponibles 
+
+    void Start()
+    {
+
+        //simpleAmmo = player.GetComponent<P_Character_Combat>().currentAmmoSingle;
+
+    }
 
     //Enumeracion para el tipo de municion seleccionada 
     public enum AmmoType
