@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3302233330460323723}
   - component: {fileID: 5025135179090061411}
   - component: {fileID: 218419842556213996}
-  - component: {fileID: 2631427771675867422}
   - component: {fileID: 8228288793010546559}
   m_Layer: 0
   m_Name: Enemy
@@ -99,11 +98,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f9a40738af70f4cb16646eec8748c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  speedChase: 10
-  speedDefault: 3.5
+  health: 30
+  speedChase: 8
+  speedDefault: 1.5
   damage: 10
-  patrolPoints: []
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   currentPatrolIndex: 0
   agent: {fileID: 0}
   detectionRange: 15
@@ -136,33 +140,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2631427771675867422
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4061515885109164919}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!195 &8228288793010546559
 NavMeshAgent:
   m_ObjectHideFlags: 0

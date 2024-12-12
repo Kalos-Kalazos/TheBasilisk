@@ -23,7 +23,10 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] int damage;
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject flameThrowTrigger;
+    public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
+    public bool hasFlamethrow = false;
+
 
     void Update()
     {
@@ -93,6 +96,8 @@ public class P_Character_Combat : MonoBehaviour
 
     public void FlameThrow(InputAction.CallbackContext context)
     {
+        if (!hasFlamethrow) return;
+
         if (context.started && ammoFlame > 0 && fireCooldown <= 0)
         {
             StartCoroutine(Flames());

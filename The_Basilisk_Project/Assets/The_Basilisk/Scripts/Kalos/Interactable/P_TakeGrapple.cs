@@ -4,20 +4,50 @@ using UnityEngine;
 
 public class P_TakeGrapple : MonoBehaviour
 {
-    public GameObject fakeGrapple, originalGrapple;
+    public P_GameManager gm;
+
+    public GameObject fakeGrapple, originalGrapple, fakeWeapon, originalWeapon, fakeFlames, originalFlames;
 
     private void Start()
     {
-        originalGrapple = GameObject.FindWithTag("HookPJ");
+        if (gameObject.CompareTag("HookTake"))
+            originalGrapple = gm.pjHook;
+
+        if (gameObject.CompareTag("WeaponTake"))
+            originalWeapon = gm.pjWeapon;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (gameObject.CompareTag("HookTake"))
         {
-            fakeGrapple.SetActive(false);
-            originalGrapple.SetActive(true);
-            other.GetComponent<P_Character_HookSwing>().enabled = true;
+            if (other.CompareTag("Player"))
+            {
+                fakeGrapple.SetActive(false);
+                originalGrapple.SetActive(true);
+                other.GetComponent<P_Character_HookSwing>().enabled = true;
+            }
+        }
+
+        if (gameObject.CompareTag("WeaponTake"))
+        {
+            if (other.CompareTag("Player"))
+            {
+                fakeWeapon.SetActive(false);
+                originalWeapon.SetActive(true);
+                other.GetComponent<P_Character_Combat>().enabled = true;
+            }
+        }
+
+
+        if (gameObject.CompareTag("FlamesTake"))
+        {
+            if (other.CompareTag("Player"))
+            {
+                fakeFlames.SetActive(false);
+                originalFlames.SetActive(true);
+                other.GetComponent<P_Character_Combat>().hasFlamethrow = false;
+            }
         }
     }
 }

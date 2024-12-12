@@ -165,8 +165,13 @@ public class P_AI_Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (damage > 0) health--;
+        if (damage > 0)
+        {
+            Debug.Log("Entra " + damage + " de daño");
+            health -= damage;
+        }
 
+        /*
         if (tempPP != null && !isChasing)
         {
             tempPP.transform.position = player.position;
@@ -175,7 +180,7 @@ public class P_AI_Enemy : MonoBehaviour
 
             isChecking = true;
         }
-
+        */
     }
 
     void OnAlert()

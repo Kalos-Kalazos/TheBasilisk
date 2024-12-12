@@ -12,23 +12,23 @@ public class P_Character_HookSwing : MonoBehaviour
     Rigidbody rb;
 
     [SerializeField] Transform orientation;
-    [SerializeField] Transform cam;
+    public Transform cam;
     public Transform gunTip;
     [SerializeField] LayerMask isGrappleable;
     [SerializeField] LineRenderer lr;
 
     [Header("=== Swing Settings ===")]
-    [SerializeField] float maxSwingDistance = 20f;
+    public float maxSwingDistance = 20f;
     [SerializeField] float horizontalForce = 10f;
     [SerializeField] float forwardForce = 10f;
-    [SerializeField] float shortenSpeed = 5f;
+    public float shortenSpeed = 5f;
     [SerializeField] float overshootYAxis = 1f;
-    [SerializeField] float grapplingCD = 0.1f;
-    float grapplingCDTimer;
+    public float grapplingCD = 0.1f;
+    public float grapplingCDTimer;
 
     [Header("=== Prediction ===")]
     public RaycastHit predictionHit;
-    [SerializeField] float predictionRadius = 1f;
+    public float predictionRadius = 1f;
     public Transform predictionPoint;
 
     private SpringJoint joint;
@@ -39,6 +39,8 @@ public class P_Character_HookSwing : MonoBehaviour
     public bool swinging;
     public bool shortenCable;
     public bool shootGrapple;
+
+    public bool hasGrabbed;
 
     private bool shouldEnableController = true;
 
@@ -109,6 +111,7 @@ public class P_Character_HookSwing : MonoBehaviour
         }
     }
 
+    /*
     public void Retract(InputAction.CallbackContext context)
     {
         if (predictionHit.point == Vector3.zero) return;
@@ -122,9 +125,10 @@ public class P_Character_HookSwing : MonoBehaviour
 
             if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
 
-            JumpToPosition(predictionHit.point, highestPointOnArc);
+            //JumpToPosition(predictionHit.point, highestPointOnArc);
         }
     }
+    */
 
     public void ShortenCable(InputAction.CallbackContext context)
     {
@@ -199,7 +203,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void StartSwing()
     {
-        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0) return;
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed) return;
 
         ResetRestrictions();
 
@@ -217,7 +221,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
         joint.maxDistance = distanceFromPoint * 0.8f;
-        joint.minDistance = distanceFromPoint * 0.25f;
+        joint.minDistance = distanceFromPoint * 0.1f;
 
         joint.spring = 15f;
         joint.damper = 2f;
@@ -228,6 +232,7 @@ public class P_Character_HookSwing : MonoBehaviour
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);*/
     }
+    /*
     public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
     {
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
@@ -240,7 +245,7 @@ public class P_Character_HookSwing : MonoBehaviour
     private void SetVelocity()
     {
         rb.velocity = velocityToSet;
-    }
+    }*/
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
