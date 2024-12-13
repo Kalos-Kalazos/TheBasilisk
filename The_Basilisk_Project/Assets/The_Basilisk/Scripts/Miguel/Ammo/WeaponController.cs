@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class WeaponController : MonoBehaviour
 {
 
-    public int simpleAmmo = 100; //municion del disparo simple
+    public int simpleAmmo = 30; //municion del disparo simple
     public int flamethrowerAmmo = 50; //municion para el lanzallamas
+    
 
     public int simpleMagazines = 5; //cargadores disponibles para el disparo simple
     public int flamethrowerMagazines = 3; //cargadores disponibles para el lanzallamas
@@ -15,6 +16,13 @@ public class WeaponController : MonoBehaviour
     //UI Texts
     public Text ammoText; //Muestra la municion
     public Text magazinesText; //Muestra los cargadores disponibles 
+
+    void Start()
+    {
+
+        //simpleAmmo = player.GetComponent<P_Character_Combat>().currentAmmoSingle;
+
+    }
 
     //Enumeracion para el tipo de municion seleccionada 
     public enum AmmoType
@@ -142,10 +150,10 @@ public class WeaponController : MonoBehaviour
         if (currentAmmoType == AmmoType.Simple && simpleMagazines > 0)
         {
 
-            if (simpleAmmo < 100) // Capacidad maxima de municion)
+            if (simpleAmmo < 30) // Capacidad maxima de municion)
             {
 
-                int ammoToReload = Mathf.Min(100 - simpleAmmo, 30); //Recarga hasta 30 balas o el maximo posible
+                int ammoToReload = Mathf.Min(30 - simpleAmmo, 30); //Recarga hasta 30 balas o el maximo posible
                 simpleAmmo += ammoToReload;
 
                 simpleMagazines--; //Usar un cargador
