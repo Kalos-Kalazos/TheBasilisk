@@ -6,8 +6,10 @@ public class GrapplingRope : MonoBehaviour
 {
     Spring spring;
     LineRenderer lr;
-    public P_Character_HookSwing grapplingGun;
+    P_Character_HookSwing grapplingGun;
+    P_Character_HookGrab grabManager;
     private Vector3 currentGrapplePosition;
+    private Vector3 grapplePoint;
 
     [Header("=== Rope Animation Settings ===")]
     [SerializeField] int quality;
@@ -21,6 +23,9 @@ public class GrapplingRope : MonoBehaviour
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
+        grapplingGun = GetComponent<P_Character_HookSwing>();
+        grabManager = GetComponent<P_Character_HookGrab>();
+
         spring = new Spring();
         spring.SetTarget(0);
     }
@@ -41,7 +46,7 @@ public class GrapplingRope : MonoBehaviour
 
     public void DrawRope()
     {
-        if (!grapplingGun.activeGrapple)
+        if (!grapplingGun.activeGrapple && !grapplingGun.hasGrabbed || grabManager.grabbed)
         {
             currentGrapplePosition = grapplingGun.gunTip.position;
             spring.Reset();
@@ -60,7 +65,11 @@ public class GrapplingRope : MonoBehaviour
         spring.SetStrength(strength);
         spring.Update(Time.deltaTime);
 
-        var grapplePoint = grapplingGun.predictionHit.point;
+        if (grapplingGun.swinging)
+            grapplePoint = grapplingGun.predictionHit.point;
+        else if (grapplingGun.hasGrabbed || grabManager.grabbed && grabManager.joint != null)
+            grapplePoint = grabManager.joint.connectedAnchor;
+
         var gunTipPosition = grapplingGun.gunTip.position;
         var direction = (grapplePoint - gunTipPosition).normalized;
         var up = Quaternion.LookRotation(direction) * Vector3.up;

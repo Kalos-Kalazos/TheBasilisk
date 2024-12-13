@@ -107,15 +107,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Retract"",
-                    ""type"": ""Button"",
-                    ""id"": ""8ae4905c-653c-4747-9102-1fbf923ccec4"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -330,34 +321,12 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""505a3fa2-184d-43f3-9f1a-b38c57bc332d"",
-                    ""path"": ""<Keyboard>/rightShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hook"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""95ccb9b3-e668-4a13-8def-34113d61fa14"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShortenCable"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9704e1d1-db96-449a-a851-0e3ccde0e36e"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Retract"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -954,7 +923,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Hook = m_Player.FindAction("Hook", throwIfNotFound: true);
         m_Player_ShortenCable = m_Player.FindAction("ShortenCable", throwIfNotFound: true);
-        m_Player_Retract = m_Player.FindAction("Retract", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1037,7 +1005,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Hook;
     private readonly InputAction m_Player_ShortenCable;
-    private readonly InputAction m_Player_Retract;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
@@ -1051,7 +1018,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Hook => m_Wrapper.m_Player_Hook;
         public InputAction @ShortenCable => m_Wrapper.m_Player_ShortenCable;
-        public InputAction @Retract => m_Wrapper.m_Player_Retract;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1088,9 +1054,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @ShortenCable.started += instance.OnShortenCable;
             @ShortenCable.performed += instance.OnShortenCable;
             @ShortenCable.canceled += instance.OnShortenCable;
-            @Retract.started += instance.OnRetract;
-            @Retract.performed += instance.OnRetract;
-            @Retract.canceled += instance.OnRetract;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1122,9 +1085,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @ShortenCable.started -= instance.OnShortenCable;
             @ShortenCable.performed -= instance.OnShortenCable;
             @ShortenCable.canceled -= instance.OnShortenCable;
-            @Retract.started -= instance.OnRetract;
-            @Retract.performed -= instance.OnRetract;
-            @Retract.canceled -= instance.OnRetract;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1316,7 +1276,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnHook(InputAction.CallbackContext context);
         void OnShortenCable(InputAction.CallbackContext context);
-        void OnRetract(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

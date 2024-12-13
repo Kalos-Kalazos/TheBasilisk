@@ -170,8 +170,7 @@ public class P_AI_Enemy : MonoBehaviour
             Debug.Log("Entra " + damage + " de daño");
             health -= damage;
         }
-
-        /*
+        /*        
         if (tempPP != null && !isChasing)
         {
             tempPP.transform.position = player.position;

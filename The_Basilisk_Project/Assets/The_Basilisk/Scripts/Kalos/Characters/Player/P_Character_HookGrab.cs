@@ -9,9 +9,10 @@ public class P_Character_HookGrab : MonoBehaviour
     [Header("=== Grab Settings ===")]
     private P_Character_HookSwing playerSwing;
     [SerializeField] float objectMoveSpeed = 5f;
+    [SerializeField] float launchPower = 5f;
     [SerializeField] Rigidbody grabbedObjectRB;
 
-    public Vector3 grabPoint, targetPosition;
+    public Vector3 grabPoint, targetPosition, hitPoint;
     public Transform hookOrigin;
 
     [SerializeField] LayerMask canGrab;
@@ -21,7 +22,7 @@ public class P_Character_HookGrab : MonoBehaviour
     public RaycastHit predictionHitObject;
     public Transform predictionPointObject;
 
-    private SpringJoint joint;
+    public SpringJoint joint;
 
     private void Start()
     {
@@ -40,6 +41,7 @@ public class P_Character_HookGrab : MonoBehaviour
             float distanceToHook = Vector3.Distance(hookOrigin.position, grabbedObjectRB.position);
             if (distanceToHook < 0.5f)
             {
+                StopGrab();
                 AlignWithHook();
                 grabbed = true;
             }
@@ -68,11 +70,18 @@ public class P_Character_HookGrab : MonoBehaviour
         }
     }
 
-    public void ReleaseGrab()
+    void ReleaseGrab()
     {
         grabbed = false;
         grabbedObjectRB.gameObject.transform.SetParent(null);
         grabbedObjectRB.isKinematic = false;
+        LaunchObject();
+    }
+
+    void LaunchObject()
+    {
+        grabbedObjectRB.AddForce(playerSwing.cam.forward * launchPower, ForceMode.Impulse);
+        Debug.Log("Launching object wow so far ma men");
         grabbedObjectRB = null;
     }
 
@@ -113,7 +122,7 @@ public class P_Character_HookGrab : MonoBehaviour
 
     void StartGrab()
     {
-        if (playerSwing.predictionHit.point == Vector3.zero || playerSwing.grapplingCDTimer > 0) return;
+        if (predictionHitObject.point == Vector3.zero || playerSwing.grapplingCDTimer > 0) return;
 
         playerSwing.hasGrabbed = true;
 
@@ -151,8 +160,9 @@ public class P_Character_HookGrab : MonoBehaviour
 
     void MoveGrabbedObject()
     {
-        if (grabbedObjectRB != null && !grabbed)
+        if (grabbedObjectRB != null && !grabbed && joint != null)
         {
+            joint.connectedAnchor = grabbedObjectRB.position;
             targetPosition = hookOrigin.position;
             grabbedObjectRB.position = Vector3.MoveTowards(grabbedObjectRB.position, targetPosition, objectMoveSpeed * Time.deltaTime);
         }

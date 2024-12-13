@@ -9,23 +9,26 @@ public class P_GameManager : MonoBehaviour
 
     public int actualScene;
 
-    public GameObject player, pjWeapon, pjHook;
+    public GameObject player, pjWeapon, pjHook, pjFlames;
 
     void Start()
     {
         actualScene = ActualSceneID();
+
+        pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
 
         if (actualScene == 1)
         {
             //Scripts deactivated
             player.GetComponent<P_Character_HookSwing>().enabled = false;
             player.GetComponent<P_Character_Combat>().hasFlamethrow = false;
-            player.GetComponent<P_Character_Combat>().flameThrowTank.SetActive(false);
             player.GetComponent<P_Character_Combat>().enabled = false;
+            player.GetComponent<P_Character_HookGrab>().enabled = false;
 
             //Objects deactivated
             pjWeapon.SetActive(false);
             pjHook.SetActive(false);
+            pjFlames.SetActive(false);
         }
         else if (actualScene == 2)
         {
@@ -33,7 +36,7 @@ public class P_GameManager : MonoBehaviour
             player.GetComponent<P_Character_Combat>().hasFlamethrow = false;
 
             //Objects deactivated
-            player.GetComponent<P_Character_Combat>().flameThrowTank.SetActive(false);
+            pjFlames.SetActive(false);
         }
     }
 

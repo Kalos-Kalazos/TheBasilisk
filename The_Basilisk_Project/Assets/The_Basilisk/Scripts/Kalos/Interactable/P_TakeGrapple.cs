@@ -15,6 +15,9 @@ public class P_TakeGrapple : MonoBehaviour
 
         if (gameObject.CompareTag("WeaponTake"))
             originalWeapon = gm.pjWeapon;
+
+        if (gameObject.CompareTag("FlamesTake"))
+            originalFlames = gm.pjFlames;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,6 +29,7 @@ public class P_TakeGrapple : MonoBehaviour
                 fakeGrapple.SetActive(false);
                 originalGrapple.SetActive(true);
                 other.GetComponent<P_Character_HookSwing>().enabled = true;
+                other.GetComponent<P_Character_HookGrab>().enabled = true;
             }
         }
 
@@ -46,7 +50,7 @@ public class P_TakeGrapple : MonoBehaviour
             {
                 fakeFlames.SetActive(false);
                 originalFlames.SetActive(true);
-                other.GetComponent<P_Character_Combat>().hasFlamethrow = false;
+                other.GetComponent<P_Character_Combat>().hasFlamethrow = true;
             }
         }
     }

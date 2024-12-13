@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 8854775838509867180}
   - component: {fileID: 2884788965538746835}
   - component: {fileID: 5706528471668912867}
+  - component: {fileID: 6440583043314318055}
   - component: {fileID: 8700451487405021578}
   - component: {fileID: 1943991512596446499}
   m_Layer: 0
@@ -249,6 +250,7 @@ MonoBehaviour:
   shortenSpeed: 8
   overshootYAxis: 3
   grapplingCD: 0.1
+  grapplingCDTimer: 0
   predictionRadius: 3
   predictionPoint: {fileID: 0}
   swingPoint: {x: 0, y: 0, z: 0}
@@ -256,6 +258,7 @@ MonoBehaviour:
   swinging: 0
   shortenCable: 0
   shootGrapple: 0
+  hasGrabbed: 0
 --- !u!114 &2163845627631675047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,6 +481,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6440583043314318055}
+        m_TargetAssemblyTypeName: P_Character_HookGrab, Assembly-CSharp
+        m_MethodName: GrabObject
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 96f38faa-54df-4430-9d16-7ff8118cbd9a
     m_ActionName: Player/HookSwing[/Keyboard/f]
   - m_PersistentCalls:
@@ -496,10 +511,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ccfe3cf0-e05a-4671-9096-b31793c47861
     m_ActionName: Player/ShortenCable[/Keyboard/s]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 8ae4905c-653c-4747-9102-1fbf923ccec4
-    m_ActionName: Player/Retract[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -674,7 +685,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53a51ca5befc6c48be79db9f992e481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplingGun: {fileID: 1220950344702437139}
   quality: 250
   damper: 14
   strength: 400
@@ -705,6 +715,32 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6440583043314318055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345871837883684899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c20cd1043f19b42ae28a71da5f4d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectMoveSpeed: 15
+  launchPower: 50
+  grabbedObjectRB: {fileID: 0}
+  grabPoint: {x: 0, y: 0, z: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  hitPoint: {x: 0, y: 0, z: 0}
+  hookOrigin: {fileID: 2641188852619225209}
+  canGrab:
+    serializedVersion: 2
+    m_Bits: 64
+  shortenCable: 0
+  grabbed: 0
+  predictionPointObject: {fileID: 0}
+  joint: {fileID: 0}
 --- !u!114 &8700451487405021578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,7 +764,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 1.19, y: 1, z: 1.19}
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1
@@ -984,17 +1020,17 @@ PrefabInstance:
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.69999486
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.8
+      value: -0.891
       objectReference: {fileID: 0}
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.8600042
+      value: 0.726
       objectReference: {fileID: 0}
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
@@ -1124,12 +1160,12 @@ PrefabInstance:
     - target: {fileID: 6480314783142956603, guid: 6c42fe80a94364840bfc5d95c69ea4e9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.35
+      value: -1.441
       objectReference: {fileID: 0}
     - target: {fileID: 6480314783142956603, guid: 6c42fe80a94364840bfc5d95c69ea4e9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.14
+      value: -1.274
       objectReference: {fileID: 0}
     - target: {fileID: 6480314783142956603, guid: 6c42fe80a94364840bfc5d95c69ea4e9,
         type: 3}
