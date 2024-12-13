@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,18 @@ public class P_Character_HookGrab : MonoBehaviour
 {
     [Header("=== Grab Settings ===")]
     private P_Character_HookSwing playerSwing;
+    [SerializeField] float objectMoveSpeed = 5f;
+    [SerializeField] Rigidbody grabbedObjectRB;
 
-    public Vector3 grabPoint;
+    public Vector3 grabPoint, targetPosition;
+    public Transform hookOrigin;
 
     [SerializeField] LayerMask canGrab;
 
-    public bool shortenCable;
+    public bool shortenCable, grabbed;
+
+    public RaycastHit predictionHitObject;
+    public Transform predictionPointObject;
 
     private SpringJoint joint;
 
@@ -23,13 +30,27 @@ public class P_Character_HookGrab : MonoBehaviour
 
     private void Update()
     {
-        if (shortenCable)
-        {
-            float distanceFromPoint = Vector3.Distance(transform.position, grabPoint);
-            joint.maxDistance = Mathf.Max(joint.maxDistance - playerSwing.shortenSpeed * Time.deltaTime, distanceFromPoint * 0.5f);
-        }
+        if (playerSwing.swinging) return;
 
+        MoveGrabbedObject();
         CheckForGrabPoints();
+
+        if (grabbedObjectRB != null && !grabbed)
+        {
+            float distanceToHook = Vector3.Distance(hookOrigin.position, grabbedObjectRB.position);
+            if (distanceToHook < 0.5f)
+            {
+                AlignWithHook();
+                grabbed = true;
+            }
+        }
+    }
+
+    void AlignWithHook()
+    {
+        grabbedObjectRB.transform.SetPositionAndRotation(hookOrigin.position, hookOrigin.rotation);
+        grabbedObjectRB.transform.SetParent(hookOrigin);
+        grabbedObjectRB.isKinematic = true;
     }
 
     public void GrabObject(InputAction.CallbackContext context)
@@ -40,25 +61,24 @@ public class P_Character_HookGrab : MonoBehaviour
         }
         else if (context.canceled)
         {
-            StopGrab();
+            if (grabbed)
+                ReleaseGrab();
+            else
+                StopGrab();
         }
     }
 
-    public void TakeCloseObject(InputAction.CallbackContext context)
+    public void ReleaseGrab()
     {
-        if (context.started)
-        {
-            shortenCable = true;
-        }
-        else if (context.canceled)
-        {
-            shortenCable = false;
-        }
+        grabbed = false;
+        grabbedObjectRB.gameObject.transform.SetParent(null);
+        grabbedObjectRB.isKinematic = false;
+        grabbedObjectRB = null;
     }
 
     void CheckForGrabPoints()
     {
-        if (joint != null) return;
+        if (joint != null && joint.connectedAnchor == playerSwing.swingPoint) return;
 
         RaycastHit sphereCastHit;
         Physics.SphereCast(playerSwing.cam.position, playerSwing.predictionRadius, playerSwing.cam.forward, out sphereCastHit, playerSwing.maxSwingDistance, canGrab);
@@ -79,16 +99,16 @@ public class P_Character_HookGrab : MonoBehaviour
 
         if (realHitPoint != Vector3.zero)
         {
-            playerSwing.predictionPoint.gameObject.SetActive(true);
-            playerSwing.predictionPoint.position = realHitPoint;
+            predictionPointObject.gameObject.SetActive(true);
+            predictionPointObject.position = realHitPoint;
         }
         else
         {
-            playerSwing.predictionPoint.gameObject.SetActive(false);
-            playerSwing.predictionPoint.position = playerSwing.cam.position + playerSwing.cam.forward * playerSwing.maxSwingDistance;
+            predictionPointObject.gameObject.SetActive(false);
+            predictionPointObject.position = playerSwing.cam.position + playerSwing.cam.forward * playerSwing.maxSwingDistance;
         }
 
-        playerSwing.predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
+        predictionHitObject = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
 
     void StartGrab()
@@ -99,9 +119,9 @@ public class P_Character_HookGrab : MonoBehaviour
 
         playerSwing.activeGrapple = true;
 
-        grabPoint = playerSwing.predictionHit.point;
+        grabPoint = predictionHitObject.point;
 
-        playerSwing.predictionPoint.gameObject.SetActive(false);
+        predictionPointObject.gameObject.SetActive(false);
 
         joint = gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
@@ -114,6 +134,28 @@ public class P_Character_HookGrab : MonoBehaviour
         joint.spring = 20f;
         joint.damper = 1f;
         joint.massScale = 0.1f;
+
+        grabbedObjectRB = predictionHitObject.rigidbody;
+
+        if (targetPosition != null && grabPoint != null && grabbedObjectRB != null)
+        {
+            if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 0.5f && playerSwing.hasGrabbed)//  && !grabbed)
+            {
+                grabbedObjectRB.gameObject.transform.SetParent(hookOrigin);
+                grabbedObjectRB.isKinematic = true;
+                grabbed = true;
+            }
+        }
+
+    }
+
+    void MoveGrabbedObject()
+    {
+        if (grabbedObjectRB != null && !grabbed)
+        {
+            targetPosition = hookOrigin.position;
+            grabbedObjectRB.position = Vector3.MoveTowards(grabbedObjectRB.position, targetPosition, objectMoveSpeed * Time.deltaTime);
+        }
     }
 
     void StopGrab()

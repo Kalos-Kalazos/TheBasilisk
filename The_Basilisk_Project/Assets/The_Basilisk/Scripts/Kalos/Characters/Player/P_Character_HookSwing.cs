@@ -203,7 +203,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void StartSwing()
     {
-        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed) return;
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed && activeGrapple) return;
 
         ResetRestrictions();
 
