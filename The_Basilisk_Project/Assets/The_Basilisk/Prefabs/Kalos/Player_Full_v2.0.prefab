@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 6440583043314318055}
   - component: {fileID: 8700451487405021578}
   - component: {fileID: 1943991512596446499}
+  - component: {fileID: 1254081748376032938}
   m_Layer: 0
   m_Name: Player_Full_v2.0
   m_TagString: Player
@@ -511,6 +512,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ccfe3cf0-e05a-4671-9096-b31793c47861
     m_ActionName: Player/ShortenCable[/Keyboard/s]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1254081748376032938}
+        m_TargetAssemblyTypeName: P_WeaponController, Assembly-CSharp
+        m_MethodName: ChangeAmmo
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ed9bff0c-6bb4-4a8c-879c-32f2b3fb5546
+    m_ActionName: Player/ChangeAmmoType[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -739,7 +756,8 @@ MonoBehaviour:
     m_Bits: 64
   shortenCable: 0
   grabbed: 0
-  predictionPointObject: {fileID: 0}
+  predictionPointObject: {fileID: 884132382919486114, guid: f7d6e3af6ac595049ab13707a5af2352,
+    type: 3}
   joint: {fileID: 0}
 --- !u!114 &8700451487405021578
 MonoBehaviour:
@@ -770,6 +788,26 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1254081748376032938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345871837883684899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d31b9ecefa8477f43b5bd85296c5b632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simpleAmmo: 30
+  flamethrowerAmmo: 50
+  simpleMagazines: 5
+  flamethrowerMagazines: 3
+  ammoText: {fileID: 0}
+  magazinesText: {fileID: 0}
+  currentAmmoType: 0
+  simple: 0
 --- !u!1 &4968719344087149376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,12 +1063,12 @@ PrefabInstance:
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.891
+      value: -0.72
       objectReference: {fileID: 0}
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.726
+      value: 0.72
       objectReference: {fileID: 0}
     - target: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,
         type: 3}
@@ -1160,12 +1198,12 @@ PrefabInstance:
     - target: {fileID: 6480314783142956603, guid: 6c42fe80a94364840bfc5d95c69ea4e9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.441
+      value: -1.27
       objectReference: {fileID: 0}
     - target: {fileID: 6480314783142956603, guid: 6c42fe80a94364840bfc5d95c69ea4e9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.274
+      value: -1.28
       objectReference: {fileID: 0}
     - target: {fileID: 6480314783142956603, guid: 6c42fe80a94364840bfc5d95c69ea4e9,
         type: 3}

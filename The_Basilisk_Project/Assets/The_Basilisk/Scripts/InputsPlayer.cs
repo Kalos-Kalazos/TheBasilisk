@@ -64,6 +64,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ChangeAmmoType"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed9bff0c-6bb4-4a8c-879c-32f2b3fb5546"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""aa209517-028f-4eb5-9825-f214a2e7fa3d"",
@@ -145,17 +154,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""ShootSingle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -167,41 +165,8 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""886e731e-7071-4ae4-95c0-e61739dad6fd"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Touch"",
-                    ""action"": ""ShootSingle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ee3d0cd2-254e-47a7-a8cb-bc94d9658c54"",
-                    ""path"": ""<Joystick>/trigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Joystick"",
-                    ""action"": ""ShootSingle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8255d333-5683-4943-a58a-ccb207ff1dce"",
-                    ""path"": ""<XRController>/{PrimaryAction}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""XR"",
-                    ""action"": ""ShootSingle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ca73a365-ffa9-47e0-bb98-96cc4c235226"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""aa0128b2-3a19-4831-beb5-46c99813c73b"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -327,6 +292,17 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ShortenCable"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24bd93e2-1dd7-4b16-9490-fedf5a1d0b14"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ChangeAmmoType"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -918,6 +894,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_ShootSingle = m_Player.FindAction("ShootSingle", throwIfNotFound: true);
         m_Player_FlameThrow = m_Player.FindAction("FlameThrow", throwIfNotFound: true);
         m_Player_Recharge = m_Player.FindAction("Recharge", throwIfNotFound: true);
+        m_Player_ChangeAmmoType = m_Player.FindAction("ChangeAmmoType", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
@@ -1000,6 +977,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ShootSingle;
     private readonly InputAction m_Player_FlameThrow;
     private readonly InputAction m_Player_Recharge;
+    private readonly InputAction m_Player_ChangeAmmoType;
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Crouch;
@@ -1013,6 +991,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @ShootSingle => m_Wrapper.m_Player_ShootSingle;
         public InputAction @FlameThrow => m_Wrapper.m_Player_FlameThrow;
         public InputAction @Recharge => m_Wrapper.m_Player_Recharge;
+        public InputAction @ChangeAmmoType => m_Wrapper.m_Player_ChangeAmmoType;
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
@@ -1039,6 +1018,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Recharge.started += instance.OnRecharge;
             @Recharge.performed += instance.OnRecharge;
             @Recharge.canceled += instance.OnRecharge;
+            @ChangeAmmoType.started += instance.OnChangeAmmoType;
+            @ChangeAmmoType.performed += instance.OnChangeAmmoType;
+            @ChangeAmmoType.canceled += instance.OnChangeAmmoType;
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
@@ -1070,6 +1052,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Recharge.started -= instance.OnRecharge;
             @Recharge.performed -= instance.OnRecharge;
             @Recharge.canceled -= instance.OnRecharge;
+            @ChangeAmmoType.started -= instance.OnChangeAmmoType;
+            @ChangeAmmoType.performed -= instance.OnChangeAmmoType;
+            @ChangeAmmoType.canceled -= instance.OnChangeAmmoType;
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
@@ -1271,6 +1256,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnShootSingle(InputAction.CallbackContext context);
         void OnFlameThrow(InputAction.CallbackContext context);
         void OnRecharge(InputAction.CallbackContext context);
+        void OnChangeAmmoType(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);

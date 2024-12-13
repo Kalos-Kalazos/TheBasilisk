@@ -27,6 +27,12 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] float impulsitoBala;
     public bool hasFlamethrow = false;
 
+    P_WeaponController wpControl;
+
+    private void Start()
+    {
+        wpControl = GetComponent<P_WeaponController>();
+    }
 
     void Update()
     {
@@ -50,6 +56,8 @@ public class P_Character_Combat : MonoBehaviour
 
     public void Shooting(InputAction.CallbackContext context)
     {
+        if (!wpControl.simple) return;
+
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
         {
             damage = 10;
@@ -96,7 +104,7 @@ public class P_Character_Combat : MonoBehaviour
 
     public void FlameThrow(InputAction.CallbackContext context)
     {
-        if (!hasFlamethrow) return;
+        if (!hasFlamethrow && wpControl.simple) return;
 
         if (context.started && ammoFlame > 0 && fireCooldown <= 0)
         {

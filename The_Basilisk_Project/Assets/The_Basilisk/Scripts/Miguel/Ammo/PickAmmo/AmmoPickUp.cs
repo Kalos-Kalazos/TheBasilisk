@@ -5,7 +5,7 @@ using UnityEngine;
 public class AmmoPickUp : MonoBehaviour
 {
     // Referenciar a las armas estas deberian estar asignadas en el inspector de unity
-    public WeaponController weaponController;
+    public P_WeaponController weaponController;
 
     //Variables para el incremento de cargadores
     public int simpleAmmoIncrease = 1;// Cargadores de arma simple a aumentar
