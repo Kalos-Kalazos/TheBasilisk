@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 2884788965538746835}
   - component: {fileID: 5706528471668912867}
   - component: {fileID: 6440583043314318055}
-  - component: {fileID: 8700451487405021578}
+  - component: {fileID: 4455183056764108645}
   - component: {fileID: 1943991512596446499}
   - component: {fileID: 1254081748376032938}
   m_Layer: 0
@@ -326,15 +326,15 @@ MonoBehaviour:
   myCC: {fileID: 0}
   inputVector: {x: 0, y: 0}
   movementVector: {x: 0, y: 0, z: 0}
-  gravity: -9.81
+  gravity: -11
   yVelocity: 0
   isWalking: 0
   isCrouched: 0
-  playerSpeed: 10
+  playerSpeed: 6
   crouchSpeed: 2
   swingSpeed: 10
   cameraTransform: {fileID: 0}
-  jumpHeight: 2
+  jumpHeight: 1
   characterHeightStandUp: 2
   characterHeightCrouched: 1
   groundCheckDistance: 0.1
@@ -756,10 +756,9 @@ MonoBehaviour:
     m_Bits: 64
   shortenCable: 0
   grabbed: 0
-  predictionPointObject: {fileID: 884132382919486114, guid: f7d6e3af6ac595049ab13707a5af2352,
-    type: 3}
+  predictionPointObject: {fileID: 0}
   joint: {fileID: 0}
---- !u!114 &8700451487405021578
+--- !u!114 &4455183056764108645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

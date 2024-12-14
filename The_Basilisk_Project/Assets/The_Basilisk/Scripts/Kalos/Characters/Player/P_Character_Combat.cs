@@ -12,7 +12,6 @@ public class P_Character_Combat : MonoBehaviour
     [Header("Combat Settings")]
     public int currentAmmoSingle;
     public int ammoSingle;
-    public int maxAmmoSingle;
     [SerializeField] float fireRate;
     [SerializeField] float shootingRange;
     public int ammoFlame;
@@ -20,14 +19,19 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] float fireCooldown;
     [SerializeField] float flameRate;
     [SerializeField] float flameRange;
-    [SerializeField] int damage;
+    [SerializeField] float flameDistance;
+    public int damage;
     [SerializeField] Transform shootingPoint;
     [SerializeField] GameObject flameThrowTrigger;
     public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
     public bool hasFlamethrow = false;
+    [SerializeField] float burnDamagePerSecond;
+
+    [SerializeField] LayerMask EnemyLayer;
 
     P_WeaponController wpControl;
+
 
     private void Start()
     {
@@ -60,8 +64,6 @@ public class P_Character_Combat : MonoBehaviour
 
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
         {
-            damage = 10;
-
             Ray ray = new Ray(shootingPoint.position, shootingPoint.forward);
             RaycastHit hit;
 
@@ -69,19 +71,12 @@ public class P_Character_Combat : MonoBehaviour
             {
                 Debug.DrawRay(ray.origin, ray.direction * shootingRange, Color.red, fireRate);
 
-                if(hit.collider != null)
+                if(hit.collider != null && hit.collider.CompareTag("Enemy"))
                 {
-                    if (hit.collider.CompareTag("Enemy"))
+                    P_AI_Enemy enemy = hit.collider.GetComponent<P_AI_Enemy>();
+                    if (enemy != null)
                     {
-                        hit.collider.GetComponent<P_AI_Enemy>().TakeDamage(damage);
-                        //!cuidao con nav mesh!
-                        if (hit.rigidbody != null)
-                        {
-                            Vector3 forceDirection = hit.point - shootingPoint.position;
-                            forceDirection.Normalize();
-                            hit.rigidbody.AddForce(forceDirection * impulsitoBala, ForceMode.Impulse);
-                        }
-                        //VFX Sangre
+                        enemy.TakeDamage(damage);
                     }
                 }
                 //else VFX Bujero de bala
@@ -97,14 +92,14 @@ public class P_Character_Combat : MonoBehaviour
     {
         if (context.started)
         {
-            ammoSingle -= 30 - currentAmmoSingle;
-            currentAmmoSingle = 30;
+            ammoSingle -= 12 - currentAmmoSingle;
+            currentAmmoSingle = 12;
         }
     }
 
     public void FlameThrow(InputAction.CallbackContext context)
     {
-        if (!hasFlamethrow && wpControl.simple) return;
+        if (!hasFlamethrow || wpControl.simple) return;
 
         if (context.started && ammoFlame > 0 && fireCooldown <= 0)
         {
@@ -134,16 +129,34 @@ public class P_Character_Combat : MonoBehaviour
 
     void DealFlameDamage()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(flameThrowTrigger.transform.position, flameRange);
-        foreach (Collider hit in hitColliders)
+        Collider[] hitColliders = Physics.OverlapSphere(flameThrowTrigger.transform.position, flameRange, EnemyLayer);
+
+        foreach (Collider hitCollider in hitColliders)
         {
-            if (hit.CompareTag("Enemy"))
+            if (hitCollider.CompareTag("Enemy"))
             {
-                hit.GetComponent<P_AI_Enemy>().TakeDamage(damage);
+                P_AI_Enemy enemy = hitCollider.GetComponent<P_AI_Enemy>();
+
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(damage);
+                    ApplyBurnEffect(hitCollider);
+                }
             }
         }
-
     }
+
+    private void ApplyBurnEffect(Collider hitCollider)
+    {
+        P_AI_Enemy enemy = hitCollider.GetComponent<P_AI_Enemy>();
+        if (enemy != null)
+        {
+            float burnDuration = 5f;
+            float burnDamagePerSecond = 2f;
+            enemy.ApplyBurnEffect(burnDuration, burnDamagePerSecond);
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Color originalColor = Gizmos.color;

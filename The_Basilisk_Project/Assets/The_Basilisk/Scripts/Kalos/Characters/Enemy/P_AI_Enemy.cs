@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
+using static P_WeaponController;
 
 public class P_AI_Enemy : MonoBehaviour
 {
     [Header("=== Enemy Status Settings ===")]
-    [SerializeField] int health = 100;
+    [SerializeField] float health = 100;
     [SerializeField] float speedChase = 7;
     [SerializeField] float speedDefault = 3.5f;
     [SerializeField] int damage = 2;
+    [SerializeField] EnemyState currentState;
 
     [Header("=== Enemy Patrol Settings ===")]
     [SerializeField] Transform[] patrolPoints;
@@ -26,9 +29,22 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float maxDetectionAngle = 45;
     [SerializeField] float alertRadius = 50;
 
+    [Header("=== Enemy Attack Settings ===")]
+    [SerializeField] float lastAttackTime;
+    [SerializeField] float attackCD;
+    [SerializeField] float attackRange;
+
+    [Header("=== Enemy Animation Settings ===")]
+    Animator animator;
+    bool isPausing = false;
+
+    [SerializeField] GameObject ui;
+
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player").transform;
 
         if (patrolPoints.Length > 0)
@@ -37,9 +53,36 @@ public class P_AI_Enemy : MonoBehaviour
         }
     }
 
+    public enum EnemyState
+    {
+        Patrolling,
+        Chasing,
+        Attacking,
+        Iddle
+    }
+
 
     void Update()
     {
+        switch (currentState)
+        {
+            case EnemyState.Patrolling:
+                Patrol();
+                DetectPlayer();
+                break; 
+
+            case EnemyState.Chasing:
+                ChasePlayer();
+                break;
+            case EnemyState.Attacking:
+                AttackPlayer();
+                break;
+            case EnemyState.Iddle:
+                IdleBehavior();
+                break;
+        }
+
+        /*
         if (isChasing)
         {
             ChasePlayer();
@@ -55,23 +98,62 @@ public class P_AI_Enemy : MonoBehaviour
                 Patrol();
                 DetectPlayer();
             }
+        }*/
+    }
+
+    #region -- Burn Logic
+    private Coroutine burnCoroutine;
+
+    public void ApplyBurnEffect(float burnDuration, float burnDamagePerSecond)
+    {
+        if (burnCoroutine != null)
+        {
+            StopCoroutine(burnCoroutine);  // Detener cualquier efecto anterior
         }
 
-        if (health <= 0)
+        burnCoroutine = StartCoroutine(BurnEnemy(burnDuration, burnDamagePerSecond));
+    }
+
+    private IEnumerator BurnEnemy(float burnDuration, float burnDamagePerSecond)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < burnDuration)
         {
-            Destroy(gameObject);
+            TakeDamage(burnDamagePerSecond * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
         }
     }
+    #endregion
 
     void Patrol()
     {
+        if (isPausing) return;
+
+        agent.isStopped = false;
+
         if (!agent.pathPending && agent.remainingDistance < 1f)
         {
-            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-            agent.destination = patrolPoints[currentPatrolIndex].position;
+            StartCoroutine(PauseAtPatrolPoint());
         }
     }
+    private IEnumerator PauseAtPatrolPoint()
+    {
+        isPausing = true;
+        agent.isStopped = true;
 
+        yield return new WaitForSeconds(Random.Range(1, 5));
+
+        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+        agent.destination = patrolPoints[currentPatrolIndex].position;
+
+        agent.isStopped = false;
+        isPausing = false;
+    }
+
+    /*
     void GoCheck(GameObject tempPP)
     {
         if (!tempPP.activeInHierarchy && !isChecking) return;
@@ -90,6 +172,29 @@ public class P_AI_Enemy : MonoBehaviour
             }
         }
     }
+    */
+
+    void IdleBehavior()
+    {
+        agent.isStopped = true;
+        animator.SetTrigger("Iddle");
+               
+        Invoke(nameof(ReturnToPatrol), 3f);
+    }
+
+    void ReturnToPatrol()
+    {
+        if (currentState == EnemyState.Iddle)
+        {
+            currentState = EnemyState.Patrolling;
+            agent.isStopped = false;
+            if (patrolPoints.Length > 0)
+            {
+                agent.destination = patrolPoints[currentPatrolIndex].position;
+            }
+        }
+    }
+
 
     void DetectPlayer()
     {
@@ -100,15 +205,11 @@ public class P_AI_Enemy : MonoBehaviour
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
             float angleToTarget = Vector3.Angle(transform.forward, directionToPlayer);
 
-            if (angleToTarget <= maxDetectionAngle)
+            if (angleToTarget <= maxDetectionAngle && HasVision(player))
             {
-                if (HasVision(player))
-                {
-                    isChasing = true;
-                    Warn();
-                }
+               currentState = EnemyState.Chasing;
+               Warn();
             }
-            else isChasing = false;
         }
     }
 
@@ -131,18 +232,53 @@ public class P_AI_Enemy : MonoBehaviour
 
     void ChasePlayer()
     {
+        agent.isStopped = false;
         agent.destination = player.position;
         agent.speed = speedChase;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        if (distanceToPlayer > detectionRange)
+        if (distanceToPlayer <= attackRange)
         {
-            isChasing = false;
+            currentState = EnemyState.Attacking;
+        }
+        else if (distanceToPlayer > detectionRange)
+        {
+            currentState = EnemyState.Iddle;
             agent.speed = speedDefault;
-            if (patrolPoints.Length > 0)
+        }
+    }
+
+    void AttackPlayer()
+    {
+        agent.isStopped = true;
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToPlayer.x, 0, directionToPlayer.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 7.5f);
+
+        if (Time.time - lastAttackTime >= attackCD)
+        {
+            lastAttackTime = Time.time;
+            //Animation
+            animator.SetTrigger("Attack");
+        }
+
+        if (Vector3.Distance(transform.position, player.position) > attackRange)
+        {
+            currentState = EnemyState.Chasing;
+            agent.isStopped = false;
+        }
+    }
+
+    public void ApplyDamageToPlayer()
+    {
+        if (Vector3.Distance(transform.position, player.position) <= attackRange - 0.1f)
+        {
+            BatterySystem batterySystem = ui.GetComponentInChildren<BatterySystem>();
+            if (batterySystem != null)
             {
-                agent.destination = patrolPoints[currentPatrolIndex].position;
+                batterySystem.LoseBattery();
             }
         }
     }
@@ -163,7 +299,8 @@ public class P_AI_Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+
+    public void TakeDamage(float damage)
     {
         if (damage > 0)
         {
@@ -180,11 +317,15 @@ public class P_AI_Enemy : MonoBehaviour
             isChecking = true;
         }
         */
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnAlert()
     {
-        isChasing = true;
+        currentState = EnemyState.Chasing;
         detectionRange = 50;
         Invoke(nameof(ResetDetectionRange), 8);
     }
@@ -196,7 +337,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (isChasing) Gizmos.color = Color.red;
+        if (currentState == EnemyState.Chasing) Gizmos.color = Color.red;
         else Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 

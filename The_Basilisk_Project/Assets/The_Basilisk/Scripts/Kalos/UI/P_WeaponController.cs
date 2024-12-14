@@ -60,11 +60,13 @@ public class P_WeaponController : MonoBehaviour
         {
             currentAmmoType = AmmoType.Simple;
             simple = true;
+            pjCombatManage.damage = 50;
         }
         else if (context.performed && simple)
         {
             currentAmmoType = AmmoType.Flamethrower;
             simple = false;
+            pjCombatManage.damage = 2;
         }
     }
 
@@ -108,7 +110,6 @@ public class P_WeaponController : MonoBehaviour
 
         if (currentAmmoType == AmmoType.Simple)
         {
-
             ammoText.text = "" + simpleAmmo;
 
             ammoText.color = ammoColor;
@@ -116,11 +117,10 @@ public class P_WeaponController : MonoBehaviour
             magazinesText.text = "" + simpleMagazines;
 
             magazinesText.color = magazinesColor;
-
         }
+
         else if (currentAmmoType == AmmoType.Flamethrower)
         {
-
             ammoText.text = "" + flamethrowerAmmo;
 
             ammoText.color = flamethrowerColor;
@@ -128,7 +128,6 @@ public class P_WeaponController : MonoBehaviour
             magazinesText.text = "" + flamethrowerMagazines;
 
             magazinesText.color = flamethrowerMagazinesColor;
-
         }
     }
 }

@@ -30,8 +30,8 @@ public class P_ObjectPooling : MonoBehaviour
             tmpEPP.SetActive(false);
             pooledEPP.Add(tmpEPP);
         }
-
     }
+
     public GameObject GetPooledTempPP()
     {
         for (int i = 0; i < amountToPoolEPP; i++)

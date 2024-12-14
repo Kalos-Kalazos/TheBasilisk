@@ -37,6 +37,8 @@ public class P_GameManager : MonoBehaviour
 
             //Objects deactivated
             pjFlames.SetActive(false);
+
+            transform.position = Vector3.zero;
         }
     }
 

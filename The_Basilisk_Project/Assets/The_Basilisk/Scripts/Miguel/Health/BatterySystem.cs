@@ -64,21 +64,26 @@ public class BatterySystem : MonoBehaviour
 
     public void LoseBattery()
     {
-
         if (currentPiles > 0)
         {
+            currentPiles--;
+            UpdateBatteryUI();
 
-            currentPiles--; UpdateBatteryUI();
-
-
+            if (currentPiles == 0)
+            {
+                PlayerDied();
+            }
         }
+    }
 
-
+    void PlayerDied()
+    {
+        Debug.Log("El jugador ha muerto.");
     }
 
     // Funcion para reponer pilas si es necesario
 
-  public void RestoreBattery(int amount)
+    public void RestoreBattery(int amount)
   {
 
         currentPiles = Mathf.Min(totalPiles, currentPiles + amount); UpdateBatteryUI();
