@@ -26,6 +26,9 @@ public class P_Character_HookSwing : MonoBehaviour
     public float grapplingCD = 0.1f;
     public float grapplingCDTimer;
 
+    [Header("=== Aereal movement Settings ===")]
+    [SerializeField] float maxSpeed = 8f;
+
     [Header("=== Prediction ===")]
     public RaycastHit predictionHit;
     public float predictionRadius = 1f;
@@ -54,6 +57,7 @@ public class P_Character_HookSwing : MonoBehaviour
         pm = GetComponent<P_Character_Move>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        cam = Camera.main?.transform;
 
         if (!cam || !gunTip || !predictionPoint || !lr)
         {
@@ -86,12 +90,15 @@ public class P_Character_HookSwing : MonoBehaviour
             pm.playerSpeed = 10;
         }
 
+        CheckForSwingPoints();
+    }
+
+    private void FixedUpdate()
+    {
         if (swinging)
         {
             AirMovement();
         }
-
-        CheckForSwingPoints();
     }
 
     /*private void LateUpdate()
@@ -198,6 +205,15 @@ public class P_Character_HookSwing : MonoBehaviour
         {
             float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
             joint.maxDistance = Mathf.Max(joint.maxDistance - shortenSpeed * Time.deltaTime, distanceFromPoint * 0.5f);
+        }
+
+        LimitMovement();
+    }
+    private void LimitMovement()
+    {
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxSpeed;
         }
     }
 

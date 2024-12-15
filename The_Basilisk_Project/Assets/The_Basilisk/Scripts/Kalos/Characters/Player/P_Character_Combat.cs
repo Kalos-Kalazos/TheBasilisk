@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class P_Character_Combat : MonoBehaviour
 {
     #region Non visible variables 
-    PlayerInput playerInput;
+    P_WeaponController wpControl;
     #endregion
 
     [Header("Combat Settings")]
@@ -14,7 +14,8 @@ public class P_Character_Combat : MonoBehaviour
     public int ammoSingle;
     [SerializeField] float fireRate;
     [SerializeField] float shootingRange;
-    public int ammoFlame;
+    public int flameMagazine;
+    public int currentAmmoFlame;
     public int maxAmmoFlame;
     [SerializeField] float fireCooldown;
     [SerializeField] float flameRate;
@@ -26,16 +27,16 @@ public class P_Character_Combat : MonoBehaviour
     public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
     public bool hasFlamethrow = false;
-    [SerializeField] float burnDamagePerSecond;
+    [SerializeField] float burnDamagePerSecond, burnDuration;
 
     [SerializeField] LayerMask EnemyLayer;
 
-    P_WeaponController wpControl;
-
+    Transform cam;
 
     private void Start()
     {
         wpControl = GetComponent<P_WeaponController>();
+        cam = Camera.main?.transform;
     }
 
     void Update()
@@ -64,7 +65,7 @@ public class P_Character_Combat : MonoBehaviour
 
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
         {
-            Ray ray = new Ray(shootingPoint.position, shootingPoint.forward);
+            Ray ray = new Ray(cam.position, cam.forward);
             RaycastHit hit;
 
             if(Physics.Raycast(ray, out hit, shootingRange))
@@ -85,6 +86,10 @@ public class P_Character_Combat : MonoBehaviour
 
             currentAmmoSingle--;
             fireCooldown = fireRate;
+
+            //Sound that warn enemies
+            P_GameManager.OnGunshot(transform.position, "Player");
+
         }
     }
 
@@ -92,8 +97,46 @@ public class P_Character_Combat : MonoBehaviour
     {
         if (context.started)
         {
-            ammoSingle -= 12 - currentAmmoSingle;
-            currentAmmoSingle = 12;
+            if (wpControl.currentAmmoType == P_WeaponController.AmmoType.Simple)
+            {
+                if (ammoSingle > 0)
+                {
+                    int ammoNeeded = 12 - currentAmmoSingle;
+
+                    if (ammoSingle >= ammoNeeded)
+                    {
+                        ammoSingle -= ammoNeeded;
+                        currentAmmoSingle = 12;
+                    }
+                    else
+                    {
+                        currentAmmoSingle += ammoSingle;
+                        ammoSingle = 0;
+                    }
+                }
+                else
+                {
+                    //No ammo
+                }
+            }
+            else if (wpControl.currentAmmoType == P_WeaponController.AmmoType.Flamethrower)
+            {
+                if (flameMagazine > 0 && currentAmmoFlame < maxAmmoFlame)
+                {
+                    int ammoNeeded = maxAmmoFlame - currentAmmoFlame;
+                    currentAmmoFlame += ammoNeeded;
+                    flameMagazine--;
+                }
+                else if (flameMagazine <= 0)
+                {
+                    //No ammo
+                }
+                else
+                {
+                    //amo full
+                }
+            }
+
         }
     }
 
@@ -101,7 +144,7 @@ public class P_Character_Combat : MonoBehaviour
     {
         if (!hasFlamethrow || wpControl.simple) return;
 
-        if (context.started && ammoFlame > 0 && fireCooldown <= 0)
+        if (context.started && currentAmmoFlame > 0 && fireCooldown <= 0)
         {
             StartCoroutine(Flames());
         }
@@ -117,10 +160,10 @@ public class P_Character_Combat : MonoBehaviour
     {
         flameThrowTrigger.SetActive(true);
 
-        while(ammoFlame > 0)
+        while(currentAmmoFlame > 0)
         {
             DealFlameDamage();
-            ammoFlame--;
+            currentAmmoFlame--;
             yield return new WaitForSeconds(flameRate);
         }
 
@@ -151,8 +194,6 @@ public class P_Character_Combat : MonoBehaviour
         P_AI_Enemy enemy = hitCollider.GetComponent<P_AI_Enemy>();
         if (enemy != null)
         {
-            float burnDuration = 5f;
-            float burnDamagePerSecond = 2f;
             enemy.ApplyBurnEffect(burnDuration, burnDamagePerSecond);
         }
     }

@@ -286,6 +286,17 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8b78594e-de7d-455c-a18b-aa91ce0862d5"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""95ccb9b3-e668-4a13-8def-34113d61fa14"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",

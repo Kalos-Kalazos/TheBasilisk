@@ -42,8 +42,9 @@ public class P_WeaponController : MonoBehaviour
         UpdateUI(); //Mostrar la informacion de la UI
 
         simpleAmmo = pjCombatManage.currentAmmoSingle;
-        flamethrowerAmmo = pjCombatManage.ammoFlame;
+        flamethrowerAmmo = pjCombatManage.currentAmmoFlame;
         simpleMagazines = pjCombatManage.ammoSingle;
+        flamethrowerMagazines = pjCombatManage.flameMagazine;
     }
 
     public void Shooting(InputAction.CallbackContext context)
@@ -95,37 +96,37 @@ public class P_WeaponController : MonoBehaviour
     // Actualizar la UI con la municion y cargadores actuales
     void UpdateUI()
     {
-        // Verificar si la municion esta por debajo o igual a 10 para cambiar el color
+        // Verificar si la municion esta por debajo para cambiar el color
 
-        Color ammoColor = (simpleAmmo <= 10) ? Color.red : Color.black;
+        Color ammoColor = (simpleAmmo <= 4) ? Color.red : Color.black;
 
-        Color flamethrowerColor = (flamethrowerAmmo <= 10) ? Color.red : Color.black;
+        Color flamethrowerColor = (flamethrowerAmmo <= 30) ? Color.red : Color.black;
 
-        // Verificar si los cargadores estan por debajo o igual a 3 para cambiar el color
+        // Verificar si los cargadores estan por debajo para cambiar el color
 
-        Color magazinesColor = (simpleMagazines <= 3) ? Color.red : Color.black;
+        Color magazinesColor = (simpleMagazines <= 12) ? Color.red : Color.black;
 
-        Color flamethrowerMagazinesColor = (flamethrowerMagazines <= 3) ? Color.red : Color.black;
+        Color flamethrowerMagazinesColor = (flamethrowerMagazines <= 2) ? Color.red : Color.black;
 
 
         if (currentAmmoType == AmmoType.Simple)
         {
-            ammoText.text = "" + simpleAmmo;
+            ammoText.text = "|" + simpleAmmo + "|";
 
             ammoText.color = ammoColor;
 
-            magazinesText.text = "" + simpleMagazines;
+            magazinesText.text = "|" + simpleMagazines + "|";
 
             magazinesText.color = magazinesColor;
         }
 
         else if (currentAmmoType == AmmoType.Flamethrower)
         {
-            ammoText.text = "" + flamethrowerAmmo;
+            ammoText.text = "|" + flamethrowerAmmo + "|";
 
             ammoText.color = flamethrowerColor;
 
-            magazinesText.text = "" + flamethrowerMagazines;
+            magazinesText.text = "|" + flamethrowerMagazines + "|";
 
             magazinesText.color = flamethrowerMagazinesColor;
         }

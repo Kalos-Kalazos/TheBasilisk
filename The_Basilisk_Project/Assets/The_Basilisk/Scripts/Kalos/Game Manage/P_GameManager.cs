@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,9 +38,14 @@ public class P_GameManager : MonoBehaviour
 
             //Objects deactivated
             pjFlames.SetActive(false);
-
-            transform.position = Vector3.zero;
         }
+    }
+
+    public static Action<Vector3, string> OnGunshot;
+
+    public static void TriggerGunshot(Vector3 position, string sourceTag)
+    {
+        OnGunshot?.Invoke(position, sourceTag);
     }
 
     public void NextLevel()

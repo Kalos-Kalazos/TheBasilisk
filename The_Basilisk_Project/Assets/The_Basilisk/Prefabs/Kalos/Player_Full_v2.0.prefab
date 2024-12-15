@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2806620578954059228}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.0000030249353, z: -0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.06, y: 0.75, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 6859263051679419311}
   - {fileID: 7691652561308264250}
   m_Father: {fileID: 9140585088973353611}
-  m_LocalEulerAnglesHint: {x: 0, y: -360, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7844880942917539997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,10 +248,11 @@ MonoBehaviour:
   maxSwingDistance: 25
   horizontalForce: 0.25
   forwardForce: 0.1
-  shortenSpeed: 8
+  shortenSpeed: 6
   overshootYAxis: 3
   grapplingCD: 0.1
   grapplingCDTimer: 0
+  maxSpeed: 8
   predictionRadius: 3
   predictionPoint: {fileID: 0}
   swingPoint: {x: 0, y: 0, z: 0}
@@ -272,22 +273,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d122f33a75f49498a1c2de36d2de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentAmmoSingle: 30
-  ammoSingle: 100
-  maxAmmoSingle: 100
+  currentAmmoSingle: 12
+  ammoSingle: 12
   fireRate: 0.2
-  shootingRange: 100
-  ammoFlame: 100
-  maxAmmoFlame: 100
+  shootingRange: 30
+  flameMagazine: 5
+  currentAmmoFlame: 80
+  maxAmmoFlame: 80
   fireCooldown: 0
   flameRate: 0.05
   flameRange: 2
-  damage: 1
+  flameDistance: 1
+  damage: 50
   shootingPoint: {fileID: 493835250907376867}
   flameThrowTrigger: {fileID: 8227072662421374384}
   flameThrowTank: {fileID: 456476857240506690}
   impulsitoBala: 5
   hasFlamethrow: 0
+  burnDamagePerSecond: 0.2
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &2510319040789381928
 MonoBehaviour:
   m_ObjectHideFlags: 0

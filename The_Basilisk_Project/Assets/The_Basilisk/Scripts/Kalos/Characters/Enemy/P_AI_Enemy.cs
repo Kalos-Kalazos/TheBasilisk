@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.AI;
 using static P_WeaponController;
@@ -41,6 +42,80 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] GameObject ui;
 
 
+    #region --Search on sound heard
+
+    [SerializeField] float searchRadius = 10f;
+    [SerializeField] float searchTime = 5f;
+    bool isSearching = false;
+
+    private void OnEnable()
+    {
+        P_GameManager.OnGunshot += OnGunshotHeard;
+    }
+
+    private void OnDisable()
+    {
+        P_GameManager.OnGunshot -= OnGunshotHeard;
+    }
+
+    public void OnGunshotHeard(Vector3 gunshotPosition, string sourceTag)
+    {
+        if (Vector3.Distance(transform.position, gunshotPosition) <= searchRadius)
+        {
+            Debug.Log($"{gameObject.name} heard a gunshot");
+
+            if (!isSearching && !player.GetComponent<P_Character_HookSwing>().activeGrapple && !player.GetComponent<P_Character_HookSwing>().swinging && currentState != EnemyState.Chasing)
+            {
+                StartCoroutine(SearchArea(gunshotPosition));
+            }
+        }
+    }
+
+    IEnumerator SearchArea(Vector3 gunshotPosition)
+    {
+        isSearching = true;
+        if (agent == null || !agent.isActiveAndEnabled) yield break;
+        agent.destination = gunshotPosition; 
+        Debug.Log($"{agent.destination} destination");
+
+        // Search
+        float searchDuration = Random.Range(5, 10);
+        float timeElapsed = 0f;
+
+        while (timeElapsed < searchDuration)
+        {
+            if (!gameObject.activeInHierarchy) yield break;
+
+            // Look
+            Vector3 randomDirection = Random.insideUnitSphere;
+            randomDirection.y = 0; //horizontal
+            Vector3 lookPosition = transform.position + randomDirection;
+
+            Quaternion lookRotation = Quaternion.LookRotation((lookPosition - transform.position).normalized);
+            float rotationTime = 1f;
+            float rotationElapsed = 0f;
+
+            while (rotationElapsed < rotationTime)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                rotationElapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(Random.Range(1, 3));
+
+            timeElapsed += rotationTime + Random.Range(1, 3);
+        }
+
+        if (agent != null)
+        {
+            currentState = EnemyState.Patrolling;
+        }
+        isSearching = false;
+    }
+    #endregion
+
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -69,10 +144,12 @@ public class P_AI_Enemy : MonoBehaviour
             case EnemyState.Patrolling:
                 Patrol();
                 DetectPlayer();
+                agent.speed = speedDefault;
                 break; 
 
             case EnemyState.Chasing:
                 ChasePlayer();
+                agent.speed = speedChase;
                 break;
             case EnemyState.Attacking:
                 AttackPlayer();
@@ -108,7 +185,7 @@ public class P_AI_Enemy : MonoBehaviour
     {
         if (burnCoroutine != null)
         {
-            StopCoroutine(burnCoroutine);  // Detener cualquier efecto anterior
+            StopCoroutine(burnCoroutine);
         }
 
         burnCoroutine = StartCoroutine(BurnEnemy(burnDuration, burnDamagePerSecond));
@@ -116,13 +193,15 @@ public class P_AI_Enemy : MonoBehaviour
 
     private IEnumerator BurnEnemy(float burnDuration, float burnDamagePerSecond)
     {
+        if (agent == null) yield break;
+
         float elapsedTime = 0f;
 
         while (elapsedTime < burnDuration)
         {
             TakeDamage(burnDamagePerSecond * Time.deltaTime);
-            elapsedTime += Time.deltaTime;
 
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
     }
@@ -144,7 +223,7 @@ public class P_AI_Enemy : MonoBehaviour
         isPausing = true;
         agent.isStopped = true;
 
-        yield return new WaitForSeconds(Random.Range(1, 5));
+        yield return new WaitForSeconds(Random.Range(1, 8));
 
         currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
         agent.destination = patrolPoints[currentPatrolIndex].position;
@@ -245,7 +324,6 @@ public class P_AI_Enemy : MonoBehaviour
         else if (distanceToPlayer > detectionRange)
         {
             currentState = EnemyState.Iddle;
-            agent.speed = speedDefault;
         }
     }
 
@@ -287,7 +365,7 @@ public class P_AI_Enemy : MonoBehaviour
     {
         Collider[] nearbyEnemies = Physics.OverlapSphere(transform.position, alertRadius);
 
-        detectionRange = 50;
+        detectionRange += 5;
 
         foreach (Collider collider in nearbyEnemies)
         {
@@ -304,7 +382,6 @@ public class P_AI_Enemy : MonoBehaviour
     {
         if (damage > 0)
         {
-            Debug.Log("Entra " + damage + " de daño");
             health -= damage;
         }
         /*        
@@ -319,6 +396,10 @@ public class P_AI_Enemy : MonoBehaviour
         */
         if (health <= 0)
         {
+            if (agent != null)
+            {
+                agent.enabled = false;  // Desactiva el agente antes de destruir
+            }
             Destroy(gameObject);
         }
     }
@@ -326,13 +407,13 @@ public class P_AI_Enemy : MonoBehaviour
     void OnAlert()
     {
         currentState = EnemyState.Chasing;
-        detectionRange = 50;
+        detectionRange += 5;
         Invoke(nameof(ResetDetectionRange), 8);
     }
 
     void ResetDetectionRange()
     {
-        detectionRange = 20;
+        detectionRange -= 5;
     }
 
     private void OnDrawGizmosSelected()
