@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 4455183056764108645}
   - component: {fileID: 1943991512596446499}
   - component: {fileID: 1254081748376032938}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player_Full_v2.0
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -253,7 +253,7 @@ MonoBehaviour:
   grapplingCD: 0.1
   grapplingCDTimer: 0
   maxSpeed: 8
-  predictionRadius: 3
+  predictionRadius: 2
   predictionPoint: {fileID: 0}
   swingPoint: {x: 0, y: 0, z: 0}
   activeGrapple: 0
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentAmmoSingle: 12
-  ammoSingle: 12
+  ammoSingle: 0
   fireRate: 0.2
   shootingRange: 30
   flameMagazine: 5
@@ -290,7 +290,9 @@ MonoBehaviour:
   flameThrowTank: {fileID: 456476857240506690}
   impulsitoBala: 5
   hasFlamethrow: 0
-  burnDamagePerSecond: 0.2
+  burnDamagePerSecond: 0.5
+  burnDuration: 10
+  soundRadius: 40
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -387,7 +389,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 1
+        m_CallState: 2
     m_ActionId: cec316df-d3a6-48b0-ac3a-905576112c04
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:

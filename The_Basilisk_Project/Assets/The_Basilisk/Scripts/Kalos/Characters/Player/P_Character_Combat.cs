@@ -27,7 +27,7 @@ public class P_Character_Combat : MonoBehaviour
     public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
     public bool hasFlamethrow = false;
-    [SerializeField] float burnDamagePerSecond, burnDuration;
+    [SerializeField] float burnDamagePerSecond, burnDuration, soundRadius;
 
     [SerializeField] LayerMask EnemyLayer;
 
@@ -78,18 +78,30 @@ public class P_Character_Combat : MonoBehaviour
                     if (enemy != null)
                     {
                         enemy.TakeDamage(damage);
+
                     }
                 }
                 //else VFX Bujero de bala
 
             }
 
+            //Sound that warn enemies
+            Collider[] hitColliders = Physics.OverlapSphere(shootingPoint.position, soundRadius, EnemyLayer);
+
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.CompareTag("Enemy"))
+                {
+                    P_AI_Enemy enemy = hitCollider.GetComponent<P_AI_Enemy>();
+                    if (enemy != null)
+                    {
+                        enemy.OnGunshotHeard(transform.position, "Player");
+                    }
+                }
+            }
+
             currentAmmoSingle--;
             fireCooldown = fireRate;
-
-            //Sound that warn enemies
-            P_GameManager.OnGunshot(transform.position, "Player");
-
         }
     }
 
@@ -119,7 +131,8 @@ public class P_Character_Combat : MonoBehaviour
                     //No ammo
                 }
             }
-            else if (wpControl.currentAmmoType == P_WeaponController.AmmoType.Flamethrower)
+
+            if (wpControl.currentAmmoType == P_WeaponController.AmmoType.Flamethrower)
             {
                 if (flameMagazine > 0 && currentAmmoFlame < maxAmmoFlame)
                 {
@@ -136,7 +149,6 @@ public class P_Character_Combat : MonoBehaviour
                     //amo full
                 }
             }
-
         }
     }
 
@@ -204,7 +216,7 @@ public class P_Character_Combat : MonoBehaviour
 
         Gizmos.color = Color.red;
 
-        Gizmos.DrawWireSphere(flameThrowTrigger.transform.position, flameRange);
+        Gizmos.DrawWireSphere(shootingPoint.position, soundRadius);
 
         Gizmos.color = originalColor;
     }

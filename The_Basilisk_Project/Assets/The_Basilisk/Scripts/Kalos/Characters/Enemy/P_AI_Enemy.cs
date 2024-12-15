@@ -6,6 +6,7 @@ using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.AI;
 using static P_WeaponController;
+using static Unity.VisualScripting.Member;
 
 public class P_AI_Enemy : MonoBehaviour
 {
@@ -43,75 +44,67 @@ public class P_AI_Enemy : MonoBehaviour
 
 
     #region --Search on sound heard
-
-    [SerializeField] float searchRadius = 10f;
-    [SerializeField] float searchTime = 5f;
+    Coroutine currentCoroutineState;
+    [SerializeField] float searchRadius = 30f;
+    [SerializeField] float searchTime = 20f;
     bool isSearching = false;
-
-    private void OnEnable()
-    {
-        P_GameManager.OnGunshot += OnGunshotHeard;
-    }
-
-    private void OnDisable()
-    {
-        P_GameManager.OnGunshot -= OnGunshotHeard;
-    }
 
     public void OnGunshotHeard(Vector3 gunshotPosition, string sourceTag)
     {
+        if (sourceTag == null || gunshotPosition == null)
+        {
+            Debug.LogError("GunshotHeard Error");
+            return;
+        }
+
         if (Vector3.Distance(transform.position, gunshotPosition) <= searchRadius)
         {
-            Debug.Log($"{gameObject.name} heard a gunshot");
-
             if (!isSearching && !player.GetComponent<P_Character_HookSwing>().activeGrapple && !player.GetComponent<P_Character_HookSwing>().swinging && currentState != EnemyState.Chasing)
             {
-                StartCoroutine(SearchArea(gunshotPosition));
+                if (currentCoroutineState != null)
+                {
+                    StopCoroutine(currentCoroutineState);
+                    isSearching = false;
+                }
+
+                currentCoroutineState = StartCoroutine(SearchArea(gunshotPosition));
             }
         }
     }
 
     IEnumerator SearchArea(Vector3 gunshotPosition)
     {
+        if (agent == null) yield break;
+
+        agent.isStopped = false;
         isSearching = true;
-        if (agent == null || !agent.isActiveAndEnabled) yield break;
         agent.destination = gunshotPosition; 
-        Debug.Log($"{agent.destination} destination");
 
         // Search
-        float searchDuration = Random.Range(5, 10);
-        float timeElapsed = 0f;
+        float searchDuration = 7;
+        float timeElapsed = 0;
 
         while (timeElapsed < searchDuration)
         {
-            if (!gameObject.activeInHierarchy) yield break;
-
-            // Look
-            Vector3 randomDirection = Random.insideUnitSphere;
-            randomDirection.y = 0; //horizontal
-            Vector3 lookPosition = transform.position + randomDirection;
-
-            Quaternion lookRotation = Quaternion.LookRotation((lookPosition - transform.position).normalized);
-            float rotationTime = 1f;
-            float rotationElapsed = 0f;
-
-            while (rotationElapsed < rotationTime)
+            if (currentState == EnemyState.Chasing)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
-                rotationElapsed += Time.deltaTime;
-                yield return null;
+                isSearching = false;
+                yield break;
             }
 
-            yield return new WaitForSeconds(Random.Range(1, 3));
+            timeElapsed += Time.deltaTime;
 
-            timeElapsed += rotationTime + Random.Range(1, 3);
+            yield return null; // Evitar bloqueos
         }
 
-        if (agent != null)
-        {
-            currentState = EnemyState.Patrolling;
-        }
+        currentState = EnemyState.Patrolling;
         isSearching = false;
+
+        if (patrolPoints.Length > 0)
+        {
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            agent.destination = patrolPoints[currentPatrolIndex].position;
+        }
     }
     #endregion
 
@@ -139,6 +132,8 @@ public class P_AI_Enemy : MonoBehaviour
 
     void Update()
     {
+        DetectPlayer();
+
         switch (currentState)
         {
             case EnemyState.Patrolling:
@@ -155,7 +150,6 @@ public class P_AI_Enemy : MonoBehaviour
                 AttackPlayer();
                 break;
             case EnemyState.Iddle:
-                IdleBehavior();
                 break;
         }
 
@@ -223,10 +217,13 @@ public class P_AI_Enemy : MonoBehaviour
         isPausing = true;
         agent.isStopped = true;
 
-        yield return new WaitForSeconds(Random.Range(1, 8));
+        yield return new WaitForSeconds(5);
 
-        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-        agent.destination = patrolPoints[currentPatrolIndex].position;
+        if (!isSearching)
+        {
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            agent.destination = patrolPoints[currentPatrolIndex].position;
+        }
 
         agent.isStopped = false;
         isPausing = false;
@@ -265,12 +262,9 @@ public class P_AI_Enemy : MonoBehaviour
     {
         if (currentState == EnemyState.Iddle)
         {
-            currentState = EnemyState.Patrolling;
             agent.isStopped = false;
-            if (patrolPoints.Length > 0)
-            {
-                agent.destination = patrolPoints[currentPatrolIndex].position;
-            }
+            currentState = EnemyState.Patrolling;
+            agent.destination = patrolPoints[currentPatrolIndex].position;
         }
     }
 

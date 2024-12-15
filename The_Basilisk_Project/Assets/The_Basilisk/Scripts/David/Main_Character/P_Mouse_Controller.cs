@@ -31,6 +31,8 @@ public class P_Mouse_Controller : MonoBehaviour
         {
             cameraTransform = virtualCamera.transform;
         }
+        currentLookingPosX = transform.localEulerAngles.y;
+        currentLookingPosY = cameraTransform.localEulerAngles.x;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

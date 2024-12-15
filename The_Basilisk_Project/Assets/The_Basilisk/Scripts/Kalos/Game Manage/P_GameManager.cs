@@ -12,6 +12,8 @@ public class P_GameManager : MonoBehaviour
 
     public GameObject player, pjWeapon, pjHook, pjFlames;
 
+    public static P_GameManager Instance;
+
     void Start()
     {
         actualScene = ActualSceneID();
@@ -39,13 +41,6 @@ public class P_GameManager : MonoBehaviour
             //Objects deactivated
             pjFlames.SetActive(false);
         }
-    }
-
-    public static Action<Vector3, string> OnGunshot;
-
-    public static void TriggerGunshot(Vector3 position, string sourceTag)
-    {
-        OnGunshot?.Invoke(position, sourceTag);
     }
 
     public void NextLevel()
