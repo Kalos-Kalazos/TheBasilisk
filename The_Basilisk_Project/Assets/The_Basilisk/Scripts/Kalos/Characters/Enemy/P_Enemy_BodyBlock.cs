@@ -3,53 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(Collider))]
 public class P_Enemy_BodyBlock : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    private Vector3 lastPosition;
+    NavMeshAgent agent;
+    P_AI_Enemy enemyControl;
+    [SerializeField] bool isStatic;
 
-    void Start()
+    private void Start()
     {
-        // Obtener el NavMeshAgent del enemigo
         agent = GetComponent<NavMeshAgent>();
-
-        // Guardar la posición inicial
-        lastPosition = transform.position;
-
-        // Asegurarse de que el NavMeshAgent no se vea afectado por colisiones físicas
-        if (TryGetComponent(out Rigidbody rb))
-        {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-        }
+        enemyControl = GetComponent<P_AI_Enemy>();
     }
 
-    void Update()
+    private void OnTriggerStay(Collider other)
     {
-        // Asegurar que el enemigo se mantenga en la posición dictada por el NavMeshAgent
-        if (agent != null)
+        if (other.CompareTag("Player"))
         {
-            Vector3 agentPosition = agent.nextPosition;
-            transform.position = agentPosition;
-        }
-        else
-        {
-            transform.position = lastPosition;
+            Vector3 directionToPlayer = (other.transform.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToPlayer.x, 0, directionToPlayer.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 8f);
+
+            if(!isStatic)
+                StaticEnemy();
         }
 
-        // Actualizar la última posición conocida
-        lastPosition = transform.position;
     }
 
-    void OnCollisionEnter(Collision collision)
+    void StaticEnemy()
     {
-        // Verificar si el jugador está empujando
-        if (collision.collider.CompareTag("Player"))
+        Debug.Log("Enemy Stopped");
+
+        agent.enabled = false;
+        isStatic = true;
+    }
+
+
+    void DynamicEnemy()
+    {
+        Debug.Log("Enemy not stopped");
+
+        agent.enabled = true;
+        isStatic = false;
+        gameObject.isStatic = isStatic;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && isStatic)
         {
-            // Reposicionar el enemigo en caso de empuje
-            transform.position = lastPosition;
+            DynamicEnemy();
         }
     }
 }

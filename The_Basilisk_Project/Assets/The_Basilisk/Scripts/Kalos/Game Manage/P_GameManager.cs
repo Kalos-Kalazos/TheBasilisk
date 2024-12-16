@@ -8,11 +8,13 @@ public class P_GameManager : MonoBehaviour
 {
     [Header("=== Game Manager Settings ===")]
 
-    public int actualScene;
+    public int actualScene, deadCount;
 
     public GameObject player, pjWeapon, pjHook, pjFlames;
 
     public static P_GameManager Instance;
+
+    [SerializeField] P_Enviroment_DD basiliskDoor;
 
     void Start()
     {
@@ -40,6 +42,15 @@ public class P_GameManager : MonoBehaviour
 
             //Objects deactivated
             pjFlames.SetActive(false);
+        }
+    }
+
+    private void Update()
+    {
+        if (deadCount >= 6)
+        {
+            basiliskDoor.canBeOpenned = true;
+            basiliskDoor.TriggerDoors();
         }
     }
 

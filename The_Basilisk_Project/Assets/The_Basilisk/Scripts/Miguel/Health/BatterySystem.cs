@@ -9,7 +9,7 @@ public class BatterySystem : MonoBehaviour
 
     public int totalPiles = 5; //Numero total de pilas del inicio
 
-    private int currentPiles; //Numero actual de pilas disponibles
+    public int currentPiles; //Numero actual de pilas disponibles
 
     public int batteryCount = 0; //Contador de pilas
 
