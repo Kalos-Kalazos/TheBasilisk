@@ -10,11 +10,13 @@ public class P_GameManager : MonoBehaviour
 
     public int actualScene, deadCount;
 
+    [SerializeField] int generatorsPowered;
+
     public GameObject player, pjWeapon, pjHook, pjFlames;
 
     public static P_GameManager Instance;
 
-    [SerializeField] P_Enviroment_DD basiliskDoor;
+    [SerializeField] P_Enviroment_DD basiliskDoor, elevatorDoor;
 
     void Start()
     {
@@ -45,18 +47,43 @@ public class P_GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void CheckToOpen()
     {
-        if (deadCount >= 6)
+        switch (actualScene)
         {
-            basiliskDoor.canBeOpenned = true;
-            basiliskDoor.TriggerDoors();
+            case 1:
+                if (deadCount >= 1)
+                {
+                    elevatorDoor.canBeOpenned = true;
+                }
+                break;
+            case 2:
+                if (deadCount >= 6)
+                {
+                    basiliskDoor.canBeOpenned = true;
+                    basiliskDoor.TriggerDoors();
+                }
+                break;
         }
+
     }
+
 
     public void NextLevel()
     {
-        SceneManager.LoadScene("GL_LvL2");
+
+        switch (actualScene)
+        {
+            case 1:
+                SceneManager.LoadScene("GL_LvL2");
+                break;
+            case 2:
+                if (generatorsPowered == 3)
+                {
+                    elevatorDoor.canBeOpenned = true;
+                }
+                break;
+        }
     }
 
     int ActualSceneID()
@@ -71,7 +98,7 @@ public class P_GameManager : MonoBehaviour
             return 2;
         }
         else
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Scene_LevelBoss")))
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL3")))
         {
             return 3;
         }

@@ -148,6 +148,8 @@ public class P_Character_HookGrab : MonoBehaviour
 
         if (targetPosition != null && grabPoint != null && grabbedObjectRB != null)
         {
+            grabbedObjectRB.velocity = Vector3.zero;
+
             if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 0.5f && playerSwing.hasGrabbed)//  && !grabbed)
             {
                 grabbedObjectRB.gameObject.transform.SetParent(hookOrigin);

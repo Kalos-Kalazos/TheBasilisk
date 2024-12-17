@@ -418,6 +418,7 @@ public class P_AI_Enemy : MonoBehaviour
                 agent.enabled = false;  // Desactiva el agente antes de destruir
             }
             gm.deadCount++;
+            gm.CheckToOpen();
             Destroy(gameObject);
         }
     }
