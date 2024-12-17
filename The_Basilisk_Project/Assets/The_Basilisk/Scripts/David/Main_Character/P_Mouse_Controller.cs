@@ -17,8 +17,8 @@ public class P_Mouse_Controller : MonoBehaviour
     [SerializeField] private float currentLookingPosX;
     [SerializeField] private float currentLookingPosY;
 
-    [SerializeField] private float minVerticalAngle = -60f;
-    [SerializeField] private float maxVerticalAngle = 60f;
+    [SerializeField] private float minVerticalAngle = -75f;
+    [SerializeField] private float maxVerticalAngle = 75f;
 
     [Header("References")]
     [SerializeField] CinemachineVirtualCamera virtualCamera;

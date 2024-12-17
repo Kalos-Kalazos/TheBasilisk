@@ -117,8 +117,8 @@ public class P_AI_Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        player = GameObject.FindWithTag("Player").transform;
-        gm = GameObject.FindAnyObjectByType<P_GameManager>();
+        player = FindAnyObjectByType<P_Mouse_Controller>().transform;
+        gm = FindAnyObjectByType<P_GameManager>();
 
         if (patrolPoints.Length > 0)
         {

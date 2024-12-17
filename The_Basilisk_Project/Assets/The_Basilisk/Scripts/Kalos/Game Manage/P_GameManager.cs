@@ -10,11 +10,15 @@ public class P_GameManager : MonoBehaviour
 
     public int actualScene, deadCount;
 
-    [SerializeField] int generatorsPowered;
+    public int generatorsPowered;
 
     public GameObject player, pjWeapon, pjHook, pjFlames;
 
     public static P_GameManager Instance;
+
+    [SerializeField] P_Enviroment_DD[] doorsToOpen;
+
+    bool doorsOpenned;
 
     [SerializeField] P_Enviroment_DD basiliskDoor, elevatorDoor;
 
@@ -65,19 +69,19 @@ public class P_GameManager : MonoBehaviour
                 }
                 break;
         }
-
     }
 
 
     public void NextLevel()
     {
-
         switch (actualScene)
         {
             case 1:
                 SceneManager.LoadScene("GL_LvL2");
                 break;
             case 2:
+                OpenDoorsLVL2();
+
                 if (generatorsPowered == 3)
                 {
                     elevatorDoor.canBeOpenned = true;
@@ -85,6 +89,20 @@ public class P_GameManager : MonoBehaviour
                 break;
         }
     }
+
+    void OpenDoorsLVL2()
+    {
+        if (!doorsOpenned)
+        {
+            for (int i = 0; i < doorsToOpen.Length; i++)
+            {
+                doorsToOpen[i].canBeOpenned = true;
+            }
+
+            doorsOpenned = true;
+        }
+    }
+
 
     int ActualSceneID()
     {

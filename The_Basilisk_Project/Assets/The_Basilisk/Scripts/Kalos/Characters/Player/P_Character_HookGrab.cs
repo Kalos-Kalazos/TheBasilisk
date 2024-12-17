@@ -73,9 +73,12 @@ public class P_Character_HookGrab : MonoBehaviour
     void ReleaseGrab()
     {
         grabbed = false;
-        grabbedObjectRB.gameObject.transform.SetParent(null);
-        grabbedObjectRB.isKinematic = false;
-        LaunchObject();
+        if (grabbedObjectRB != null)
+        {
+            grabbedObjectRB.gameObject.transform.SetParent(null);
+            grabbedObjectRB.isKinematic = false;
+            LaunchObject();
+        }
     }
 
     void LaunchObject()
