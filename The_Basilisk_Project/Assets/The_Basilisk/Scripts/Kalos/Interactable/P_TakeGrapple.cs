@@ -37,6 +37,8 @@ public class P_TakeGrapple : MonoBehaviour
             fakeFlames.SetActive(false);
             originalFlames.SetActive(true);
             other.GetComponent<P_Character_Combat>().hasFlamethrow = true;
+            if (!openned)
+                openDoor.GetComponent<P_Enviroment_DD>().canBeOpenned = true;
         }
     }
 

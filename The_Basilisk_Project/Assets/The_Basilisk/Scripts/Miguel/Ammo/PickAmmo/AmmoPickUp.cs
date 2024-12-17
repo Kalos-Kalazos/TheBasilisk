@@ -23,9 +23,9 @@ public class AmmoPickUp : MonoBehaviour
             if (weaponController != null)
             {
 
-                weaponController.simpleMagazines += simpleAmmoIncrease;//Aumenta cargadores del arma simple
+                weaponController.pjCombatManage.ammoSingle += simpleAmmoIncrease;//Aumenta cargadores del arma simple
 
-                weaponController.flamethrowerMagazines += flamethrowerAmmoIncrease; //Aumenta cargadores lanzallamas
+                weaponController.pjCombatManage.flameMagazine += flamethrowerAmmoIncrease; //Aumenta cargadores lanzallamas
 
                 isPickedUp = true; // marca el Pick Up como recogido
 

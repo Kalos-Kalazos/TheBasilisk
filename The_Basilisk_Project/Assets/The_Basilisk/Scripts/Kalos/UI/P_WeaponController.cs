@@ -9,7 +9,7 @@ public class P_WeaponController : MonoBehaviour
     public int simpleAmmo = 30; //municion del disparo simple
     public int flamethrowerAmmo = 50; //municion para el lanzallamas
 
-    P_Character_Combat pjCombatManage;
+    public P_Character_Combat pjCombatManage;
 
     public int simpleMagazines = 5; //cargadores disponibles para el disparo simple
     public int flamethrowerMagazines = 3; //cargadores disponibles para el lanzallamas
