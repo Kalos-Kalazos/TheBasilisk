@@ -9,10 +9,13 @@ public class BatterySystem : MonoBehaviour
 
     public int totalPiles = 5; //Numero total de pilas del inicio
 
-    public int currentPiles; //Numero actual de pilas disponibles
+    private int currentPiles; //Numero actual de pilas disponibles
 
     public int batteryCount = 0; //Contador de pilas
 
+    public GameObject gameOverUI; //Asigna tu panel Game Over en el Inspector
+
+    public GameObject manager;
 
     //public Text batteryText; //UI Text para mostrar el numero de pilas
 
@@ -23,6 +26,39 @@ public class BatterySystem : MonoBehaviour
         currentPiles = totalPiles; //Inicializamos con todas las pilas
         UpdateBatteryUI(); //actualizar la interfaz del inicio
 
+        manager = FindAnyObjectByType<GameOverManager>().gameObject;
+        manager.SetActive(false);
+
+    }
+
+    void Update()
+    {
+
+        if (totalPiles <= 0)
+        {
+
+            Die();
+
+
+        }
+
+    }
+
+    void Die() //Metodo que llama cuando el jugador muere
+    {
+
+        gameOverUI.SetActive(true); // Activa el game Over UI
+
+
+        Time.timeScale = 0f; // Pausa el juego
+        Time.timeScale = 1f; // Reinicia el juego
+
+    }
+
+    public void TakeDamage(int damage) //Ejemplo de daño al jugador
+    {
+
+        totalPiles -= damage;
 
     }
 
@@ -65,26 +101,37 @@ public class BatterySystem : MonoBehaviour
 
     public void LoseBattery()
     {
+
         if (currentPiles > 0)
         {
-            currentPiles--;
-            UpdateBatteryUI();
 
-            if (currentPiles == 0)
+            currentPiles--; UpdateBatteryUI();
+
+            if( currentPiles == 0)
             {
+
                 PlayerDied();
+
             }
+
         }
+
+
     }
 
     void PlayerDied()
     {
-        Debug.Log("El jugador ha muerto.");
+
+        Debug.Log("el jugador a muerto");
+
+        manager.SetActive(true);
+
     }
+
 
     // Funcion para reponer pilas si es necesario
 
-    public void RestoreBattery(int amount)
+  public void RestoreBattery(int amount)
   {
 
         currentPiles = Mathf.Min(totalPiles, currentPiles + amount); UpdateBatteryUI();
