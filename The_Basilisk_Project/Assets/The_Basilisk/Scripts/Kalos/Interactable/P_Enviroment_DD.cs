@@ -44,6 +44,11 @@ public class P_Enviroment_DD : MonoBehaviour
         if (!openned && canBeOpenned)
             StartCoroutine(nameof(OpenTheDoor));
     }
+    public void TriggerSingleDoor()
+    {
+        if (!openned && canBeOpenned)
+            StartCoroutine(nameof(OpenTheDoorSingle));
+    }
     /*
     void AwayFromDoors()
     {
@@ -82,6 +87,38 @@ public class P_Enviroment_DD : MonoBehaviour
             yield return null;
         }
     }
+
+    public IEnumerator OpenTheDoorSingle()
+    {
+        openned = true;
+        float forwardDistance = 0.1f;
+        float leftDistance = 1.5f;
+        float duration = 4f;
+        float elapsedTime = 0f;
+
+        Vector3 startPosition = transform.position;
+        Vector3 forwardPosition = startPosition + transform.forward * forwardDistance;
+        Vector3 finalPosition = forwardPosition + transform.right * leftDistance;
+
+        while (elapsedTime < duration / 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / (duration / 2f);
+            transform.position = Vector3.Lerp(startPosition, forwardPosition, t);
+            yield return null;
+        }
+
+        elapsedTime = 0f;
+
+        while (elapsedTime < duration / 2f)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / (duration / 2f);
+            transform.position = Vector3.Lerp(forwardPosition, finalPosition, t);
+            yield return null;
+        }
+    }
+
     /*
     private IEnumerator CloseTheDoor()
     {

@@ -5,10 +5,16 @@ using UnityEngine;
 public class P_TakeGrapple : MonoBehaviour
 {
     public P_GameManager gm;
+    P_Trigger_OpenDoors openTrigger;
 
-    bool openned;
+    public bool openned;
 
     public GameObject fakeGrapple, originalGrapple, fakeWeapon, originalWeapon, fakeFlames, originalFlames, openDoor;
+
+    private void Start()
+    {
+        openTrigger = FindAnyObjectByType<P_Trigger_OpenDoors>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -27,8 +33,15 @@ public class P_TakeGrapple : MonoBehaviour
             fakeWeapon.SetActive(false);
             originalWeapon.SetActive(true);
             other.GetComponent<P_Character_Combat>().enabled = true;
-            if(!openned)
-                StartCoroutine(nameof(OpenTheDoor));
+            if (!openned)
+            {
+                for (int i = 0; i < openTrigger.doorsToOpen.Length; i++)
+                {
+                    openTrigger.doorsToOpen[i].canBeOpenned = true;
+                }
+                openDoor.GetComponent<P_Enviroment_DD>().TriggerSingleDoor();
+            }
+
         }
 
         if (gameObject.CompareTag("FlamesTake") && other.CompareTag("Player"))
@@ -39,37 +52,6 @@ public class P_TakeGrapple : MonoBehaviour
             other.GetComponent<P_Character_Combat>().hasFlamethrow = true;
             if (!openned)
                 openDoor.GetComponent<P_Enviroment_DD>().canBeOpenned = true;
-        }
-    }
-
-    private IEnumerator OpenTheDoor()
-    {
-        openned = true;
-        float forwardDistance = 0.1f;
-        float leftDistance = 1.5f;
-        float duration = 4f;
-        float elapsedTime = 0f;
-
-        Vector3 startPosition = openDoor.transform.position;
-        Vector3 forwardPosition = startPosition + openDoor.transform.forward * forwardDistance;
-        Vector3 finalPosition = forwardPosition + openDoor.transform.right * leftDistance;
-
-        while (elapsedTime < duration / 2f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / (duration / 2f);
-            openDoor.transform.position = Vector3.Lerp(startPosition, forwardPosition, t);
-            yield return null;
-        }
-
-        elapsedTime = 0f;
-
-        while (elapsedTime < duration / 2f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / (duration / 2f);
-            openDoor.transform.position = Vector3.Lerp(forwardPosition, finalPosition, t);
-            yield return null;
         }
     }
 }

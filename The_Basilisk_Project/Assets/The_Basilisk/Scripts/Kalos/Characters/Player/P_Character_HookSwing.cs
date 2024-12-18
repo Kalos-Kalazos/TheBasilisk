@@ -241,7 +241,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         joint.spring = 15f;
         joint.damper = 2f;
-        joint.massScale = 4f;
+        joint.massScale = 15f;
         /*
         lr.enabled = true;
         lr.positionCount = 2;

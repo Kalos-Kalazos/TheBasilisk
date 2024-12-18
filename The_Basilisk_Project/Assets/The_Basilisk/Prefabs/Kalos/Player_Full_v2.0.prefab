@@ -292,7 +292,7 @@ MonoBehaviour:
   hasFlamethrow: 0
   burnDamagePerSecond: 0.5
   burnDuration: 10
-  soundRadius: 40
+  soundRadius: 50
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -809,6 +809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   simpleAmmo: 30
   flamethrowerAmmo: 50
+  pjCombatManage: {fileID: 0}
   simpleMagazines: 5
   flamethrowerMagazines: 3
   ammoText: {fileID: 0}
