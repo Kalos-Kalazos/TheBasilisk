@@ -29,6 +29,9 @@ public class P_Character_Combat : MonoBehaviour
     public bool hasFlamethrow = false;
     [SerializeField] float burnDamagePerSecond, burnDuration, soundRadius;
 
+    [SerializeField] GameObject muzzleVFX;
+    [SerializeField] GameObject hitPointVFX;
+
     [SerializeField] LayerMask EnemyLayer;
 
     Transform cam;
@@ -72,7 +75,11 @@ public class P_Character_Combat : MonoBehaviour
             {
                 Debug.DrawRay(ray.origin, ray.direction * shootingRange, Color.red, fireRate);
 
-                if(hit.collider != null && hit.collider.CompareTag("Enemy"))
+                GameObject muzzleTemp = Instantiate(muzzleVFX, shootingPoint.position, shootingPoint.rotation);
+                muzzleTemp.transform.SetParent(shootingPoint);
+                GameObject hitPointTemp = Instantiate(hitPointVFX, hit.point, shootingPoint.rotation);
+
+                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
                 {
                     P_AI_Enemy enemy = hit.collider.GetComponent<P_AI_Enemy>();
                     if (enemy != null)
@@ -82,7 +89,8 @@ public class P_Character_Combat : MonoBehaviour
                     }
                 }
                 //else VFX Bujero de bala
-
+                Destroy(muzzleTemp, 1);
+                Destroy(hitPointTemp, 1);
             }
 
             //Sound that warn enemies

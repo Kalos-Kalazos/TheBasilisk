@@ -20,7 +20,7 @@ public class P_GameManager : MonoBehaviour
 
     bool doorsOpenned;
 
-    [SerializeField] P_Enviroment_DD basiliskDoor, elevatorDoor;
+    public P_Enviroment_DD basiliskDoor, elevatorDoor;
 
     void Start()
     {
@@ -80,17 +80,12 @@ public class P_GameManager : MonoBehaviour
                 SceneManager.LoadScene("GL_LvL2");
                 break;
             case 2:
-                OpenDoorsLVL2();
-
-                if (generatorsPowered == 3)
-                {
-                    elevatorDoor.canBeOpenned = true;
-                }
+                SceneManager.LoadScene("GL_LvL3");
                 break;
         }
     }
 
-    void OpenDoorsLVL2()
+    public void OpenDoorsLVL2()
     {
         if (!doorsOpenned)
         {

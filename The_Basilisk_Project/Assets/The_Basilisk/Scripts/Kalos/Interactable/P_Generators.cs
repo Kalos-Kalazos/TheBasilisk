@@ -10,7 +10,7 @@ public class P_Generators : MonoBehaviour
     [SerializeField] float maxPower = 30;
     [SerializeField] float actualFuel;
     [SerializeField] float maxFuel = 30;
-    [SerializeField] bool isCharging;
+    [SerializeField] bool onRange;
     [SerializeField] bool powered;
 
     [Header("=== UI Settings ===")]
@@ -45,12 +45,12 @@ public class P_Generators : MonoBehaviour
             actualPower = maxPower;
         }
 
-        if (progressBar != null)
+        if (progressBar != null && onRange)
         {
             progressBar.value = actualPower;
         }
 
-        if (fuelBar != null)
+        if (fuelBar != null && onRange)
         {
             fuelBar.value = actualFuel;
         }
@@ -66,6 +66,7 @@ public class P_Generators : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            onRange = true;
             progressBar.gameObject.SetActive(true);
             fuelBar.gameObject.SetActive(true);
         }

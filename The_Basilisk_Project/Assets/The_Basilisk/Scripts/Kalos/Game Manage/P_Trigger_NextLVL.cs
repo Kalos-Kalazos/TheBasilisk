@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class P_Trigger_NextLVL : MonoBehaviour
 {
-    public P_GameManager gm; 
+    public P_GameManager gm;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            gm.NextLevel();
+            gm.OpenDoorsLVL2();
+
+            if (gm.generatorsPowered == 3)
+            {
+                gm.elevatorDoor.canBeOpenned = true;
+            }
+            if (gameObject.CompareTag("NextLVL"))
+            {
+                gm.NextLevel();
+            }
         }
     }
 }

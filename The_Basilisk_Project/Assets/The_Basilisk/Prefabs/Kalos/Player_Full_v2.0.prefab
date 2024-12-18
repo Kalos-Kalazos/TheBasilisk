@@ -128,7 +128,6 @@ GameObject:
   - component: {fileID: 5706528471668912867}
   - component: {fileID: 6440583043314318055}
   - component: {fileID: 4455183056764108645}
-  - component: {fileID: 1943991512596446499}
   - component: {fileID: 1254081748376032938}
   m_Layer: 8
   m_Name: Player_Full_v2.0
@@ -293,6 +292,10 @@ MonoBehaviour:
   burnDamagePerSecond: 0.5
   burnDuration: 10
   soundRadius: 50
+  muzzleVFX: {fileID: 4356289728793463192, guid: a518601cd32ed87438c309bcc8cf4051,
+    type: 3}
+  hitPointVFX: {fileID: 578925336170770808, guid: c940dd4bd32bb58499d332a61afb09d8,
+    type: 3}
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -779,22 +782,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batterySystem: {fileID: 0}
---- !u!208 &1943991512596446499
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4345871837883684899}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.5, y: 1, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &1254081748376032938
 MonoBehaviour:
   m_ObjectHideFlags: 0
