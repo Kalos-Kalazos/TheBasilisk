@@ -3302,14 +3302,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 232423115}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62a2bfa3a4463e840affd14eb2e0df2f, type: 3}
+  m_Script: {fileID: 11500000, guid: cbdfeac3bec4365458381ef94fd2ff3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  batteryPiles: []
-  totalPiles: 5
-  batteryCount: 0
-  gameOverUI: {fileID: 232423115}
-  manager: {fileID: 1675878929}
 --- !u!1 &248163612
 GameObject:
   m_ObjectHideFlags: 0
@@ -6593,7 +6588,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 232423117}
         m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
         m_MethodName: RestartGame
         m_Mode: 1
@@ -6603,7 +6598,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &548525927
 MonoBehaviour:
@@ -7610,24 +7605,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1981bfb33b586a46a3b64f0b854b04c, type: 3}
---- !u!1 &727999397 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4345871837883684899, guid: 2a763df89e688ba43b122f8ecca189dd,
-    type: 3}
-  m_PrefabInstance: {fileID: 1737512999}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &727999411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 727999397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53d098a883dc61b40be25972f272650a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &730518836
 Mesh:
   m_ObjectHideFlags: 0
@@ -10867,7 +10844,7 @@ MonoBehaviour:
   totalPiles: 5
   batteryCount: 1
   gameOverUI: {fileID: 0}
-  manager: {fileID: 0}
+  manager: {fileID: 232423115}
 --- !u!43 &1221974756
 Mesh:
   m_ObjectHideFlags: 0
@@ -15082,10 +15059,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1231231839}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4345871837883684899, guid: 2a763df89e688ba43b122f8ecca189dd,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 727999411}
     - targetCorrespondingSourceObject: {fileID: 2246278266429246920, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       insertIndex: -1
