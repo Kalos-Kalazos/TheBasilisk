@@ -3302,9 +3302,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 232423115}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbdfeac3bec4365458381ef94fd2ff3e, type: 3}
+  m_Script: {fileID: 11500000, guid: 62a2bfa3a4463e840affd14eb2e0df2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  batteryPiles: []
+  totalPiles: 5
+  batteryCount: 0
+  gameOverUI: {fileID: 232423115}
+  manager: {fileID: 1675878929}
 --- !u!1 &248163612
 GameObject:
   m_ObjectHideFlags: 0
@@ -6588,7 +6593,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 232423117}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
         m_MethodName: RestartGame
         m_Mode: 1
@@ -7623,8 +7628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d098a883dc61b40be25972f272650a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 95
-  gameOverUI: {fileID: 232423115}
 --- !u!43 &730518836
 Mesh:
   m_ObjectHideFlags: 0
@@ -10863,6 +10866,8 @@ MonoBehaviour:
   - {fileID: 764764763}
   totalPiles: 5
   batteryCount: 1
+  gameOverUI: {fileID: 0}
+  manager: {fileID: 0}
 --- !u!43 &1221974756
 Mesh:
   m_ObjectHideFlags: 0
