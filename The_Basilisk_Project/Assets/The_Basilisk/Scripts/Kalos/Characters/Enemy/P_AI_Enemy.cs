@@ -1,12 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.AI;
-using static P_WeaponController;
-using static Unity.VisualScripting.Member;
 
 public class P_AI_Enemy : MonoBehaviour
 {

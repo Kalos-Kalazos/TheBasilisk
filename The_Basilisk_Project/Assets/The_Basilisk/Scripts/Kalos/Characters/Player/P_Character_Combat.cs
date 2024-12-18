@@ -33,13 +33,25 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] GameObject hitPointVFX;
 
     [SerializeField] LayerMask EnemyLayer;
+    [SerializeField] Animator animator;
+
+    [SerializeField] bool recharged;
 
     Transform cam;
+
+    private void Awake()
+    {
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+    }
 
     private void Start()
     {
         wpControl = GetComponent<P_WeaponController>();
         cam = Camera.main?.transform;
+        recharged = true;
     }
 
     void Update()
@@ -64,7 +76,7 @@ public class P_Character_Combat : MonoBehaviour
 
     public void Shooting(InputAction.CallbackContext context)
     {
-        if (!wpControl.simple) return;
+        if (!wpControl.simple || !recharged) return;
 
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
         {
@@ -117,6 +129,7 @@ public class P_Character_Combat : MonoBehaviour
     {
         if (context.started)
         {
+            recharged = false;
             if (wpControl.currentAmmoType == P_WeaponController.AmmoType.Simple)
             {
                 if (ammoSingle > 0)
@@ -132,6 +145,10 @@ public class P_Character_Combat : MonoBehaviour
                     {
                         currentAmmoSingle += ammoSingle;
                         ammoSingle = 0;
+                    }
+                    if (animator != null)
+                    {
+                        animator.SetTrigger("Reload");
                     }
                 }
                 else
@@ -160,9 +177,14 @@ public class P_Character_Combat : MonoBehaviour
         }
     }
 
+    public void Recharged()
+    {
+        recharged = true;
+    }
+
     public void FlameThrow(InputAction.CallbackContext context)
     {
-        if (!hasFlamethrow || wpControl.simple) return;
+        if (!hasFlamethrow || wpControl.simple || !recharged) return;
 
         if (context.started && currentAmmoFlame > 0 && fireCooldown <= 0)
         {
