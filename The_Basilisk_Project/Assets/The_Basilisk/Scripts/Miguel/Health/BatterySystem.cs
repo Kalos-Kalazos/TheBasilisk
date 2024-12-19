@@ -9,13 +9,11 @@ public class BatterySystem : MonoBehaviour
 
     public int totalPiles = 5; //Numero total de pilas del inicio
 
-    private int currentPiles; //Numero actual de pilas disponibles
+    public int currentPiles; //Numero actual de pilas disponibles
 
     public int batteryCount = 0; //Contador de pilas
 
-    public GameObject gameOverUI; //Asigna tu panel Game Over en el Inspector
-
-    public GameObject manager;
+    P_GameManager gameManager;
 
     //public Text batteryText; //UI Text para mostrar el numero de pilas
 
@@ -26,33 +24,7 @@ public class BatterySystem : MonoBehaviour
         currentPiles = totalPiles; //Inicializamos con todas las pilas
         UpdateBatteryUI(); //actualizar la interfaz del inicio
 
-        manager = FindAnyObjectByType<GameOverManager>().gameObject;
-        manager.SetActive(false);
-
-    }
-
-    void Update()
-    {
-
-        if (totalPiles <= 0)
-        {
-
-            Die();
-
-
-        }
-
-    }
-
-    void Die() //Metodo que llama cuando el jugador muere
-    {
-
-        gameOverUI.SetActive(true); // Activa el game Over UI
-
-
-        Time.timeScale = 0f; // Pausa el juego
-        Time.timeScale = 1f; // Reinicia el juego
-
+        gameManager = FindAnyObjectByType<P_GameManager>();
     }
 
     public void TakeDamage(int damage) //Ejemplo de daño al jugador
@@ -64,10 +36,8 @@ public class BatterySystem : MonoBehaviour
 
     public void AddBattery()
     {
-
         currentPiles++;
         UpdateBatteryUI();// actualiza la UI cuando recoge una pila
-
 
     }
 
@@ -124,8 +94,7 @@ public class BatterySystem : MonoBehaviour
 
         Debug.Log("el jugador a muerto");
 
-        manager.SetActive(true);
-
+        gameManager.GameOver_UI();
     }
 
 

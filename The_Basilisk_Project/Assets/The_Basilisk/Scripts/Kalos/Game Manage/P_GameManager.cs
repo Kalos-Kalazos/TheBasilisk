@@ -22,9 +22,13 @@ public class P_GameManager : MonoBehaviour
 
     public P_Enviroment_DD basiliskDoor, elevatorDoor;
 
+    [SerializeField] GameObject UI_GameOver;
+
     void Start()
     {
         actualScene = ActualSceneID();
+
+        Time.timeScale = 1f;
 
         pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
 
@@ -95,6 +99,14 @@ public class P_GameManager : MonoBehaviour
             }
 
             doorsOpenned = true;
+        }
+    }
+    public void GameOver_UI()
+    {
+        if (UI_GameOver != null)
+        {
+            UI_GameOver.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 

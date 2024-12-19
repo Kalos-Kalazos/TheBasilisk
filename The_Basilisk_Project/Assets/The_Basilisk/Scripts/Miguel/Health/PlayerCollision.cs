@@ -9,7 +9,7 @@ public class PlayerCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && batterySystem.currentPiles <=0)
+        if (collision.gameObject.CompareTag("Enemy") && batterySystem.currentPiles > 0)
         {
             //Llamamos al metodo loseBattery() cuando el jugador es atacado por un enemigo.
 

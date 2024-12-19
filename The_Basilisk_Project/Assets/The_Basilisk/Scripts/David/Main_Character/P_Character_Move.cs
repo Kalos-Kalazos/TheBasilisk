@@ -38,7 +38,6 @@ public class P_Character_Move : MonoBehaviour
         playerInputs.Player.Jump.performed += ctx => Jump();
         playerInputs.Player.Crouch.performed += ctx => ToggleCrouch();
     }
-
     private void OnEnable()
     {
         playerInputs.Enable();
@@ -48,6 +47,8 @@ public class P_Character_Move : MonoBehaviour
     {
         playerInputs.Disable();
     }
+
+
 
     private void Start()
     {
@@ -72,7 +73,7 @@ public class P_Character_Move : MonoBehaviour
             return;
         }
 
-        MovePlayer();
+        Move();
         ApplyGravity();
         CheckForWalking();
     }
@@ -86,7 +87,7 @@ public class P_Character_Move : MonoBehaviour
         }
     }
 
-    private void MovePlayer()
+    private void Move()
     {
         if (!myCC.enabled) return;
 

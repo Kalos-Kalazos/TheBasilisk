@@ -129,7 +129,6 @@ public class P_Character_Combat : MonoBehaviour
     {
         if (context.started)
         {
-            recharged = false;
             if (wpControl.currentAmmoType == P_WeaponController.AmmoType.Simple)
             {
                 if (ammoSingle > 0)
@@ -140,11 +139,13 @@ public class P_Character_Combat : MonoBehaviour
                     {
                         ammoSingle -= ammoNeeded;
                         currentAmmoSingle = 12;
+                        recharged = false;
                     }
                     else
                     {
                         currentAmmoSingle += ammoSingle;
                         ammoSingle = 0;
+                        recharged = false;
                     }
                     if (animator != null)
                     {
@@ -177,7 +178,7 @@ public class P_Character_Combat : MonoBehaviour
         }
     }
 
-    public void Recharged()
+    public void RechargedBoolean()
     {
         recharged = true;
     }

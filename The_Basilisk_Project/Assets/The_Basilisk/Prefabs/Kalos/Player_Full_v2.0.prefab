@@ -117,10 +117,10 @@ GameObject:
   - component: {fileID: 7091086280166304328}
   - component: {fileID: 7030380333450355321}
   - component: {fileID: 952069115498656020}
+  - component: {fileID: 4114651461272240560}
   - component: {fileID: 1220950344702437139}
   - component: {fileID: 2163845627631675047}
   - component: {fileID: 2510319040789381928}
-  - component: {fileID: 3004502352965753079}
   - component: {fileID: 2454628663326441322}
   - component: {fileID: 2705867135760613748}
   - component: {fileID: 8854775838509867180}
@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 6440583043314318055}
   - component: {fileID: 4455183056764108645}
   - component: {fileID: 1254081748376032938}
+  - component: {fileID: 4813077843506717313}
   m_Layer: 8
   m_Name: Player_Full_v2.0
   m_TagString: Player
@@ -225,6 +226,33 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4114651461272240560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345871837883684899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58edbd81342772f47aa843648d1934c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCC: {fileID: 0}
+  inputVector: {x: 0, y: 0}
+  movementVector: {x: 0, y: 0, z: 0}
+  gravity: -11
+  yVelocity: 0
+  isWalking: 0
+  isCrouched: 0
+  playerSpeed: 5
+  crouchSpeed: 2
+  swingSpeed: 10
+  cameraTransform: {fileID: 0}
+  jumpHeight: 1
+  characterHeightStandUp: 2
+  characterHeightCrouched: 1
+  groundCheckDistance: 0.1
 --- !u!114 &1220950344702437139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,8 +273,8 @@ MonoBehaviour:
     m_Bits: 8
   lr: {fileID: 0}
   maxSwingDistance: 15
-  horizontalForce: 0.2
-  forwardForce: 0.18
+  horizontalForce: 0.22
+  forwardForce: 0.2
   shortenSpeed: 5
   overshootYAxis: 3
   grapplingCD: 0.1
@@ -299,6 +327,8 @@ MonoBehaviour:
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  animator: {fileID: 0}
+  recharged: 0
 --- !u!114 &2510319040789381928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,36 +349,9 @@ MonoBehaviour:
   smoothedMousePosY: 0
   currentLookingPosX: 0
   currentLookingPosY: 0
-  minVerticalAngle: -60
-  maxVerticalAngle: 60
+  minVerticalAngle: -75
+  maxVerticalAngle: 75
   virtualCamera: {fileID: 7844880942917539997}
---- !u!114 &3004502352965753079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4345871837883684899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2b39b6c93822494fbb8834cfd8875f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myCC: {fileID: 0}
-  inputVector: {x: 0, y: 0}
-  movementVector: {x: 0, y: 0, z: 0}
-  gravity: -11
-  yVelocity: 0
-  isWalking: 0
-  isCrouched: 0
-  playerSpeed: 6
-  crouchSpeed: 2
-  swingSpeed: 10
-  cameraTransform: {fileID: 0}
-  jumpHeight: 1
-  characterHeightStandUp: 2
-  characterHeightCrouched: 1
-  groundCheckDistance: 0.1
 --- !u!114 &2454628663326441322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -803,6 +806,27 @@ MonoBehaviour:
   magazinesText: {fileID: 0}
   currentAmmoType: 0
   simple: 0
+--- !u!95 &4813077843506717313
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345871837883684899}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dfb024f00af6c894684dcc57e8b0490c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4968719344087149376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,7 +1129,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 2263109f2fdea3b48b8f337bae7c4ba2, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 704339380658197982, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6519630792203300375, guid: 424a25dbfd6eea045aee3f5fdc2ea6c1,

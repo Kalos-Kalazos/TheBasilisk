@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class P_Character_HookSwing : MonoBehaviour
 {
     [Header("=== References ===")]
-    private P_Character_Move pm;
+    private P_Character_Move_v2 pm;
     private CharacterController controller;
     Rigidbody rb;
 
@@ -54,7 +54,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void Start()
     {
-        pm = GetComponent<P_Character_Move>();
+        pm = GetComponent<P_Character_Move_v2>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         cam = Camera.main?.transform;

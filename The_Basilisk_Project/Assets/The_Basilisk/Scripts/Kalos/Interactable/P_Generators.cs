@@ -54,21 +54,27 @@ public class P_Generators : MonoBehaviour
         {
             fuelBar.value = actualFuel;
         }
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Fuel") && playerGrab.grabbed)
+        if (!powered)
         {
-            StartCoroutine(AddFuel(10));
-            Destroy(other.gameObject);
-        }
+            if (other.CompareTag("Fuel") && playerGrab.grabbed)
+            {
+                StartCoroutine(AddFuel(10));
+                Destroy(other.gameObject);
+            }
 
-        if (other.CompareTag("Player"))
-        {
-            onRange = true;
-            progressBar.gameObject.SetActive(true);
-            fuelBar.gameObject.SetActive(true);
+            if (other.CompareTag("Player"))
+            {
+                onRange = true;
+                progressBar.gameObject.SetActive(true);
+                fuelBar.gameObject.SetActive(true);
+            }
+
         }
     }
 
