@@ -36,7 +36,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     private SpringJoint joint;
     private Vector3 currentGrapplePosition;
-    public Vector3 swingPoint;
+    public Vector3 swingPoint, grapplePoint;
 
     public bool activeGrapple;
     public bool swinging;
@@ -114,7 +114,11 @@ public class P_Character_HookSwing : MonoBehaviour
         }
         else if (context.canceled)
         {
-            StopSwing();
+            if (swinging)
+            {
+                ResetRestrictions();
+                StopSwing();
+            }
         }
     }
 
@@ -170,18 +174,23 @@ public class P_Character_HookSwing : MonoBehaviour
             realHitPoint = sphereCastHit.point;
         }
 
-        if (realHitPoint != Vector3.zero)
+        if (Vector3.Distance(transform.position, realHitPoint) > 1f)
         {
-            predictionPoint.gameObject.SetActive(true);
-            predictionPoint.position = realHitPoint;
-        }
-        else
-        {
-            predictionPoint.gameObject.SetActive(false);
-            predictionPoint.position = cam.position + cam.forward * maxSwingDistance;
+            if (realHitPoint != Vector3.zero)
+            {
+                predictionPoint.gameObject.SetActive(true);
+                predictionPoint.position = realHitPoint;
+            }
+            else
+            {
+                predictionPoint.gameObject.SetActive(false);
+                predictionPoint.position = cam.position + cam.forward * maxSwingDistance;
+            }
+
+            predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
         }
 
-        predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
+        //Vector3.Distance(transform.position, swingPoint)
     }
 
     void AirMovement()
@@ -223,6 +232,8 @@ public class P_Character_HookSwing : MonoBehaviour
 
         ResetRestrictions();
 
+        Invoke(nameof(ExecuteGrapple), 0.2f);
+
         activeGrapple = true;
         swinging = true;
         controller.enabled = false;
@@ -237,7 +248,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
         joint.maxDistance = distanceFromPoint * 0.8f;
-        joint.minDistance = distanceFromPoint * 0.1f;
+        joint.minDistance = distanceFromPoint * 0.2f;
 
         joint.spring = 15f;
         joint.damper = 2f;
@@ -248,20 +259,41 @@ public class P_Character_HookSwing : MonoBehaviour
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);*/
     }
-    /*
+
+    private void ExecuteGrapple()
+    {
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed && activeGrapple) return;
+
+        controller.enabled = false;
+        rb.isKinematic = false;
+        grapplePoint = predictionHit.point;
+
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
+
+        JumpToPosition(grapplePoint, highestPointOnArc);
+        Invoke(nameof(ResetRestrictions), 1f);
+    }
+
+    
     public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
     {
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
 
-        Invoke(nameof(ResetRestrictions), 2f);
+        //Invoke(nameof(ResetRestrictions), 1f);
     }
 
     private Vector3 velocityToSet;
     private void SetVelocity()
     {
         rb.velocity = velocityToSet;
-    }*/
+    }
+
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
@@ -295,17 +327,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
         grapplingCDTimer = grapplingCD;
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (swinging && collision.collider.CompareTag("Ground"))
-        {
-            ResetRestrictions();
-
-            StartCoroutine(ReenableCharacterController());
-        }
-    }
-
+    
     private IEnumerator ReenableCharacterController()
     {
         yield return new WaitForSeconds(0.1f);
@@ -314,6 +336,14 @@ public class P_Character_HookSwing : MonoBehaviour
         controller.enabled = true;
         rb.isKinematic = true;
         StopSwing();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!swinging)
+        {
+            StartCoroutine(ReenableCharacterController());
+        }
     }
 
     /*public void DrawRope()

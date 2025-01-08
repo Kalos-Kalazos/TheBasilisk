@@ -55,14 +55,16 @@ public class P_Character_Move_v2 : MonoBehaviour
     private void Update()
     {
         CheckGrounded();
-
-
+                
         if (pGrapple != null && pGrapple.activeGrapple ||
             pSwing != null && pSwing.swinging)
         {
 
             return;
         }
+
+        if (isGrounded) playerSpeed = 8;
+        else playerSpeed = 6;
 
         Move();
         ApplyGravity();
@@ -72,10 +74,10 @@ public class P_Character_Move_v2 : MonoBehaviour
     private void CheckGrounded()
     {
         isGrounded = myCC.isGrounded || Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + myCC.skinWidth);
-        if (isGrounded && yVelocity < 0)
+        /*if (isGrounded && yVelocity < 0)
         {
             yVelocity = -1f;
-        }
+        }*/
     }
 
     private void Move()

@@ -16,9 +16,19 @@ public class P_Enviroment_DD : MonoBehaviour
     Vector3 startPositionR;
     Vector3 startPositionL;
 
+    bool interacted;
+    bool checkStatus;
+    GameObject player;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
+        if (other.CompareTag("Player"))
+        {
+            player = other.gameObject;
+            checkStatus = true;
+        }
+
+        if (other.CompareTag("Enemy"))
         {
             //StopCoroutine(nameof(CloseTheDoor));
             startPositionR = doorR.transform.position;
@@ -26,6 +36,37 @@ public class P_Enviroment_DD : MonoBehaviour
             TriggerDoors();
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            checkStatus = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (checkStatus)
+        {
+            Interaction(player);
+        }
+
+
+        if (checkStatus && interacted)
+        {
+            //StopCoroutine(nameof(CloseTheDoor));
+            startPositionR = doorR.transform.position;
+            startPositionL = doorL.transform.position;
+            TriggerDoors();
+            checkStatus = false;
+        }
+    }
+
+    void Interaction(GameObject player)
+    {
+        interacted = player.GetComponent<P_DoorInteraction>().performed;
+    }
+
     /*
     private void OnTriggerExit(Collider other)
     {

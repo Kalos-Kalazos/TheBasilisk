@@ -116,6 +116,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""ec592cef-93a0-425f-9910-c9535771b966"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -264,28 +273,6 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c5fd4a8a-4933-44b2-ab16-eaa6c8bd8f8f"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hook"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8218c86a-1997-4f31-ada8-d839dad4c5ec"",
-                    ""path"": ""<Mouse>/middleButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hook"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8b78594e-de7d-455c-a18b-aa91ce0862d5"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
@@ -314,6 +301,17 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ChangeAmmoType"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d7cc748-04d9-4a80-83d6-c9cdfb841d43"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -911,6 +909,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Hook = m_Player.FindAction("Hook", throwIfNotFound: true);
         m_Player_ShortenCable = m_Player.FindAction("ShortenCable", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -994,6 +993,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Hook;
     private readonly InputAction m_Player_ShortenCable;
+    private readonly InputAction m_Player_Interact;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
@@ -1008,6 +1008,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Hook => m_Wrapper.m_Player_Hook;
         public InputAction @ShortenCable => m_Wrapper.m_Player_ShortenCable;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1047,6 +1048,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @ShortenCable.started += instance.OnShortenCable;
             @ShortenCable.performed += instance.OnShortenCable;
             @ShortenCable.canceled += instance.OnShortenCable;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1081,6 +1085,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @ShortenCable.started -= instance.OnShortenCable;
             @ShortenCable.performed -= instance.OnShortenCable;
             @ShortenCable.canceled -= instance.OnShortenCable;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1273,6 +1280,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnHook(InputAction.CallbackContext context);
         void OnShortenCable(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

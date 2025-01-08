@@ -24,7 +24,7 @@ public class HookCooldown : MonoBehaviour
     void Update()
     {
         //Si el jugador presiona la tecla para usar el hook
-        if(Input.GetKeyDown(KeyCode.E) && !isCooldown)
+        if(Input.GetKeyDown(KeyCode.Mouse1) && !isCooldown)
         {
 
             UseHook();

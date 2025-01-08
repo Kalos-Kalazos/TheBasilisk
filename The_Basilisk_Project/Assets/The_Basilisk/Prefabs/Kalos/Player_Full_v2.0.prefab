@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 4455183056764108645}
   - component: {fileID: 1254081748376032938}
   - component: {fileID: 4813077843506717313}
+  - component: {fileID: 3876615822439697512}
   m_Layer: 8
   m_Name: Player_Full_v2.0
   m_TagString: Player
@@ -283,6 +284,7 @@ MonoBehaviour:
   predictionRadius: 2
   predictionPoint: {fileID: 0}
   swingPoint: {x: 0, y: 0, z: 0}
+  grapplePoint: {x: 0, y: 0, z: 0}
   activeGrapple: 0
   swinging: 0
   shortenCable: 0
@@ -542,6 +544,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ed9bff0c-6bb4-4a8c-879c-32f2b3fb5546
     m_ActionName: Player/ChangeAmmoType[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3876615822439697512}
+        m_TargetAssemblyTypeName: P_DoorInteraction, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ec592cef-93a0-425f-9910-c9535771b966
+    m_ActionName: Player/Interact[/Keyboard/f,/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -827,6 +845,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3876615822439697512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4345871837883684899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4518d97efe86749984e196b8bce0a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  performed: 0
 --- !u!1 &4968719344087149376
 GameObject:
   m_ObjectHideFlags: 0
