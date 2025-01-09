@@ -717,7 +717,12 @@ PrefabInstance:
     - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: shortenSpeed
-      value: 4
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: overshootYAxis
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
@@ -743,6 +748,11 @@ PrefabInstance:
         type: 3}
       propertyPath: maxAmmoFlame
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4114651461272240560, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: playerSpeed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4345871837883684899, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
