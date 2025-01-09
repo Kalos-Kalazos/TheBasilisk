@@ -18,9 +18,11 @@ public class P_GameManager : MonoBehaviour
 
     [SerializeField] P_Enviroment_DD[] doorsToOpen;
 
-    bool doorsOpenned;
+    bool doorsOpenned, azazelInteracted;
 
-    public P_Enviroment_DD basiliskDoor, elevatorDoor;
+    P_Azazel_Talk azazel;
+
+    public P_Enviroment_DD basiliskDoor, elevatorDoor, azazelDoor;
 
     [SerializeField] GameObject UI_GameOver;
 
@@ -31,6 +33,8 @@ public class P_GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
+
+        azazel = FindAnyObjectByType<P_Azazel_Talk>();
 
         if (actualScene == 1)
         {
@@ -55,6 +59,15 @@ public class P_GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        
+    }
+    void Interaction(GameObject player)
+    {
+        azazelInteracted = player.GetComponent<P_DoorInteraction>().performed;
+    }
+
     public void CheckToOpen()
     {
         switch (actualScene)
@@ -70,6 +83,10 @@ public class P_GameManager : MonoBehaviour
                 {
                     basiliskDoor.canBeOpenned = true;
                     basiliskDoor.TriggerDoors();
+                }
+                if (azazelInteracted)
+                {
+                    
                 }
                 break;
         }

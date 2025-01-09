@@ -716,6 +716,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
+      propertyPath: hC
+      value: 
+      objectReference: {fileID: 1405004485}
+    - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: grapplingCD
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
       propertyPath: shortenSpeed
       value: 6
       objectReference: {fileID: 0}
@@ -37968,6 +37978,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1405004483}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1405004485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6893009674249598957, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405004483}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d61b9bbc8215249953c57c9fef07ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1410410750
 Mesh:
   m_ObjectHideFlags: 0

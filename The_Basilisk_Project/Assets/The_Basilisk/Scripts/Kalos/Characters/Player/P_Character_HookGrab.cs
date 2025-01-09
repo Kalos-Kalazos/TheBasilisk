@@ -161,6 +161,7 @@ public class P_Character_HookGrab : MonoBehaviour
             }
         }
 
+        playerSwing.grapplingCDTimer = playerSwing.grapplingCD;
     }
 
     void MoveGrabbedObject()
@@ -183,7 +184,5 @@ public class P_Character_HookGrab : MonoBehaviour
         {
             Destroy(joint);
         }
-
-        playerSwing.grapplingCDTimer = playerSwing.grapplingCD;
     }
 }

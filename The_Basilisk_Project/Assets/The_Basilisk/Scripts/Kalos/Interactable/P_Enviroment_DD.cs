@@ -27,14 +27,15 @@ public class P_Enviroment_DD : MonoBehaviour
             player = other.gameObject;
             checkStatus = true;
         }
-
+        /* LOS ENEMIGOS ABREN PUERTAS:
+         * 
         if (other.CompareTag("Enemy"))
         {
             //StopCoroutine(nameof(CloseTheDoor));
             startPositionR = doorR.transform.position;
             startPositionL = doorL.transform.position;
             TriggerDoors();
-        }
+        }*/
     }
     private void OnTriggerExit(Collider other)
     {
@@ -50,7 +51,6 @@ public class P_Enviroment_DD : MonoBehaviour
         {
             Interaction(player);
         }
-
 
         if (checkStatus && interacted)
         {

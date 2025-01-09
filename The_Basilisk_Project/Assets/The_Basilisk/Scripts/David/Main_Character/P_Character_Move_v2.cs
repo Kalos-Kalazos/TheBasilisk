@@ -25,7 +25,7 @@ public class P_Character_Move_v2 : MonoBehaviour
     [SerializeField] public float characterHeightCrouched = 1.0f;
     [SerializeField] public float groundCheckDistance = 0.1f;
 
-    private bool isGrounded;
+    public bool isGrounded;
     private bool canJump = true;
 
     public Vector2 moveInput { get { return inputVector; } }

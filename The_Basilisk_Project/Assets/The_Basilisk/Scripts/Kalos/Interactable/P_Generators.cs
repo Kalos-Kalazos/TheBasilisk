@@ -9,13 +9,15 @@ public class P_Generators : MonoBehaviour
     [SerializeField] float actualPower;
     [SerializeField] float maxPower = 30;
     [SerializeField] float actualFuel;
-    [SerializeField] float maxFuel = 30;
+    [SerializeField] float maxFuel = 10;
     [SerializeField] bool onRange;
     [SerializeField] bool powered;
+    [SerializeField] bool charging;
 
     [Header("=== UI Settings ===")]
     public Slider progressBar;
     public Slider fuelBar;
+    [SerializeField] int generatorID;
 
     [Header("=== Effect Settings ===")]
 
@@ -62,9 +64,9 @@ public class P_Generators : MonoBehaviour
     {
         if (!powered)
         {
-            if (other.CompareTag("Fuel") && playerGrab.grabbed)
+            if (other.CompareTag("Fuel") && playerGrab.grabbed && !charging)
             {
-                StartCoroutine(AddFuel(10));
+                StartCoroutine(AddFuel(5));
                 Destroy(other.gameObject);
             }
 
@@ -82,6 +84,7 @@ public class P_Generators : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            onRange = false;
             progressBar.gameObject.SetActive(false);
             fuelBar.gameObject.SetActive(false);
         }
@@ -101,6 +104,8 @@ public class P_Generators : MonoBehaviour
     */
     private IEnumerator AddFuel(float fuelAmount)
     {
+        charging = true;
+
         float targetFuel = actualFuel + fuelAmount;
 
         while (actualFuel < targetFuel)
@@ -127,6 +132,7 @@ public class P_Generators : MonoBehaviour
 
     void ActivateGenerator()
     {
+        charging = false;
         powered = true;
         StopAllCoroutines();
         gameManager.generatorsPowered++;

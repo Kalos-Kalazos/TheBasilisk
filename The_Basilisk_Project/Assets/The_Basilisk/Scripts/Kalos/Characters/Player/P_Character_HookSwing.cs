@@ -11,6 +11,7 @@ public class P_Character_HookSwing : MonoBehaviour
     private CharacterController controller;
     Rigidbody rb;
 
+    [SerializeField] HookCooldown hC;
     [SerializeField] Transform orientation;
     public Transform cam;
     public Transform gunTip;
@@ -76,10 +77,26 @@ public class P_Character_HookSwing : MonoBehaviour
         if (grapplingCDTimer < 0) grapplingCDTimer = 0;
         #endregion
 
+        #region --ReenableController
         if (!shouldEnableController)
         {
             controller.enabled = false;
+            rb.isKinematic = false;
         }
+        else
+        {
+            controller.enabled = true;
+            rb.isKinematic = true;
+        }
+
+        if (pm.isGrounded && !swinging && !activeGrapple)
+        {
+            controller.enabled = true;
+            rb.isKinematic = true;
+        }
+
+        #endregion
+
 
         if (swinging)
         {
@@ -91,6 +108,8 @@ public class P_Character_HookSwing : MonoBehaviour
         }
 
         CheckForSwingPoints();
+
+        hC.currentCooldownTime = grapplingCDTimer;
     }
 
     private void FixedUpdate()
@@ -232,6 +251,8 @@ public class P_Character_HookSwing : MonoBehaviour
 
         ResetRestrictions();
 
+        hC.UseHook();
+
         Invoke(nameof(ExecuteGrapple), 0.2f);
 
         activeGrapple = true;
@@ -258,6 +279,8 @@ public class P_Character_HookSwing : MonoBehaviour
         lr.positionCount = 2;
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);*/
+
+        grapplingCDTimer = grapplingCD;
     }
 
     private void ExecuteGrapple()
@@ -315,17 +338,12 @@ public class P_Character_HookSwing : MonoBehaviour
         shouldEnableController = false;
     }
 
-    void StopSwing()
+    private void OnCollisionEnter(Collision collision)
     {
-        //lr.enabled = false;
-        activeGrapple = false;
-
-        if (joint != null)
+        if (!swinging || !activeGrapple)
         {
-            Destroy(joint);
+            StartCoroutine(ReenableCharacterController());
         }
-
-        grapplingCDTimer = grapplingCD;
     }
     
     private IEnumerator ReenableCharacterController()
@@ -338,13 +356,18 @@ public class P_Character_HookSwing : MonoBehaviour
         StopSwing();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void StopSwing()
     {
-        if (!swinging)
+        //lr.enabled = false;
+        activeGrapple = false;
+
+        if (joint != null)
         {
-            StartCoroutine(ReenableCharacterController());
+            Destroy(joint);
         }
+        StopCoroutine(ReenableCharacterController());
     }
+
 
     /*public void DrawRope()
     {
