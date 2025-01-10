@@ -629,6 +629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownTime: 5
+  currentCooldownTime: 0
   cooldownText: {fileID: 7736508101818512841}
 --- !u!1 &3343833324323907113
 GameObject:
@@ -1614,7 +1615,7 @@ Canvas:
   m_GameObject: {fileID: 5284273393780000253}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0

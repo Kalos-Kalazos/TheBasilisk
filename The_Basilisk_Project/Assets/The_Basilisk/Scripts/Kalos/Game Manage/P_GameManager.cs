@@ -61,7 +61,20 @@ public class P_GameManager : MonoBehaviour
 
     private void Update()
     {
-        
+        if (!azazel.talking && !azazel.ended && azazel.onRange)
+        {
+            Interaction(player);
+        }
+
+        if (azazelInteracted && !azazel.talking && !azazel.ended)
+        {
+            azazel.talking = true;
+            azazel.AzazelTalks();
+        }
+        if(azazelInteracted && azazel.canNext && !azazel.ended)
+        {
+            azazel.NextLine();
+        }
     }
     void Interaction(GameObject player)
     {
@@ -84,9 +97,10 @@ public class P_GameManager : MonoBehaviour
                     basiliskDoor.canBeOpenned = true;
                     basiliskDoor.TriggerDoors();
                 }
-                if (azazelInteracted)
+                if (azazel.ended)
                 {
-                    
+                    azazelDoor.canBeOpenned = true;
+                    azazelDoor.TriggerDoors();
                 }
                 break;
         }
