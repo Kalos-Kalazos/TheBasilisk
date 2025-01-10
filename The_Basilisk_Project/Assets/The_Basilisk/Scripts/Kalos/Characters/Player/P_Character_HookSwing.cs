@@ -97,7 +97,6 @@ public class P_Character_HookSwing : MonoBehaviour
 
         #endregion
 
-
         if (swinging)
         {
             pm.playerSpeed = pm.swingSpeed;
