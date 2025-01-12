@@ -42,7 +42,6 @@ public class P_Character_HookSwing : MonoBehaviour
     public bool activeGrapple;
     public bool swinging;
     public bool shortenCable;
-    public bool shootGrapple;
 
     public bool hasGrabbed;
 

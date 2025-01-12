@@ -8,9 +8,9 @@ public class P_Character_HookGrab : MonoBehaviour
 {
     [Header("=== Grab Settings ===")]
     private P_Character_HookSwing playerSwing;
-    [SerializeField] float objectMoveSpeed = 5f;
-    [SerializeField] float launchPower = 5f;
-    [SerializeField] Rigidbody grabbedObjectRB;
+    private PA_Hook playerPA_Hook;
+    public float launchPower = 40f;
+    public Rigidbody grabbedObjectRB;
 
     public Vector3 grabPoint, targetPosition, hitPoint;
     public Transform hookOrigin;
@@ -27,19 +27,20 @@ public class P_Character_HookGrab : MonoBehaviour
     private void Start()
     {
         playerSwing = gameObject.GetComponent<P_Character_HookSwing>();
+        playerPA_Hook = gameObject.GetComponent<PA_Hook>();
     }
 
     private void Update()
     {
         if (playerSwing.swinging) return;
 
-        MoveGrabbedObject();
+        //MoveGrabbedObject();
         CheckForGrabPoints();
 
         if (grabbedObjectRB != null && !grabbed)
         {
             float distanceToHook = Vector3.Distance(hookOrigin.position, grabbedObjectRB.position);
-            if (distanceToHook < 0.5f)
+            if (distanceToHook < 1f)
             {
                 StopGrab();
                 AlignWithHook();
@@ -57,7 +58,7 @@ public class P_Character_HookGrab : MonoBehaviour
 
     public void GrabObject(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !grabbed)
         {
             StartGrab();
         }
@@ -75,6 +76,7 @@ public class P_Character_HookGrab : MonoBehaviour
         grabbed = false;
         if (grabbedObjectRB != null)
         {
+            playerPA_Hook.hookHead.GetComponent<P_Reference_HeadHook>().isHooked = false;
             grabbedObjectRB.gameObject.transform.SetParent(null);
             grabbedObjectRB.isKinematic = false;
             LaunchObject();
@@ -86,6 +88,7 @@ public class P_Character_HookGrab : MonoBehaviour
         grabbedObjectRB.AddForce(playerSwing.cam.forward * launchPower, ForceMode.Impulse);
         Debug.Log("Launching object wow so far ma men");
         grabbedObjectRB = null;
+
     }
 
     void CheckForGrabPoints()
@@ -153,9 +156,10 @@ public class P_Character_HookGrab : MonoBehaviour
         {
             grabbedObjectRB.velocity = Vector3.zero;
 
-            if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 0.5f && playerSwing.hasGrabbed)//  && !grabbed)
+            if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 1f && playerSwing.hasGrabbed)//  && !grabbed)
             {
                 grabbedObjectRB.gameObject.transform.SetParent(hookOrigin);
+                grabbedObjectRB.gameObject.GetComponent<BoxCollider>().enabled = false;
                 grabbedObjectRB.isKinematic = true;
                 grabbed = true;
             }
@@ -164,6 +168,7 @@ public class P_Character_HookGrab : MonoBehaviour
         playerSwing.grapplingCDTimer = playerSwing.grapplingCD;
     }
 
+    /*
     void MoveGrabbedObject()
     {
         if (grabbedObjectRB != null && !grabbed && joint != null)
@@ -172,7 +177,7 @@ public class P_Character_HookGrab : MonoBehaviour
             targetPosition = hookOrigin.position;
             grabbedObjectRB.position = Vector3.MoveTowards(grabbedObjectRB.position, targetPosition, objectMoveSpeed * Time.deltaTime);
         }
-    }
+    }*/
 
     void StopGrab()
     {

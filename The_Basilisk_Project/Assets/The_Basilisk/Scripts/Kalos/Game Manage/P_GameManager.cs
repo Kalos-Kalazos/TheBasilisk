@@ -43,6 +43,7 @@ public class P_GameManager : MonoBehaviour
             player.GetComponent<P_Character_Combat>().hasFlamethrow = false;
             player.GetComponent<P_Character_Combat>().enabled = false;
             player.GetComponent<P_Character_HookGrab>().enabled = false;
+            player.GetComponent<PA_Hook>().enabled = false;
 
             //Objects deactivated
             pjWeapon.SetActive(false);
@@ -61,19 +62,22 @@ public class P_GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!azazel.talking && !azazel.ended && azazel.onRange)
+        if (azazel != null)
         {
-            Interaction(player);
-        }
+            if (!azazel.talking && !azazel.ended && azazel.onRange)
+            {
+                Interaction(player);
+            }
 
-        if (azazelInteracted && !azazel.talking && !azazel.ended)
-        {
-            azazel.talking = true;
-            azazel.AzazelTalks();
-        }
-        if(azazelInteracted && azazel.canNext && !azazel.ended)
-        {
-            azazel.NextLine();
+            if (azazelInteracted && !azazel.talking && !azazel.ended)
+            {
+                azazel.talking = true;
+                azazel.AzazelTalks();
+            }
+            if (azazelInteracted && azazel.canNext && !azazel.ended)
+            {
+                azazel.NextLine();
+            }
         }
     }
     void Interaction(GameObject player)
@@ -140,7 +144,6 @@ public class P_GameManager : MonoBehaviour
             Time.timeScale = 0f;
         }
     }
-
 
     int ActualSceneID()
     {

@@ -25,6 +25,7 @@ public class P_TakeGrapple : MonoBehaviour
             originalGrapple.SetActive(true);
             other.GetComponent<P_Character_HookSwing>().enabled = true;
             other.GetComponent<P_Character_HookGrab>().enabled = true;
+            other.GetComponent<PA_Hook>().enabled = true;
         }
 
         if (gameObject.CompareTag("WeaponTake") && other.CompareTag("Player"))
