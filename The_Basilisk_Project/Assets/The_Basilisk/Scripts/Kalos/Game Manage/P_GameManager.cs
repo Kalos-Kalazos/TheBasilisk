@@ -96,7 +96,7 @@ public class P_GameManager : MonoBehaviour
                 }
                 break;
             case 2:
-                if (deadCount >= 6)
+                if (deadCount >= 4)
                 {
                     basiliskDoor.canBeOpenned = true;
                     basiliskDoor.TriggerDoors();
