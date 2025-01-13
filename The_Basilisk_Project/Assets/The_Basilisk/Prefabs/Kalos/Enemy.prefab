@@ -229,19 +229,20 @@ MonoBehaviour:
   - {fileID: 0}
   currentPatrolIndex: 0
   agent: {fileID: 0}
-  detectionRange: 15
+  detectionRange: 14
   player: {fileID: 0}
   tempPP: {fileID: 0}
   isChasing: 0
   isChecking: 0
   maxDetectionAngle: 45
   alertRadius: 40
-  lastAttackTime: 0
+  attackRate: 0
   attackCD: 1
   attackRange: 2
+  gm: {fileID: 0}
   ui: {fileID: 0}
-  searchRadius: 30
-  searchTime: 30
+  searchRadius: 20
+  searchTime: 15
 --- !u!195 &8228288793010546559
 NavMeshAgent:
   m_ObjectHideFlags: 0

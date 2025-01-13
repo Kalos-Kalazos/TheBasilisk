@@ -21,6 +21,7 @@ public class P_Azazel_Talk : MonoBehaviour
     public int lineIndex;
 
     float typingTime = 0.05f;
+    float w8Time = 0.75f;
 
     private void Start()
     {
@@ -34,10 +35,16 @@ public class P_Azazel_Talk : MonoBehaviour
     private void Update()
     {
         if (talking && !ended)
-        {            
+        {
             if (dialogueText.text == dialogueLines[lineIndex])
             {
+                w8Time -= Time.deltaTime;
+            }
+
+            if (w8Time <= 0)
+            {
                 canNext = true;
+                w8Time = 0.75f;
             }
             else canNext = false;
         }

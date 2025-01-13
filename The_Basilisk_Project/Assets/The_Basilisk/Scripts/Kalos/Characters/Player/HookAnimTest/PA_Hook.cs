@@ -21,6 +21,8 @@ public class PA_Hook : MonoBehaviour
     [SerializeField] Vector3 targetPoint;
     Vector3 targetPosition;
 
+    float fallTime;
+
     public Transform hookHead;
 
     Rigidbody headRB;
@@ -44,10 +46,16 @@ public class PA_Hook : MonoBehaviour
 
         launch = hookControl.activeGrapple;
 
-        if (hookControl.hasGrabbed) 
+        if (hookControl.hasGrabbed)
+        {
+            fallTime = 0;
             targetPoint = grabControl.joint.connectedAnchor;
-        else if(launch)
+        }
+        else if (launch)
+        {
+            fallTime = 0.5f;
             targetPoint = hookControl.swingPoint;
+        }
 
         if (!isProcessingAction)
         {
@@ -104,7 +112,7 @@ public class PA_Hook : MonoBehaviour
         returning = true;
         headRB.isKinematic = false;
 
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(fallTime);
 
         float step = speed * Time.deltaTime;
         targetPosition = originPoint.position;

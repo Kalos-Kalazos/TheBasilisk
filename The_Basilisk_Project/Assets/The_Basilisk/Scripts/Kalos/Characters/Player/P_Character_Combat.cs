@@ -105,23 +105,28 @@ public class P_Character_Combat : MonoBehaviour
                 Destroy(hitPointTemp, 1);
             }
 
-            //Sound that warn enemies
-            Collider[] hitColliders = Physics.OverlapSphere(shootingPoint.position, soundRadius, EnemyLayer);
-
-            foreach (var hitCollider in hitColliders)
-            {
-                if (hitCollider.CompareTag("Enemy"))
-                {
-                    P_AI_Enemy enemy = hitCollider.GetComponent<P_AI_Enemy>();
-                    if (enemy != null)
-                    {
-                        enemy.OnGunshotHeard(transform.position, "Player");
-                    }
-                }
-            }
+            SoundEmitter();
 
             currentAmmoSingle--;
             fireCooldown = fireRate;
+        }
+    }
+
+    public void SoundEmitter()
+    {
+        //Sound that warn enemies
+        Collider[] hitColliders = Physics.OverlapSphere(shootingPoint.position, soundRadius, EnemyLayer);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Enemy"))
+            {
+                P_AI_Enemy enemy = hitCollider.GetComponent<P_AI_Enemy>();
+                if (enemy != null)
+                {
+                    enemy.OnGunshotHeard(transform.position, "Player");
+                }
+            }
         }
     }
 
@@ -189,6 +194,7 @@ public class P_Character_Combat : MonoBehaviour
 
         if (context.started && currentAmmoFlame > 0 && fireCooldown <= 0)
         {
+            SoundEmitter();
             StartCoroutine(Flames());
         }
         else if(context.canceled)

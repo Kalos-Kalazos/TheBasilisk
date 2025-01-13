@@ -7,7 +7,9 @@ using UnityEngine.InputSystem;
 public class P_Character_HookSwing : MonoBehaviour
 {
     [Header("=== References ===")]
-    private P_Character_Move_v2 pm;
+    private P_Character_Move_v2 pm; //Player Move
+    private P_Character_Combat pc;  //Player Combat
+    private PA_Hook hookAnim;
     private CharacterController controller;
     Rigidbody rb;
 
@@ -55,8 +57,10 @@ public class P_Character_HookSwing : MonoBehaviour
     void Start()
     {
         pm = GetComponent<P_Character_Move_v2>();
+        pc = GetComponent<P_Character_Combat>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        hookAnim = GetComponent<PA_Hook>();
         cam = Camera.main?.transform;
 
         if (!cam || !gunTip || !predictionPoint || !lr)
@@ -68,7 +72,7 @@ public class P_Character_HookSwing : MonoBehaviour
     void Update()
     {
         #region --GrapplingCooldown
-        if (grapplingCDTimer > 0)
+        if (grapplingCDTimer > 0 && hookAnim.retracted)
         {
             grapplingCDTimer -= Time.deltaTime;
         }
@@ -252,6 +256,8 @@ public class P_Character_HookSwing : MonoBehaviour
         hC.UseHook();
 
         Invoke(nameof(ExecuteGrapple), 0.2f);
+
+        pc.SoundEmitter();
 
         activeGrapple = true;
         swinging = true;

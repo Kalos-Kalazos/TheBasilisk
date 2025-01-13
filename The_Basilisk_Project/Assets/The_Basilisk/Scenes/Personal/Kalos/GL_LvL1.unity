@@ -1247,7 +1247,7 @@ PrefabInstance:
     - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: grapplingCD
-      value: 1
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1220950344702437139, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
@@ -1289,6 +1289,11 @@ PrefabInstance:
       propertyPath: batterySystem
       value: 
       objectReference: {fileID: 1193944319}
+    - target: {fileID: 5735696598867567082, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: speed
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 5735696598867567082, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: m_Enabled

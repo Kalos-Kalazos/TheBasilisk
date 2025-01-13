@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,13 +19,14 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] NavMeshAgent agent;
 
     [Header("=== Enemy Detection Settings ===")]
-    [SerializeField] float detectionRange = 20;
+    [SerializeField] float detectionRange = 15;
+    [SerializeField] float detectionCloseRange = 5;
     [SerializeField] Transform player;
     [SerializeField] GameObject tempPP;
     [SerializeField] bool isChasing = false;
     [SerializeField] bool isChecking = false;
     [SerializeField] float maxDetectionAngle = 45;
-    [SerializeField] float alertRadius = 50;
+    [SerializeField] float alertRadius = 40;
 
     [Header("=== Enemy Attack Settings ===")]
     [SerializeField] float attackRate;
@@ -39,11 +41,12 @@ public class P_AI_Enemy : MonoBehaviour
 
     [SerializeField] GameObject ui;
 
+    float timeElapsedChase = 0;
 
     #region --Search on sound heard
     Coroutine currentCoroutineState;
-    [SerializeField] float searchRadius = 30f;
-    [SerializeField] float searchTime = 20f;
+    [SerializeField] float searchRadius = 20;
+    [SerializeField] float searchTime = 15;
     bool isSearching = false;
 
     public void OnGunshotHeard(Vector3 gunshotPosition, string sourceTag)
@@ -80,10 +83,9 @@ public class P_AI_Enemy : MonoBehaviour
         isSearching = true;
 
         // Search
-        float searchDuration = 7;
         float timeElapsed = 0;
 
-        while (timeElapsed < searchDuration)
+        while (timeElapsed < searchTime)
         {
             if (currentState == EnemyState.Chasing)
             {
@@ -96,7 +98,7 @@ public class P_AI_Enemy : MonoBehaviour
             yield return null; // Evitar bloqueos
         }
 
-        currentState = EnemyState.Patrolling;
+        currentState = EnemyState.Iddle;
         isSearching = false;
 
         if (patrolPoints.Length > 0 && !agent.enabled)
@@ -145,13 +147,24 @@ public class P_AI_Enemy : MonoBehaviour
 
             case EnemyState.Chasing:
                 ChasePlayer();
-                detectionRange = 15;
+                detectionRange = 8;
                 agent.speed = speedChase;
+
+                #region --TimeSearching
+                while (timeElapsedChase < searchTime)
+                {
+                    timeElapsedChase += Time.deltaTime;
+                }
+                #endregion
+
                 break;
+
             case EnemyState.Attacking:
                 AttackPlayer();
                 break;
+
             case EnemyState.Iddle:
+                IdleBehavior();
                 break;
         }
 
@@ -181,6 +194,22 @@ public class P_AI_Enemy : MonoBehaviour
                 DetectPlayer();
             }
         }*/
+
+
+        #region --PJ on Stealth
+        if (player.GetComponent<P_Character_Move_v2>().isCrouched)
+        {
+            detectionRange = 7;
+            maxDetectionAngle = 30;
+            searchTime = 10;
+        }
+        else
+        {
+            detectionRange = 14;
+            maxDetectionAngle = 60;
+            searchTime = 15;
+        }
+        #endregion
     }
 
     #region -- Burn Logic
@@ -270,7 +299,7 @@ public class P_AI_Enemy : MonoBehaviour
         
         animator.SetTrigger("Iddle");
                
-        Invoke(nameof(ReturnToPatrol), 3f);
+        Invoke(nameof(ReturnToPatrol), 2f);
     }
 
     void ReturnToPatrol()
@@ -295,9 +324,17 @@ public class P_AI_Enemy : MonoBehaviour
 
             if (angleToTarget <= maxDetectionAngle && HasVision(player))
             {
-               currentState = EnemyState.Chasing;
-               Warn();
+                timeElapsedChase = 0;
+                currentState = EnemyState.Chasing;
+                Warn();
             }
+        }
+
+        if (distanceToPlayer <= detectionCloseRange && !player.GetComponent<P_Character_Move_v2>().isCrouched && player.GetComponent<P_Character_Move_v2>().isWalking)
+        {
+            timeElapsedChase = 0;
+            currentState = EnemyState.Chasing;
+            Warn();
         }
     }
 
@@ -333,7 +370,7 @@ public class P_AI_Enemy : MonoBehaviour
         {
             currentState = EnemyState.Attacking;
         }
-        else if (distanceToPlayer > detectionRange)
+        else if (distanceToPlayer > detectionRange && timeElapsedChase >= searchTime)
         {
             currentState = EnemyState.Iddle;
         }
@@ -428,6 +465,9 @@ public class P_AI_Enemy : MonoBehaviour
         if (currentState == EnemyState.Chasing) Gizmos.color = Color.red;
         else Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectionCloseRange);
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, alertRadius);
