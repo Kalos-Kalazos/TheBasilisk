@@ -25,6 +25,8 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] GameObject tempPP;
     [SerializeField] bool isChasing = false;
     [SerializeField] bool isChecking = false;
+    [SerializeField] bool playerIsCrouched = false;
+    [SerializeField] bool playerIsWalking = false;
     [SerializeField] float maxDetectionAngle = 45;
     [SerializeField] float alertRadius = 40;
 
@@ -136,18 +138,19 @@ public class P_AI_Enemy : MonoBehaviour
     {
         DetectPlayer();
 
+        playerIsCrouched = player.GetComponent<P_Character_Move_v2>().isCrouched;
+        playerIsWalking = player.GetComponent<P_Character_Move_v2>().isWalking;
+
         switch (currentState)
         {
             case EnemyState.Patrolling:
                 Patrol();
                 DetectPlayer();
-                detectionRange = 20;
                 agent.speed = speedDefault;
                 break; 
 
             case EnemyState.Chasing:
                 ChasePlayer();
-                detectionRange = 8;
                 agent.speed = speedChase;
 
                 #region --TimeSearching
@@ -325,16 +328,16 @@ public class P_AI_Enemy : MonoBehaviour
             if (angleToTarget <= maxDetectionAngle && HasVision(player))
             {
                 timeElapsedChase = 0;
-                currentState = EnemyState.Chasing;
                 Warn();
+                currentState = EnemyState.Chasing;
             }
         }
 
-        if (distanceToPlayer <= detectionCloseRange && !player.GetComponent<P_Character_Move_v2>().isCrouched && player.GetComponent<P_Character_Move_v2>().isWalking)
+        if (distanceToPlayer <= detectionCloseRange && !playerIsCrouched && playerIsWalking)
         {
             timeElapsedChase = 0;
-            currentState = EnemyState.Chasing;
             Warn();
+            currentState = EnemyState.Chasing;
         }
     }
 
