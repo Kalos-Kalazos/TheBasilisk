@@ -17,13 +17,6 @@ public class WeaponController : MonoBehaviour
     public Text ammoText; //Muestra la municion
     public Text magazinesText; //Muestra los cargadores disponibles 
 
-    void Start()
-    {
-
-        //simpleAmmo = player.GetComponent<P_Character_Combat>().currentAmmoSingle;
-
-    }
-
     //Enumeracion para el tipo de municion seleccionada 
     public enum AmmoType
     {
@@ -37,21 +30,39 @@ public class WeaponController : MonoBehaviour
 
     private float nextFireTime = 0f; // Tiempo cuando se podra disparar nuevamente
 
+    public RectTransform image1; // Referencias al RectTransform de la primera imagent
+
+    public RectTransform image2; // Refeferencia de la segunda imagen
+
+    private Vector2 position1; // Posicion inicial de la primera imagen
+
+    private Vector2 position2; // Position inicial de la segunda imagen
+
+    void Start()
+    {
+
+        //simpleAmmo = player.GetComponent<P_Character_Combat>().currentAmmoSingle;
+
+        // Guardamos las posiciones iniciales
+
+        position1 = image1.anchoredPosition;
+        position2 = image2.anchoredPosition;
+
+    }
+
+    
+
     // Update is called once per frame
     void Update()
     {
         UpdateUI(); //Mostrar la informacion de la UI
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) //Cambiar entre los tipos de municion con la tecla 1 y 2
+        if (Input.GetKeyDown(KeyCode.Tab)) //Cambiar entre los tipos de municion con la tecla tabulador
         {
-
-            currentAmmoType = AmmoType.Simple;
-
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-
-            currentAmmoType = AmmoType.Flamethrower;
+            SwapPositions();
+            if (currentAmmoType == AmmoType.Simple) currentAmmoType = AmmoType.Flamethrower;
+            if (currentAmmoType == AmmoType.Flamethrower) currentAmmoType = AmmoType.Simple;
+            
 
         }
         if (Input.GetButtonDown("Fire1"))//Disparar dependiendo del tipo de municion
@@ -88,6 +99,17 @@ public class WeaponController : MonoBehaviour
         }
 
     }
+
+    void SwapPositions()
+    {
+
+        // Intercambia las posiciones de las imagenes
+        Vector2 temp = image1.anchoredPosition;
+        image1.anchoredPosition = image2.anchoredPosition;
+        image2.anchoredPosition = temp;
+
+    }
+
 
     // funcion para disparar el arma
     void FireWeapon()
@@ -225,7 +247,7 @@ public class WeaponController : MonoBehaviour
             magazinesText.color = magazinesColor;
 
         }
-        else if (currentAmmoType == AmmoType.Flamethrower)
+        else
         {
 
             ammoText.text = "0" + flamethrowerAmmo;
