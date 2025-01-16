@@ -31,6 +31,7 @@ public class P_Character_Combat : MonoBehaviour
 
     [SerializeField] GameObject muzzleVFX;
     [SerializeField] GameObject hitPointVFX;
+    [SerializeField] GameObject hitBloodVFX;
 
     [SerializeField] LayerMask EnemyLayer;
     [SerializeField] Animator animator;
@@ -89,20 +90,28 @@ public class P_Character_Combat : MonoBehaviour
 
                 GameObject muzzleTemp = Instantiate(muzzleVFX, shootingPoint.position, shootingPoint.rotation);
                 muzzleTemp.transform.SetParent(shootingPoint);
-                GameObject hitPointTemp = Instantiate(hitPointVFX, hit.point, shootingPoint.rotation);
 
                 if (hit.collider != null && hit.collider.CompareTag("Enemy"))
                 {
+                    GameObject hitBloodTemp = Instantiate(hitBloodVFX, hit.point, shootingPoint.rotation);
+
                     P_AI_Enemy enemy = hit.collider.GetComponent<P_AI_Enemy>();
                     if (enemy != null)
                     {
                         enemy.TakeDamage(damage);
 
                     }
+
+                    Destroy(hitBloodTemp, 2);
                 }
-                //else VFX Bujero de bala
-                Destroy(muzzleTemp, 1);
-                Destroy(hitPointTemp, 1);
+                else
+                {
+                    GameObject hitPointTemp = Instantiate(hitPointVFX, hit.point, shootingPoint.rotation);
+
+                    Destroy(hitPointTemp, 5);
+                }
+
+                Destroy(muzzleTemp, 1.5f);
             }
 
             SoundEmitter();
