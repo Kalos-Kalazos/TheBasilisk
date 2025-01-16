@@ -3549,7 +3549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.003921569, g: 0.007843138, b: 0.023529414, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3557,8 +3557,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_Font: {fileID: 12800000, guid: 0d321ad12fe3d4391b506737af0972d1, type: 3}
+    m_FontSize: 22
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
@@ -3589,7 +3589,6 @@ GameObject:
   - component: {fileID: 299757488}
   - component: {fileID: 299757490}
   - component: {fileID: 299757489}
-  - component: {fileID: 299757491}
   m_Layer: 5
   m_Name: Menu_Pricipal
   m_TagString: Untagged
@@ -3695,19 +3694,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &299757491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299757487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7e9540e3e8befc4cbc2fbe18c2d3986, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PauseMenuUI: {fileID: 2069779471}
 --- !u!43 &310269605
 Mesh:
   m_ObjectHideFlags: 0
@@ -3931,8 +3917,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_Font: {fileID: 12800000, guid: 0d321ad12fe3d4391b506737af0972d1, type: 3}
+    m_FontSize: 22
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
@@ -6066,8 +6052,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_Font: {fileID: 12800000, guid: 0d321ad12fe3d4391b506737af0972d1, type: 3}
+    m_FontSize: 22
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
@@ -9186,7 +9172,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1082228350}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1548176006}
+        m_TargetAssemblyTypeName: StartButtonMenu, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1094479791
 GameObject:
   m_ObjectHideFlags: 0
@@ -9662,6 +9660,7 @@ GameObject:
   - component: {fileID: 1115774711}
   - component: {fileID: 1115774713}
   - component: {fileID: 1115774712}
+  - component: {fileID: 1115774715}
   - component: {fileID: 1115774714}
   m_Layer: 5
   m_Name: Titulo Principal
@@ -9702,7 +9701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 1ec4517fa0e20c3499abf2093bf7efb8, type: 2}
-  m_Color: {r: 0.105561286, g: 0.72156864, b: 0.078431375, a: 1}
+  m_Color: {r: 0.050980397, g: 1, b: 0.19607845, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9710,7 +9709,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 0d321ad12fe3d4391b506737af0972d1, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -9744,9 +9743,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   legacyText: {fileID: 1115774712}
-  glitchFrequency: 1.5
-  glitchDuration: 1
+  glitchFrequency: 0.02
+  glitchDuration: 0.001
   originalText: The Basilisk
+--- !u!114 &1115774715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115774710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00dbb768f8b6cd242930bc58f754452e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 1115774712}
+  glitchDuration: 1
+  glitchFrequency: 0.1
+  glitchIntensity: 0.5
+  isGlitching: 0
 --- !u!1 &1122104447
 GameObject:
   m_ObjectHideFlags: 0
@@ -9871,7 +9887,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1548000848}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: StopGameController, Assembly-CSharp
         m_MethodName: ResumeGame
         m_Mode: 1
@@ -10982,7 +10998,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1548000848}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: StopGameController, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
@@ -12936,6 +12952,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1524607656}
+  - component: {fileID: 1524607657}
   m_Layer: 5
   m_Name: Main_Menu_UI
   m_TagString: Untagged
@@ -12966,6 +12983,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1524607657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524607655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03deba941288c304b97ecf060896b5d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 2069779471}
 --- !u!1 &1548000846
 GameObject:
   m_ObjectHideFlags: 0
@@ -12975,7 +13005,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1548000847}
-  - component: {fileID: 1548000848}
   m_Layer: 0
   m_Name: Menu_Pause
   m_TagString: Untagged
@@ -13004,19 +13033,6 @@ Transform:
   - {fileID: 1238497384}
   m_Father: {fileID: 1524607656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1548000848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1548000846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7e9540e3e8befc4cbc2fbe18c2d3986, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PauseMenuUI: {fileID: 2069779471}
 --- !u!1 &1548176004
 GameObject:
   m_ObjectHideFlags: 0
@@ -13026,6 +13042,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1548176005}
+  - component: {fileID: 1548176006}
   m_Layer: 0
   m_Name: Buttons_Menu
   m_TagString: Untagged
@@ -13051,6 +13068,18 @@ Transform:
   - {fileID: 1860042233}
   m_Father: {fileID: 299757488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1548176006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548176004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15600c127d8ff4d469d8c9f674442084, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1578592731 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2246278266429246920, guid: 2a763df89e688ba43b122f8ecca189dd,
@@ -14809,7 +14838,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.9245283, g: 0.082858644, b: 0.082858644, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -14829,9 +14858,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 299757491}
-        m_TargetAssemblyTypeName: StopGameController, Assembly-CSharp
-        m_MethodName: QuitGame
+      - m_Target: {fileID: 1548176006}
+        m_TargetAssemblyTypeName: StartButtonMenu, Assembly-CSharp
+        m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15383,7 +15412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8dfd7a098f98d044b3b74f3ca4dfeb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlImagen: {fileID: 1114224486}
 --- !u!43 &2029983499
 Mesh:
   m_ObjectHideFlags: 0
