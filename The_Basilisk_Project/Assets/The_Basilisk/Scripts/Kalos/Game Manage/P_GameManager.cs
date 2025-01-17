@@ -31,13 +31,11 @@ public class P_GameManager : MonoBehaviour
         actualScene = ActualSceneID();
 
         Time.timeScale = 1f;
-
-        pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
-
-        azazel = FindAnyObjectByType<P_Azazel_Talk>();
-
+                
         if (actualScene == 1)
         {
+            pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
+
             //Scripts deactivated
             player.GetComponent<P_Character_HookSwing>().enabled = false;
             player.GetComponent<P_Character_Combat>().hasFlamethrow = false;
@@ -52,6 +50,7 @@ public class P_GameManager : MonoBehaviour
         }
         else if (actualScene == 2)
         {
+            azazel = FindAnyObjectByType<P_Azazel_Talk>();
             //Scripts Deactivated
             player.GetComponent<P_Character_Combat>().hasFlamethrow = false;
 

@@ -42,6 +42,10 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] P_GameManager gm;
 
     [SerializeField] GameObject ui;
+    [SerializeField] GameObject vfx_Death;
+    [SerializeField] Transform pivot_VFX;
+
+    Rigidbody rb;
 
     float timeElapsedChase = 0;
 
@@ -118,6 +122,7 @@ public class P_AI_Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         player = FindAnyObjectByType<P_Mouse_Controller>().transform;
         gm = FindAnyObjectByType<P_GameManager>();
+        rb = GetComponent<Rigidbody>();
 
         if (patrolPoints.Length > 0)
         {
@@ -446,15 +451,21 @@ public class P_AI_Enemy : MonoBehaviour
             isChecking = true;
         }
         */
+
+        //Enemy Death
         if (health <= 0)
         {
             if (agent != null)
             {
                 agent.enabled = false;  // Desactiva el agente antes de destruir
             }
+            rb.isKinematic = false;
+            rb.AddForce(-player.forward * 10, ForceMode.Impulse);
+            GameObject VFXTemp = Instantiate(vfx_Death, pivot_VFX.position, Quaternion.identity);
+            VFXTemp.transform.SetParent(transform);
             gm.deadCount++;
             gm.CheckToOpen();
-            Destroy(gameObject);
+            Destroy(gameObject, 3);
         }
     }
 

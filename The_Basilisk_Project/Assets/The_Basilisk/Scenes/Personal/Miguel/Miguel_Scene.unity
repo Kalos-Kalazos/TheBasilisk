@@ -3453,7 +3453,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &299757488
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9013,11 +9013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00dbb768f8b6cd242930bc58f754452e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textComponent: {fileID: 1115774712}
-  glitchDuration: 1
-  glitchFrequency: 0.1
-  glitchIntensity: 0.5
-  isGlitching: 0
 --- !u!1 &1122104447
 GameObject:
   m_ObjectHideFlags: 0
@@ -15824,6 +15819,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UI_Battle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6121451627966403371, guid: 19a56f3f88bc6434783df57c3dc59881,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

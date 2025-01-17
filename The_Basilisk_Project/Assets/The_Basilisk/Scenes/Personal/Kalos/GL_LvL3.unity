@@ -741,6 +741,16 @@ PrefabInstance:
       objectReference: {fileID: 338003920}
     - target: {fileID: 1254081748376032938, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
+      propertyPath: image1
+      value: 
+      objectReference: {fileID: 1410339998}
+    - target: {fileID: 1254081748376032938, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: image2
+      value: 
+      objectReference: {fileID: 1410339999}
+    - target: {fileID: 1254081748376032938, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
       propertyPath: ammoText
       value: 
       objectReference: {fileID: 1405004488}
@@ -38008,6 +38018,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1410339998 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3923662903332361228, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405004483}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1410339999 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6766830787190810721, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+    type: 3}
+  m_PrefabInstance: {fileID: 1405004483}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1410410750
 Mesh:
   m_ObjectHideFlags: 0

@@ -18,9 +18,19 @@ public class P_WeaponController : MonoBehaviour
     public Text ammoText; //Muestra la municion
     public Text magazinesText; //Muestra los cargadores disponibles 
 
+    public RectTransform image1; // Referencias al RectTransform de la primera imagent
+
+    public RectTransform image2; // Refeferencia de la segunda imagen
+
+    private Vector2 position1; // Posicion inicial de la primera imagen
+
+    private Vector2 position2; // Position inicial de la segunda imagen
+
     void Start()
     {
         pjCombatManage = GetComponent<P_Character_Combat>();
+        position1 = image1.anchoredPosition;
+        position2 = image2.anchoredPosition;
 
         currentAmmoType = AmmoType.Simple;
         simple = true;
@@ -69,6 +79,17 @@ public class P_WeaponController : MonoBehaviour
             simple = false;
             pjCombatManage.damage = 2;
         }
+        SwapPositions();
+    }
+
+    void SwapPositions()
+    {
+
+        // Intercambia las posiciones de las imagenes
+        Vector2 temp = image1.anchoredPosition;
+        image1.anchoredPosition = image2.anchoredPosition;
+        image2.anchoredPosition = temp;
+
     }
 
     // funcion para disparar el arma

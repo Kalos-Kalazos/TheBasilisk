@@ -1254,6 +1254,16 @@ PrefabInstance:
       objectReference: {fileID: 2005668475}
     - target: {fileID: 1254081748376032938, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
+      propertyPath: image1
+      value: 
+      objectReference: {fileID: 426611274}
+    - target: {fileID: 1254081748376032938, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: image2
+      value: 
+      objectReference: {fileID: 426611275}
+    - target: {fileID: 1254081748376032938, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
       propertyPath: ammoText
       value: 
       objectReference: {fileID: 1849232193}
@@ -5208,6 +5218,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a2bfa3a4463e840affd14eb2e0df2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &426611274 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3923662903332361228, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+    type: 3}
+  m_PrefabInstance: {fileID: 426611272}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &426611275 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6766830787190810721, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+    type: 3}
+  m_PrefabInstance: {fileID: 426611272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &434822732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8549582446250045097, guid: 756cf1dbd7ed0074e857f5d57a6361f5,
