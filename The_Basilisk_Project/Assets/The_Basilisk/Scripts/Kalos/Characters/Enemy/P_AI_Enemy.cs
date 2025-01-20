@@ -54,6 +54,10 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] LayerMask EnemyLayer;
     [SerializeField] LayerMask PlayerLayer;
 
+    [SerializeField] GameObject vfxBlood;
+    public Transform pivotVFX;
+    bool died;
+
     public void OnGunshotHeard(Vector3 gunshotPosition, string sourceTag)
     {
         if (sourceTag == null || gunshotPosition == null)
@@ -122,6 +126,7 @@ public class P_AI_Enemy : MonoBehaviour
         player = FindAnyObjectByType<P_Mouse_Controller>().transform;
         gm = FindAnyObjectByType<P_GameManager>();
         batterySystem = ui.GetComponentInChildren<BatterySystem>();
+        died = false;
 
         if (patrolPoints.Length > 0)
         {
@@ -134,7 +139,8 @@ public class P_AI_Enemy : MonoBehaviour
         Patrolling,
         Chasing,
         Attacking,
-        Iddle
+        Iddle,
+        Dead
     }
 
 
@@ -172,6 +178,11 @@ public class P_AI_Enemy : MonoBehaviour
 
             case EnemyState.Iddle:
                 IdleBehavior();
+                break;
+
+            case EnemyState.Dead:
+                if(!died)
+                    Death();
                 break;
         }
 
@@ -263,6 +274,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     private IEnumerator PauseAtPatrolPoint()
     {
+        if (currentState == EnemyState.Dead) yield break;
         if (!agent.enabled) yield break;
 
         isPausing = true;
@@ -303,6 +315,8 @@ public class P_AI_Enemy : MonoBehaviour
 
     void IdleBehavior()
     {
+        if (currentState == EnemyState.Dead) return;
+
         if (agent.enabled) agent.isStopped = true; 
         
         animator.SetTrigger("Iddle");
@@ -312,6 +326,8 @@ public class P_AI_Enemy : MonoBehaviour
 
     void ReturnToPatrol()
     {
+        if (currentState == EnemyState.Dead) return;
+
         if (currentState == EnemyState.Iddle && agent.enabled)
         {
             agent.isStopped = false;
@@ -323,6 +339,8 @@ public class P_AI_Enemy : MonoBehaviour
 
     void DetectPlayer()
     {
+        if (currentState == EnemyState.Dead) return;
+
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         if (distanceToPlayer <= detectionRange)
@@ -365,6 +383,8 @@ public class P_AI_Enemy : MonoBehaviour
 
     void ChasePlayer()
     {
+        if (currentState == EnemyState.Dead) return;
+
         if (agent.enabled)
         {
             agent.isStopped = false;
@@ -386,6 +406,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     void AttackPlayer()
     {
+        if (currentState == EnemyState.Dead) return;
         if (agent.enabled) agent.isStopped = true;
         
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
@@ -411,6 +432,8 @@ public class P_AI_Enemy : MonoBehaviour
     }
     void TryApplyDamage()
     {
+        if (currentState == EnemyState.Dead) return;
+
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Hit!");
@@ -421,6 +444,8 @@ public class P_AI_Enemy : MonoBehaviour
 
     void Warn()
     {
+        if (currentState == EnemyState.Dead) return;
+
         Collider[] nearbyEnemies = Physics.OverlapSphere(transform.position, alertRadius, EnemyLayer);
 
 
@@ -437,10 +462,13 @@ public class P_AI_Enemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (currentState == EnemyState.Dead) return;
+
         if (damage > 0)
         {
             health -= damage;
         }
+
         /*        
         if (tempPP != null && !isChasing)
         {
@@ -453,18 +481,31 @@ public class P_AI_Enemy : MonoBehaviour
         */
         if (health <= 0)
         {
-            if (agent != null)
-            {
-                agent.enabled = false;  // Desactiva el agente antes de destruir
-            }
-            gm.deadCount++;
-            gm.CheckToOpen();
-            Destroy(gameObject);
+            currentState = EnemyState.Dead;
         }
+    }
+
+    void Death()
+    {
+        died = true;
+        if (agent != null)
+        {
+            agent.enabled = false;  // Desactiva el agente antes de destruir
+        }
+        gm.deadCount++;
+        gm.CheckToOpen();
+        GameObject hitBloodLoopTemp = Instantiate(vfxBlood, pivotVFX.position, pivotVFX.rotation);
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.mass = 3.0f;
+        rb.AddForce(-transform.forward, ForceMode.Impulse);
+        Destroy(hitBloodLoopTemp, 1.5f);
+        Destroy(gameObject, 2.5f);
     }
 
     void OnAlert()
     {
+        if (currentState == EnemyState.Dead) return;
+
         currentState = EnemyState.Chasing;
     }
 

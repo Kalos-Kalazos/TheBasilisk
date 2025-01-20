@@ -99,7 +99,7 @@ public class P_Character_Combat : MonoBehaviour
                     if (enemy != null)
                     {
                         enemy.TakeDamage(damage);
-
+                        enemy.pivotVFX.position = hit.point;
                     }
 
                     Destroy(hitBloodTemp, 2);

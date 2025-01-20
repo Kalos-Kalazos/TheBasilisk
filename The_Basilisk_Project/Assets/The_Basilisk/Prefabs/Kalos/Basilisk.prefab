@@ -148,18 +148,32 @@ MonoBehaviour:
   currentPatrolIndex: 0
   agent: {fileID: 0}
   detectionRange: 8
+  detectionCloseRange: 5
   player: {fileID: 0}
   tempPP: {fileID: 0}
   isChasing: 0
   isChecking: 0
+  playerIsCrouched: 0
+  playerIsWalking: 0
   maxDetectionAngle: 50
   alertRadius: 40
-  lastAttackTime: 0
+  attackRate: 0
   attackCD: 2
   attackRange: 3
+  gm: {fileID: 0}
   ui: {fileID: 0}
   searchRadius: 30
   searchTime: 20
+  batterySystem: {fileID: 0}
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  vfxBlood: {fileID: 1733231068459491712, guid: 3103ab2370d0217499c04250fa865074,
+    type: 3}
+  pivotVFX: {fileID: 4349815961973726237}
 --- !u!195 &3609119040439951609
 NavMeshAgent:
   m_ObjectHideFlags: 0

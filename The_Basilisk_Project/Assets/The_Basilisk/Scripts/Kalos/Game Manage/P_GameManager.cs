@@ -30,12 +30,12 @@ public class P_GameManager : MonoBehaviour
     {
         actualScene = ActualSceneID();
 
+        pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
+
         Time.timeScale = 1f;
                 
         if (actualScene == 1)
         {
-            pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
-
             //Scripts deactivated
             player.GetComponent<P_Character_HookSwing>().enabled = false;
             player.GetComponent<P_Character_Combat>().hasFlamethrow = false;
@@ -139,8 +139,8 @@ public class P_GameManager : MonoBehaviour
     {
         if (UI_GameOver != null)
         {
-            UI_GameOver.SetActive(true);
-            Time.timeScale = 0f;
+            //UI_GameOver.SetActive(true);
+            //Time.timeScale = 0f;
         }
     }
 
