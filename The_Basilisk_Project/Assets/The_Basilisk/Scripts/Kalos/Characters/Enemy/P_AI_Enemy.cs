@@ -256,6 +256,7 @@ public class P_AI_Enemy : MonoBehaviour
             }            
         }
     }
+
     private IEnumerator PauseAtPatrolPoint()
     {
         if (!agent.enabled) yield break;

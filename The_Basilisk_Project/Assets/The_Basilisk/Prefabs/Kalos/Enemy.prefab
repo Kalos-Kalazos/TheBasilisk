@@ -230,13 +230,16 @@ MonoBehaviour:
   currentPatrolIndex: 0
   agent: {fileID: 0}
   detectionRange: 14
+  detectionCloseRange: 5
   player: {fileID: 0}
   tempPP: {fileID: 0}
   isChasing: 0
   isChecking: 0
+  playerIsCrouched: 0
+  playerIsWalking: 0
   maxDetectionAngle: 45
   alertRadius: 40
-  attackRate: 0
+  attackRate: 1
   attackCD: 1
   attackRange: 2
   gm: {fileID: 0}
@@ -257,14 +260,14 @@ NavMeshAgent:
   m_Acceleration: 5
   avoidancePriority: 50
   m_AngularSpeed: 200
-  m_StoppingDistance: 1
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 3
 --- !u!95 &2036635694831107300
 Animator:
   serializedVersion: 5

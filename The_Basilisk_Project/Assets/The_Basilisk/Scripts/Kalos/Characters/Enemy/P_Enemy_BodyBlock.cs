@@ -8,7 +8,7 @@ public class P_Enemy_BodyBlock : MonoBehaviour
     NavMeshAgent agent;
     P_AI_Enemy enemyControl;
     [SerializeField] bool isStatic;
-
+    /*
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -53,5 +53,5 @@ public class P_Enemy_BodyBlock : MonoBehaviour
         {
             DynamicEnemy();
         }
-    }
+    }*/
 }
