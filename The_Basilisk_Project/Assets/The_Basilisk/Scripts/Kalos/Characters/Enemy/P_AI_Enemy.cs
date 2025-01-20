@@ -42,10 +42,6 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] P_GameManager gm;
 
     [SerializeField] GameObject ui;
-    [SerializeField] GameObject vfx_Death;
-    [SerializeField] Transform pivot_VFX;
-
-    Rigidbody rb;
 
     float timeElapsedChase = 0;
 
@@ -54,6 +50,9 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float searchRadius = 20;
     [SerializeField] float searchTime = 15;
     bool isSearching = false;
+    [SerializeField] BatterySystem batterySystem;
+    [SerializeField] LayerMask EnemyLayer;
+    [SerializeField] LayerMask PlayerLayer;
 
     public void OnGunshotHeard(Vector3 gunshotPosition, string sourceTag)
     {
@@ -122,7 +121,7 @@ public class P_AI_Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         player = FindAnyObjectByType<P_Mouse_Controller>().transform;
         gm = FindAnyObjectByType<P_GameManager>();
-        rb = GetComponent<Rigidbody>();
+        batterySystem = ui.GetComponentInChildren<BatterySystem>();
 
         if (patrolPoints.Length > 0)
         {
@@ -261,6 +260,7 @@ public class P_AI_Enemy : MonoBehaviour
             }            
         }
     }
+
     private IEnumerator PauseAtPatrolPoint()
     {
         if (!agent.enabled) yield break;
@@ -351,7 +351,7 @@ public class P_AI_Enemy : MonoBehaviour
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange))
+        if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange, PlayerLayer))
         {
             if(hit.transform == target)
             {
@@ -387,16 +387,19 @@ public class P_AI_Enemy : MonoBehaviour
     void AttackPlayer()
     {
         if (agent.enabled) agent.isStopped = true;
-
+        
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToPlayer.x, 0, directionToPlayer.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 7.5f);
 
         if (attackCD <= 0)
         {
+            Debug.Log("Enemy Attack");
             attackCD = attackRate;
             //Animation
             animator.SetTrigger("Attack");
+
+            TryApplyDamage();
         }
 
         if (Vector3.Distance(transform.position, player.position) > attackRange)
@@ -406,22 +409,19 @@ public class P_AI_Enemy : MonoBehaviour
             if (agent.enabled) agent.isStopped = false;
         }
     }
-
-    public void ApplyDamageToPlayer()
+    void TryApplyDamage()
     {
-        if (Vector3.Distance(transform.position, player.position) <= attackRange - 0.1f)
+        if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
-            BatterySystem batterySystem = ui.GetComponentInChildren<BatterySystem>();
-            if (batterySystem != null)
-            {
-                batterySystem.LoseBattery();
-            }
+            Debug.Log("Hit!");
+            batterySystem.LoseBattery();
         }
+        else Debug.Log("Attack missed!");
     }
 
     void Warn()
     {
-        Collider[] nearbyEnemies = Physics.OverlapSphere(transform.position, alertRadius);
+        Collider[] nearbyEnemies = Physics.OverlapSphere(transform.position, alertRadius, EnemyLayer);
 
 
         foreach (Collider collider in nearbyEnemies)
@@ -451,21 +451,15 @@ public class P_AI_Enemy : MonoBehaviour
             isChecking = true;
         }
         */
-
-        //Enemy Death
         if (health <= 0)
         {
             if (agent != null)
             {
                 agent.enabled = false;  // Desactiva el agente antes de destruir
             }
-            rb.isKinematic = false;
-            rb.AddForce(-player.forward * 10, ForceMode.Impulse);
-            GameObject VFXTemp = Instantiate(vfx_Death, pivot_VFX.position, Quaternion.identity);
-            VFXTemp.transform.SetParent(transform);
             gm.deadCount++;
             gm.CheckToOpen();
-            Destroy(gameObject, 3);
+            Destroy(gameObject);
         }
     }
 

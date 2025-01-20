@@ -47,7 +47,7 @@ public class P_Enviroment_DD : MonoBehaviour
 
     private void Update()
     {
-        if (checkStatus)
+        if (checkStatus && player != null)
         {
             Interaction(player);
         }
