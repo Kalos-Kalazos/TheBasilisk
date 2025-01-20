@@ -3595,7 +3595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &299757488
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9758,11 +9758,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00dbb768f8b6cd242930bc58f754452e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textComponent: {fileID: 1115774712}
-  glitchDuration: 1
-  glitchFrequency: 0.1
-  glitchIntensity: 0.5
-  isGlitching: 0
 --- !u!1 &1122104447
 GameObject:
   m_ObjectHideFlags: 0
@@ -12995,7 +12990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03deba941288c304b97ecf060896b5d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 2069779471}
+  menu: {fileID: 0}
 --- !u!1 &1548000846
 GameObject:
   m_ObjectHideFlags: 0
@@ -13005,6 +13000,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1548000847}
+  - component: {fileID: 1548000848}
   m_Layer: 0
   m_Name: Menu_Pause
   m_TagString: Untagged
@@ -13033,6 +13029,19 @@ Transform:
   - {fileID: 1238497384}
   m_Father: {fileID: 1524607656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1548000848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548000846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03deba941288c304b97ecf060896b5d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 1548000846}
 --- !u!1 &1548176004
 GameObject:
   m_ObjectHideFlags: 0
@@ -14194,7 +14203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1751258369
 RectTransform:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class StartButtonMenu : MonoBehaviour
     public void StartGame()
     {
 
-        SceneManager.LoadScene("GameScene"); //Reemplaza "GameScene" con el nombre exacto de tu escena del juego
+        SceneManager.LoadScene("GameObject"); //Reemplaza "GameScene" con el nombre exacto de tu escena del juego
 
 
     }
