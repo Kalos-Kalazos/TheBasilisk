@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject menu;
     private bool isMenuActive = false;
+    public PlayerInput playerInput;
 
     private void Start()
     {
@@ -29,14 +31,17 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
 
-        // Detecta si el jugador presiona la tecla para pausa (por ejemplo, "P")
+        
+    }
 
-        if (Input.GetKeyDown(KeyCode.P))
+    public void CallPause(InputAction.CallbackContext context)
+    {
+        if (context.started)
         {
+            // Detecta si el jugador presiona la tecla para pausa (por ejemplo, "P")
 
             //Cambiar el estado del menu
             isMenuActive = !isMenuActive;
-            menu.SetActive(isMenuActive);
 
             //Activar o Desactivar el Menu
             menu.SetActive(isMenuActive);
@@ -59,7 +64,7 @@ public class PauseMenu : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
 
                 Time.timeScale = 1f; //reanudar el juego
-                
+
 
             }
         }

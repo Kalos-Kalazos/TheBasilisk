@@ -116,6 +116,15 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CallPause"",
+                    ""type"": ""Button"",
+                    ""id"": ""432ce07a-0eab-4e88-8408-bcf5aa0ddffe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -358,6 +367,17 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Retract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86f03023-11a7-40ce-841b-b3a35810d13c"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CallPause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -955,6 +975,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         m_Player_Hook = m_Player.FindAction("Hook", throwIfNotFound: true);
         m_Player_ShortenCable = m_Player.FindAction("ShortenCable", throwIfNotFound: true);
         m_Player_Retract = m_Player.FindAction("Retract", throwIfNotFound: true);
+        m_Player_CallPause = m_Player.FindAction("CallPause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1038,6 +1059,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Hook;
     private readonly InputAction m_Player_ShortenCable;
     private readonly InputAction m_Player_Retract;
+    private readonly InputAction m_Player_CallPause;
     public struct PlayerActions
     {
         private @InputsPlayer m_Wrapper;
@@ -1052,6 +1074,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         public InputAction @Hook => m_Wrapper.m_Player_Hook;
         public InputAction @ShortenCable => m_Wrapper.m_Player_ShortenCable;
         public InputAction @Retract => m_Wrapper.m_Player_Retract;
+        public InputAction @CallPause => m_Wrapper.m_Player_CallPause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1091,6 +1114,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Retract.started += instance.OnRetract;
             @Retract.performed += instance.OnRetract;
             @Retract.canceled += instance.OnRetract;
+            @CallPause.started += instance.OnCallPause;
+            @CallPause.performed += instance.OnCallPause;
+            @CallPause.canceled += instance.OnCallPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1125,6 +1151,9 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
             @Retract.started -= instance.OnRetract;
             @Retract.performed -= instance.OnRetract;
             @Retract.canceled -= instance.OnRetract;
+            @CallPause.started -= instance.OnCallPause;
+            @CallPause.performed -= instance.OnCallPause;
+            @CallPause.canceled -= instance.OnCallPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1317,6 +1346,7 @@ public partial class @InputsPlayer: IInputActionCollection2, IDisposable
         void OnHook(InputAction.CallbackContext context);
         void OnShortenCable(InputAction.CallbackContext context);
         void OnRetract(InputAction.CallbackContext context);
+        void OnCallPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
