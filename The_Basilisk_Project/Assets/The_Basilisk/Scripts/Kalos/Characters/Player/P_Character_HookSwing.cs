@@ -100,15 +100,6 @@ public class P_Character_HookSwing : MonoBehaviour
 
         #endregion
 
-        if (swinging)
-        {
-            pm.playerSpeed = pm.swingSpeed;
-        }
-        else
-        {
-            pm.playerSpeed = 10;
-        }
-
         CheckForSwingPoints();
 
         hC.currentCooldownTime = grapplingCDTimer;

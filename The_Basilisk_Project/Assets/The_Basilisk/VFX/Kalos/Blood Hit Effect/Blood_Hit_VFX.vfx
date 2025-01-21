@@ -64,10 +64,10 @@ MonoBehaviour:
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: 426
-    y: -250
-    width: 965
-    height: 2256
+    x: 427
+    y: -249
+    width: 963
+    height: 2254
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,7 +125,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 64
+      m_SerializableObject: 32
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -139,7 +139,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":3.0,"y":4.0,"z":3.0}'
+      m_SerializableObject: '{"x":4.0,"y":6.0,"z":4.0}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -584,7 +584,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614583}
   - {fileID: 8926484042661614585}
   dataType: 0
-  capacity: 500
+  capacity: 64
   stripCapacity: 16
   particlePerStripCount: 16
   needsComputeBounds: 0
@@ -1929,7 +1929,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 64
+      m_SerializableObject: 32
     m_Space: 2147483647
   m_Property:
     name: o
@@ -2019,7 +2019,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":3.0,"y":4.0,"z":3.0}'
+      m_SerializableObject: '{"x":3.0,"y":6.0,"z":3.0}'
     m_Space: 2147483647
   m_Property:
     name: o
@@ -2547,7 +2547,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.0,"y":-2.5,"z":0.0}}'
+      m_SerializableObject: '{"vector":{"x":0.0,"y":-5.0,"z":0.0}}'
     m_Space: 0
   m_Property:
     name: Force

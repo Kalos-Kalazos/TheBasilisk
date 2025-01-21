@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 public class P_Character_Combat : MonoBehaviour
 {
@@ -23,7 +24,6 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] float flameDistance;
     public int damage;
     [SerializeField] Transform shootingPoint;
-    [SerializeField] GameObject flameThrowTrigger;
     public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
     public bool hasFlamethrow = false;
@@ -32,6 +32,8 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] GameObject muzzleVFX;
     [SerializeField] GameObject hitPointVFX;
     [SerializeField] GameObject hitBloodVFX;
+    [SerializeField] VisualEffect flamesVFX;
+    [SerializeField] Transform flamesPivot;
 
     [SerializeField] LayerMask EnemyLayer;
     [SerializeField] Animator animator;
@@ -53,6 +55,7 @@ public class P_Character_Combat : MonoBehaviour
         wpControl = GetComponent<P_WeaponController>();
         cam = Camera.main?.transform;
         recharged = true;
+        //flamesVFX.Stop();
     }
 
     void Update()
@@ -209,28 +212,28 @@ public class P_Character_Combat : MonoBehaviour
         else if(context.canceled)
         {
             StopAllCoroutines();
-            flameThrowTrigger.SetActive(false);
+            //flamesVFX.Stop();
         }
             
     }
 
     IEnumerator Flames()
     {
-        flameThrowTrigger.SetActive(true);
+        //flamesVFX.Play();
 
-        while(currentAmmoFlame > 0)
+        while (currentAmmoFlame > 0)
         {
             DealFlameDamage();
             currentAmmoFlame--;
             yield return new WaitForSeconds(flameRate);
         }
 
-        flameThrowTrigger.SetActive(false);
+        //flamesVFX.Stop();
     }
 
     void DealFlameDamage()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(flameThrowTrigger.transform.position, flameRange, EnemyLayer);
+        Collider[] hitColliders = Physics.OverlapCapsule(shootingPoint.position, flamesPivot.position, flameRange, EnemyLayer);
 
         foreach (Collider hitCollider in hitColliders)
         {
@@ -265,5 +268,7 @@ public class P_Character_Combat : MonoBehaviour
         Gizmos.DrawWireSphere(shootingPoint.position, soundRadius);
 
         Gizmos.color = originalColor;
+
+        Gizmos.DrawWireSphere(flamesPivot.position, flameRange);
     }
 }
