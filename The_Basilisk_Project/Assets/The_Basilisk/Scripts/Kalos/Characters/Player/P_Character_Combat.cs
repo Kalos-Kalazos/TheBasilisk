@@ -34,6 +34,7 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] GameObject hitPointVFX;
     [SerializeField] GameObject hitBloodVFX;
     [SerializeField] VisualEffect flamesVFX;
+    [SerializeField] VisualEffect smallFlameVFX;
     [SerializeField] Transform flamesPivot;
 
     [SerializeField] LayerMask EnemyLayer;
@@ -50,6 +51,11 @@ public class P_Character_Combat : MonoBehaviour
             animator = GetComponentInChildren<Animator>();
         }
     }
+    private void OnEnable()
+    {
+        flamesVFX.Stop();
+        smallFlameVFX.Stop();
+    }
 
     private void Start()
     {
@@ -57,6 +63,7 @@ public class P_Character_Combat : MonoBehaviour
         cam = Camera.main?.transform;
         recharged = true;
         flamesVFX.Stop();
+        smallFlameVFX.Stop();
     }
 
     void Update()
@@ -216,6 +223,7 @@ public class P_Character_Combat : MonoBehaviour
         {
             StopAllCoroutines();
             flamesVFX.Stop();
+            smallFlameVFX.Stop();
         }
             
     }
@@ -223,6 +231,8 @@ public class P_Character_Combat : MonoBehaviour
     IEnumerator Flames()
     {
         flamesVFX.Play();
+        smallFlameVFX.Play();
+        Debug.Log("Se activan las llamas");
 
         while (currentAmmoFlame > 0)
         {
@@ -232,6 +242,7 @@ public class P_Character_Combat : MonoBehaviour
         }
 
         flamesVFX.Stop();
+        smallFlameVFX.Stop();
     }
 
     void DealFlameDamage()
