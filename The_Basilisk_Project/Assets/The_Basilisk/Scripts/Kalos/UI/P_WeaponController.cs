@@ -43,8 +43,6 @@ public class P_WeaponController : MonoBehaviour
     }
     public AmmoType currentAmmoType = AmmoType.Simple; //Tipo de municion actual
 
-    //Variables para el disparo Continuo
-    private bool isFiring = false; //Indicador de si el lanzallamas esta disparando
 
     // Update is called once per frame
     void Update()
@@ -67,17 +65,17 @@ public class P_WeaponController : MonoBehaviour
 
     public void ChangeAmmo(InputAction.CallbackContext context)
     {
+        if (!pjCombatManage.hasFlamethrow) return;
+
         if (context.performed && !simple)
         {
             currentAmmoType = AmmoType.Simple;
             simple = true;
-            pjCombatManage.damage = 50;
         }
         else if (context.performed && simple)
         {
             currentAmmoType = AmmoType.Flamethrower;
             simple = false;
-            pjCombatManage.damage = 2;
         }
         SwapPositions();
     }
@@ -132,22 +130,22 @@ public class P_WeaponController : MonoBehaviour
 
         if (currentAmmoType == AmmoType.Simple)
         {
-            ammoText.text = "|" + simpleAmmo + "|";
+            ammoText.text = "-" + simpleAmmo + "-";
 
             ammoText.color = ammoColor;
 
-            magazinesText.text = "|" + simpleMagazines + "|";
+            magazinesText.text = "-" + simpleMagazines + "-";
 
             magazinesText.color = magazinesColor;
         }
 
         else if (currentAmmoType == AmmoType.Flamethrower)
         {
-            ammoText.text = "|" + flamethrowerAmmo + "|";
+            ammoText.text = "-" + flamethrowerAmmo + "-";
 
             ammoText.color = flamethrowerColor;
 
-            magazinesText.text = "|" + flamethrowerMagazines + "|";
+            magazinesText.text = "-" + flamethrowerMagazines + "-";
 
             magazinesText.color = flamethrowerMagazinesColor;
         }

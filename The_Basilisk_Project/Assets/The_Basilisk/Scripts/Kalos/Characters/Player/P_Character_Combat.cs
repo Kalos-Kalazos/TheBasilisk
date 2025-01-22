@@ -22,7 +22,8 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] float flameRate;
     [SerializeField] float flameRange;
     [SerializeField] float flameDistance;
-    public int damage;
+    [SerializeField] int damage;
+    [SerializeField] float damageFlames;
     [SerializeField] Transform shootingPoint;
     public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
@@ -55,7 +56,7 @@ public class P_Character_Combat : MonoBehaviour
         wpControl = GetComponent<P_WeaponController>();
         cam = Camera.main?.transform;
         recharged = true;
-        //flamesVFX.Stop();
+        flamesVFX.Stop();
     }
 
     void Update()
@@ -80,6 +81,8 @@ public class P_Character_Combat : MonoBehaviour
 
     public void Shooting(InputAction.CallbackContext context)
     {
+        if (!this.enabled) return;
+
         if (!wpControl.simple || !recharged) return;
 
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
@@ -212,14 +215,14 @@ public class P_Character_Combat : MonoBehaviour
         else if(context.canceled)
         {
             StopAllCoroutines();
-            //flamesVFX.Stop();
+            flamesVFX.Stop();
         }
             
     }
 
     IEnumerator Flames()
     {
-        //flamesVFX.Play();
+        flamesVFX.Play();
 
         while (currentAmmoFlame > 0)
         {
@@ -228,7 +231,7 @@ public class P_Character_Combat : MonoBehaviour
             yield return new WaitForSeconds(flameRate);
         }
 
-        //flamesVFX.Stop();
+        flamesVFX.Stop();
     }
 
     void DealFlameDamage()
@@ -243,7 +246,7 @@ public class P_Character_Combat : MonoBehaviour
 
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(damage);
+                    enemy.TakeDamage(damageFlames);
                     ApplyBurnEffect(hitCollider);
                 }
             }

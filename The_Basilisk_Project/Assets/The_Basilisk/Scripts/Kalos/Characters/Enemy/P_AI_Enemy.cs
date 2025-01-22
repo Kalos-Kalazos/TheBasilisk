@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 public class P_AI_Enemy : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float health = 100;
     [SerializeField] float speedChase = 7;
     [SerializeField] float speedDefault = 3.5f;
-    [SerializeField] int damage = 2;
     public EnemyState currentState;
 
     [Header("=== Enemy Patrol Settings ===")]
@@ -23,8 +23,6 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float detectionCloseRange = 5;
     [SerializeField] Transform player;
     [SerializeField] GameObject tempPP;
-    [SerializeField] bool isChasing = false;
-    [SerializeField] bool isChecking = false;
     [SerializeField] bool playerIsCrouched = false;
     [SerializeField] bool playerIsWalking = false;
     [SerializeField] float maxDetectionAngle = 45;
@@ -44,6 +42,8 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] GameObject ui;
 
     float timeElapsedChase = 0;
+
+    [SerializeField] VisualEffect vfx_Burned;
 
     #region --Search on sound heard
     Coroutine currentCoroutineState;
@@ -127,6 +127,7 @@ public class P_AI_Enemy : MonoBehaviour
         gm = FindAnyObjectByType<P_GameManager>();
         batterySystem = ui.GetComponentInChildren<BatterySystem>();
         died = false;
+        vfx_Burned.Stop();
 
         if (patrolPoints.Length > 0)
         {
@@ -239,13 +240,14 @@ public class P_AI_Enemy : MonoBehaviour
         {
             StopCoroutine(burnCoroutine);
         }
-
         burnCoroutine = StartCoroutine(BurnEnemy(burnDuration, burnDamagePerSecond));
     }
 
     private IEnumerator BurnEnemy(float burnDuration, float burnDamagePerSecond)
     {
         float elapsedTime = 0f;
+
+        vfx_Burned.Play();
 
         while (elapsedTime < burnDuration)
         {
@@ -254,6 +256,8 @@ public class P_AI_Enemy : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        vfx_Burned.Stop();
     }
     #endregion
 

@@ -535,16 +535,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentAmmoSingle: 12
   ammoSingle: 0
-  fireRate: 0.2
+  fireRate: 0.1
   shootingRange: 30
-  flameMagazine: 5
-  currentAmmoFlame: 80
-  maxAmmoFlame: 80
+  flameMagazine: 0
+  currentAmmoFlame: 200
+  maxAmmoFlame: 200
   fireCooldown: 0
-  flameRate: 0.05
-  flameRange: 2
+  flameRate: 0.025
+  flameRange: 1
   flameDistance: 1
   damage: 50
+  damageFlames: 2.5
   shootingPoint: {fileID: 493835250907376867}
   flameThrowTank: {fileID: 456476857240506690}
   impulsitoBala: 5
