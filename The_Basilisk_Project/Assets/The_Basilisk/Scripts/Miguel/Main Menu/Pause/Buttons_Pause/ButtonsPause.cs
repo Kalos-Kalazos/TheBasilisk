@@ -25,8 +25,9 @@ public class ButtonsPause : MonoBehaviour
     public void OpenOptions()
     {
 
+        optionsMenuUI.SetActive(true); //activa el menu de opciones
         PauseMenuUI.SetActive(false); //Oculta el menu de pausa
-        optionsMenuUI.SetActive(true); //Oculta el menu de opciones
+        
 
     }
 
@@ -45,6 +46,8 @@ public class ButtonsPause : MonoBehaviour
 
         mainMenuUI.SetActive(true); //Muestra el Menu principal
         //alternativamente carga la scena del menu principal:
+
+        SceneManager.LoadScene("MainMenu");
 
     }
 

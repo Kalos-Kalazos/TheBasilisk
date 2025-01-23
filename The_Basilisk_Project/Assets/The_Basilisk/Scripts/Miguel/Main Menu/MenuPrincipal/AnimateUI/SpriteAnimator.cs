@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SpriteAnimator : MonoBehaviour
 {
+    public Animator spriteAnimator;// Asigna el Animator del Sprite
+
     public Sprite[] sprites; //Array de Sprites
 
     public Image targetImage; // Referencia al componente Image
@@ -14,6 +16,19 @@ public class SpriteAnimator : MonoBehaviour
     private int currentFrame;
     private float timer;
 
+    public void PlayAnimation()
+    {
+
+        spriteAnimator.SetBool("IsHovering", true); //Activa la Animacion
+
+    }
+
+    public void StopAnimation()
+    {
+
+        spriteAnimator.SetBool("IsHovering", false); //Desactiva la animacion
+
+    }
 
     // Update is called once per frame
     void Update()
