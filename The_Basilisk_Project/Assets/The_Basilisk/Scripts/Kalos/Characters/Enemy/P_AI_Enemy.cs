@@ -22,7 +22,7 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float detectionRange = 15;
     [SerializeField] float detectionCloseRange = 5;
     [SerializeField] Transform player;
-    [SerializeField] GameObject tempPP;
+    //[SerializeField] GameObject tempPP;
     [SerializeField] bool playerIsCrouched = false;
     [SerializeField] bool playerIsWalking = false;
     [SerializeField] float maxDetectionAngle = 45;
@@ -147,8 +147,6 @@ public class P_AI_Enemy : MonoBehaviour
 
     void Update()
     {
-        DetectPlayer();
-
         playerIsCrouched = player.GetComponent<P_Character_Move_v2>().isCrouched;
         playerIsWalking = player.GetComponent<P_Character_Move_v2>().isWalking;
 
@@ -400,6 +398,7 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (distanceToPlayer <= attackRange)
         {
+            Debug.Log("Enemy Attack1");
             currentState = EnemyState.Attacking;
         }
         else if (distanceToPlayer > detectionRange && timeElapsedChase >= searchTime)
@@ -419,20 +418,21 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (attackCD <= 0)
         {
-            Debug.Log("Enemy Attack");
+            Debug.Log("Enemy Attack2");
             attackCD = attackRate;
             //Animation
-            animator.SetTrigger("Attack");
+            //animator.SetTrigger("Attack");
 
             TryApplyDamage();
         }
-
+        
         if (Vector3.Distance(transform.position, player.position) > attackRange)
         {
             currentState = EnemyState.Chasing;
 
             if (agent.enabled) agent.isStopped = false;
         }
+        
     }
     void TryApplyDamage()
     {

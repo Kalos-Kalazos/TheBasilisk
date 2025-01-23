@@ -8,7 +8,7 @@ public class P_Character_HookGrab : MonoBehaviour
 {
     [Header("=== Grab Settings ===")]
     private P_Character_HookSwing playerSwing;
-    private PA_Hook playerPA_Hook;
+    public PA_Hook playerPA_Hook;
     public float launchPower = 40f;
     public Rigidbody grabbedObjectRB;
 
@@ -184,6 +184,7 @@ public class P_Character_HookGrab : MonoBehaviour
         //lr.enabled = false;
         playerSwing.activeGrapple = false;
         playerSwing.hasGrabbed = false;
+        playerPA_Hook.hookHead.GetComponent<P_Reference_HeadHook>().isHooked = false;
 
         if (joint != null)
         {
