@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2045158335595958095}
   - component: {fileID: 2895007054252573520}
+  - component: {fileID: 5631280612201958780}
   m_Layer: 0
   m_Name: Pared_Modular
   m_TagString: Untagged
@@ -138,8 +139,29 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 4, z: 0.8}
-  m_Center: {x: -2, y: 2, z: 0.4}
+  m_Size: {x: 4.0967383, y: 4, z: 0.17424451}
+  m_Center: {x: -1.9513977, y: 2, z: 0.087122254}
+--- !u!65 &5631280612201958780
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4838446283155130595}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.1166425, y: 0.8892555, z: 0.2790407}
+  m_Center: {x: -2.1042516, y: -0.05537206, z: 0.27377605}
 --- !u!1 &5260232215606612679
 GameObject:
   m_ObjectHideFlags: 0
