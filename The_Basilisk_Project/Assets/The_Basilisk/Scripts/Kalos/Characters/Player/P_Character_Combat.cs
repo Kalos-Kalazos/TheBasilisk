@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 public class P_Character_Combat : MonoBehaviour
 {
@@ -21,9 +22,9 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] float flameRate;
     [SerializeField] float flameRange;
     [SerializeField] float flameDistance;
-    public int damage;
+    [SerializeField] int damage;
+    [SerializeField] float damageFlames;
     [SerializeField] Transform shootingPoint;
-    [SerializeField] GameObject flameThrowTrigger;
     public GameObject flameThrowTank;
     [SerializeField] float impulsitoBala;
     public bool hasFlamethrow = false;
@@ -32,6 +33,9 @@ public class P_Character_Combat : MonoBehaviour
     [SerializeField] GameObject muzzleVFX;
     [SerializeField] GameObject hitPointVFX;
     [SerializeField] GameObject hitBloodVFX;
+    [SerializeField] VisualEffect flamesVFX;
+    [SerializeField] VisualEffect smallFlameVFX;
+    [SerializeField] Transform flamesPivot;
 
     [SerializeField] LayerMask EnemyLayer;
     [SerializeField] Animator animator;
@@ -47,12 +51,19 @@ public class P_Character_Combat : MonoBehaviour
             animator = GetComponentInChildren<Animator>();
         }
     }
+    private void OnEnable()
+    {
+        flamesVFX.Stop();
+        smallFlameVFX.Stop();
+    }
 
     private void Start()
     {
         wpControl = GetComponent<P_WeaponController>();
         cam = Camera.main?.transform;
         recharged = true;
+        flamesVFX.Stop();
+        smallFlameVFX.Stop();
     }
 
     void Update()
@@ -77,6 +88,8 @@ public class P_Character_Combat : MonoBehaviour
 
     public void Shooting(InputAction.CallbackContext context)
     {
+        if (!this.enabled) return;
+
         if (!wpControl.simple || !recharged) return;
 
         if (context.started && currentAmmoSingle > 0 && fireCooldown <= 0)
@@ -209,28 +222,32 @@ public class P_Character_Combat : MonoBehaviour
         else if(context.canceled)
         {
             StopAllCoroutines();
-            flameThrowTrigger.SetActive(false);
+            flamesVFX.Stop();
+            smallFlameVFX.Stop();
         }
             
     }
 
     IEnumerator Flames()
     {
-        flameThrowTrigger.SetActive(true);
+        flamesVFX.Play();
+        smallFlameVFX.Play();
+        Debug.Log("Se activan las llamas");
 
-        while(currentAmmoFlame > 0)
+        while (currentAmmoFlame > 0)
         {
             DealFlameDamage();
             currentAmmoFlame--;
             yield return new WaitForSeconds(flameRate);
         }
 
-        flameThrowTrigger.SetActive(false);
+        flamesVFX.Stop();
+        smallFlameVFX.Stop();
     }
 
     void DealFlameDamage()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(flameThrowTrigger.transform.position, flameRange, EnemyLayer);
+        Collider[] hitColliders = Physics.OverlapCapsule(shootingPoint.position, flamesPivot.position, flameRange, EnemyLayer);
 
         foreach (Collider hitCollider in hitColliders)
         {
@@ -240,7 +257,7 @@ public class P_Character_Combat : MonoBehaviour
 
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(damage);
+                    enemy.TakeDamage(damageFlames);
                     ApplyBurnEffect(hitCollider);
                 }
             }
@@ -265,5 +282,7 @@ public class P_Character_Combat : MonoBehaviour
         Gizmos.DrawWireSphere(shootingPoint.position, soundRadius);
 
         Gizmos.color = originalColor;
+
+        Gizmos.DrawWireSphere(flamesPivot.position, flameRange);
     }
 }
