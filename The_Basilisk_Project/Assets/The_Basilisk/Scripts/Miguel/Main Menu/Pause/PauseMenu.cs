@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject menu;
     private bool isMenuActive = false;
     public PlayerInput playerInput;
+    [SerializeField] P_Mouse_Controller mouseController;
 
     private void Start()
     {
@@ -24,7 +25,7 @@ public class PauseMenu : MonoBehaviour
 
         //Esconder el cursor al inicio del juego
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;        
     }
 
     // Update is called once per frame
@@ -48,26 +49,39 @@ public class PauseMenu : MonoBehaviour
 
             if (isMenuActive)
             {
-                //Mostrar el cursor y detener el juego
-                Cursor.visible = true;
-
-                Cursor.lockState = CursorLockMode.None;
-
-                Time.timeScale = 0f; //Pausar el juego
-
+                PauseBehavoir();
             }
             else
             {
-                // Esconder el cursor y reanudar el juego
-                Cursor.visible = false;
-
-                Cursor.lockState = CursorLockMode.Locked;
-
-                Time.timeScale = 1f; //reanudar el juego
-
-
+                ReanudeBehavoir();
             }
         }
+    }
+    
+    public void PauseBehavoir()
+    {
+        //Mostrar el cursor y detener el juego
+        Cursor.visible = true;
+
+        Cursor.lockState = CursorLockMode.None;
+
+        mouseController.enabled = false;
+
+        Time.timeScale = 0f; //Pausar el juego
+
+    }
+
+    public void ReanudeBehavoir()
+    {
+        // Esconder el cursor y reanudar el juego
+        Cursor.visible = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+
+        mouseController.enabled = true;
+
+        Time.timeScale = 1f; //reanudar el juego
+
     }
 
 }

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class OptionsMenu : MonoBehaviour
 {
@@ -13,10 +15,9 @@ public class OptionsMenu : MonoBehaviour
     [Header("Audio Sources")]
     public AudioSource effectAudioSource; //Audio para efectos
     public AudioSource musicAudioSource; // Audio para musica
-
+    public AudioMixer masterMixer;
 
     [Header("Back Button")]
-    public GameObject mainMenu; //Referencia al Menu principal
     public GameObject optionsMenu; // Referencia al menu de opciones
 
 
@@ -40,8 +41,11 @@ public class OptionsMenu : MonoBehaviour
     public void UpdateMasterVolume()
     {
 
-        float volume = masterSlider.value;
-        AudioListener.volume = volume;
+        float volume = musicSlider.value;
+
+        if (musicAudioSource != null)
+
+            musicAudioSource.volume = volume;
 
         PlayerPrefs.SetFloat("MasterVolume", volume); //Guarda el valor
 
@@ -89,9 +93,6 @@ public class OptionsMenu : MonoBehaviour
         // Cambia al menu principal
 
         optionsMenu.SetActive(false);
-
-        mainMenu.SetActive(true);
-
     }
 
     // Update is called once per frame

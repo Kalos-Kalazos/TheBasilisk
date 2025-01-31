@@ -9,16 +9,21 @@ public class ButtonsPause : MonoBehaviour
 
     public GameObject PauseMenuUI;//Referencia al panel del de pausa
     public GameObject optionsMenuUI; //Referencia al panel de opciones
-    public GameObject mainMenuUI; //Referencia al panel del menu principal
+    [SerializeField] PauseMenu pauseControl;
 
     private bool isPaused = false;
+
+    private void Start()
+    {
+        pauseControl = GetComponent<PauseMenu>();
+    }
 
     public void Resume()
     {
 
         PauseMenuUI.SetActive(false); //Oculta el menu de pausa
-        Time.timeScale = 1f; //Reanuda el tiempo
-        isPaused = false;
+        pauseControl.ReanudeBehavoir();
+
 
     }
 
@@ -43,8 +48,6 @@ public class ButtonsPause : MonoBehaviour
     {
 
         Time.timeScale = 1f;// Asegurar de que reanuda el tiempo
-
-        mainMenuUI.SetActive(true); //Muestra el Menu principal
         //alternativamente carga la scena del menu principal:
 
         SceneManager.LoadScene("MainMenu");
