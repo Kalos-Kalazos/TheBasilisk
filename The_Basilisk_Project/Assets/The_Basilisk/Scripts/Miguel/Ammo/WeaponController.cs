@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class WeaponController : MonoBehaviour
 {
 
-    public int simpleAmmo = 100; //municion del disparo simple
+    public int simpleAmmo = 30; //municion del disparo simple
     public int flamethrowerAmmo = 50; //municion para el lanzallamas
+    
 
     public int simpleMagazines = 5; //cargadores disponibles para el disparo simple
     public int flamethrowerMagazines = 3; //cargadores disponibles para el lanzallamas
@@ -29,21 +30,39 @@ public class WeaponController : MonoBehaviour
 
     private float nextFireTime = 0f; // Tiempo cuando se podra disparar nuevamente
 
+    public RectTransform image1; // Referencias al RectTransform de la primera imagent
+
+    public RectTransform image2; // Refeferencia de la segunda imagen
+
+    private Vector2 position1; // Posicion inicial de la primera imagen
+
+    private Vector2 position2; // Position inicial de la segunda imagen
+
+    void Start()
+    {
+
+        //simpleAmmo = player.GetComponent<P_Character_Combat>().currentAmmoSingle;
+
+        // Guardamos las posiciones iniciales
+
+        position1 = image1.anchoredPosition;
+        position2 = image2.anchoredPosition;
+
+    }
+
+    
+
     // Update is called once per frame
     void Update()
     {
         UpdateUI(); //Mostrar la informacion de la UI
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) //Cambiar entre los tipos de municion con la tecla 1 y 2
+        if (Input.GetKeyDown(KeyCode.Tab)) //Cambiar entre los tipos de municion con la tecla tabulador
         {
-
-            currentAmmoType = AmmoType.Simple;
-
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-
-            currentAmmoType = AmmoType.Flamethrower;
+            SwapPositions();
+            if (currentAmmoType == AmmoType.Simple) currentAmmoType = AmmoType.Flamethrower;
+            if (currentAmmoType == AmmoType.Flamethrower) currentAmmoType = AmmoType.Simple;
+            
 
         }
         if (Input.GetButtonDown("Fire1"))//Disparar dependiendo del tipo de municion
@@ -80,6 +99,17 @@ public class WeaponController : MonoBehaviour
         }
 
     }
+
+    void SwapPositions()
+    {
+
+        // Intercambia las posiciones de las imagenes
+        Vector2 temp = image1.anchoredPosition;
+        image1.anchoredPosition = image2.anchoredPosition;
+        image2.anchoredPosition = temp;
+
+    }
+
 
     // funcion para disparar el arma
     void FireWeapon()
@@ -142,10 +172,10 @@ public class WeaponController : MonoBehaviour
         if (currentAmmoType == AmmoType.Simple && simpleMagazines > 0)
         {
 
-            if (simpleAmmo < 100) // Capacidad maxima de municion)
+            if (simpleAmmo < 30) // Capacidad maxima de municion)
             {
 
-                int ammoToReload = Mathf.Min(100 - simpleAmmo, 30); //Recarga hasta 30 balas o el maximo posible
+                int ammoToReload = Mathf.Min(30 - simpleAmmo, 30); //Recarga hasta 30 balas o el maximo posible
                 simpleAmmo += ammoToReload;
 
                 simpleMagazines--; //Usar un cargador
@@ -217,7 +247,7 @@ public class WeaponController : MonoBehaviour
             magazinesText.color = magazinesColor;
 
         }
-        else if (currentAmmoType == AmmoType.Flamethrower)
+        else
         {
 
             ammoText.text = "0" + flamethrowerAmmo;

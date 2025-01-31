@@ -5,7 +5,7 @@ using UnityEngine;
 public class AmmoPickUp : MonoBehaviour
 {
     // Referenciar a las armas estas deberian estar asignadas en el inspector de unity
-    public WeaponController weaponController;
+    public P_WeaponController weaponController;
 
     //Variables para el incremento de cargadores
     public int simpleAmmoIncrease = 1;// Cargadores de arma simple a aumentar
@@ -23,9 +23,9 @@ public class AmmoPickUp : MonoBehaviour
             if (weaponController != null)
             {
 
-                weaponController.simpleMagazines += simpleAmmoIncrease;//Aumenta cargadores del arma simple
+                weaponController.pjCombatManage.ammoSingle += simpleAmmoIncrease;//Aumenta cargadores del arma simple
 
-                weaponController.flamethrowerMagazines += flamethrowerAmmoIncrease; //Aumenta cargadores lanzallamas
+                weaponController.pjCombatManage.flameMagazine += flamethrowerAmmoIncrease; //Aumenta cargadores lanzallamas
 
                 isPickedUp = true; // marca el Pick Up como recogido
 

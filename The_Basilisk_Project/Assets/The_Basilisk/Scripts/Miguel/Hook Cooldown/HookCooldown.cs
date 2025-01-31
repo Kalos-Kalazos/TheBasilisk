@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class HookCooldown : MonoBehaviour
 {
-    public float cooldownTime = 5f; //Tiempo de cooldown en segundos
+    public float cooldownTime = 2f; //Tiempo de cooldown en segundos
     private bool isCooldown = false; //Bandera para saber si el hook esta en cooldown
 
-    private float currentCooldownTime; //Tiempo restante del cooldown
+    public float currentCooldownTime; //Tiempo restante del cooldown
     public Text cooldownText; //referencias al Text UI que mostrara el tiempo
 
     void Start()
@@ -23,14 +23,6 @@ public class HookCooldown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Si el jugador presiona la tecla para usar el hook
-        if(Input.GetKeyDown(KeyCode.E) && !isCooldown)
-        {
-
-            UseHook();
-
-        }
-
         if (isCooldown) //Si esta en cooldown actualizar el tiempo restante 
         {
 
@@ -55,7 +47,7 @@ public class HookCooldown : MonoBehaviour
         
     }
 
-    void UseHook()
+    public void UseHook()
     {
         //aqui va la logica para usar el hook (Lanzar, atrapar, etc)
         Debug.Log("Hook lanzado");

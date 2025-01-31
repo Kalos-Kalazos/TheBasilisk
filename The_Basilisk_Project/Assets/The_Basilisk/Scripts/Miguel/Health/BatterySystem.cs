@@ -9,9 +9,11 @@ public class BatterySystem : MonoBehaviour
 
     public int totalPiles = 5; //Numero total de pilas del inicio
 
-    private int currentPiles; //Numero actual de pilas disponibles
+    public int currentPiles; //Numero actual de pilas disponibles
 
     public int batteryCount = 0; //Contador de pilas
+
+    P_GameManager gameManager;
 
     //public Text batteryText; //UI Text para mostrar el numero de pilas
 
@@ -22,15 +24,20 @@ public class BatterySystem : MonoBehaviour
         currentPiles = totalPiles; //Inicializamos con todas las pilas
         UpdateBatteryUI(); //actualizar la interfaz del inicio
 
+        gameManager = FindAnyObjectByType<P_GameManager>();
+    }
+
+    public void TakeDamage(int damage) //Ejemplo de daño al jugador
+    {
+
+        totalPiles -= damage;
 
     }
 
     public void AddBattery()
     {
-
         currentPiles++;
         UpdateBatteryUI();// actualiza la UI cuando recoge una pila
-
 
     }
 
@@ -70,11 +77,26 @@ public class BatterySystem : MonoBehaviour
 
             currentPiles--; UpdateBatteryUI();
 
+            if( currentPiles == 0)
+            {
+
+                PlayerDied();
+
+            }
 
         }
 
 
     }
+
+    void PlayerDied()
+    {
+
+        Debug.Log("el jugador a muerto");
+
+        gameManager.GameOver_UI();
+    }
+
 
     // Funcion para reponer pilas si es necesario
 

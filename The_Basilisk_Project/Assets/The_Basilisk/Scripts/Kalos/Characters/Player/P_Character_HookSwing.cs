@@ -1,43 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public class P_Character_HookSwing : MonoBehaviour
 {
     [Header("=== References ===")]
-    private P_Character_Move pm;
+    private P_Character_Move_v2 pm; //Player Move
+    private P_Character_Combat pc;  //Player Combat
+    private PA_Hook hookAnim;
     private CharacterController controller;
     Rigidbody rb;
 
+    [SerializeField] HookCooldown hC;
     [SerializeField] Transform orientation;
-    [SerializeField] Transform cam;
+    public Transform cam;
     public Transform gunTip;
     [SerializeField] LayerMask isGrappleable;
     [SerializeField] LineRenderer lr;
 
     [Header("=== Swing Settings ===")]
-    [SerializeField] float maxSwingDistance = 20f;
+    public float maxSwingDistance = 20f;
     [SerializeField] float horizontalForce = 10f;
     [SerializeField] float forwardForce = 10f;
-    [SerializeField] float shortenSpeed = 5f;
+    public float shortenSpeed = 5f;
     [SerializeField] float overshootYAxis = 1f;
-    [SerializeField] float grapplingCD = 0.1f;
-    float grapplingCDTimer;
+    public float grapplingCD = 0.1f;
+    public float grapplingCDTimer;
+
+    [Header("=== Aereal movement Settings ===")]
+    [SerializeField] float maxSpeed = 8f;
 
     [Header("=== Prediction ===")]
     public RaycastHit predictionHit;
-    [SerializeField] float predictionRadius = 1f;
+    public float predictionRadius = 1f;
     public Transform predictionPoint;
 
     private SpringJoint joint;
     private Vector3 currentGrapplePosition;
-    public Vector3 swingPoint;
+    public Vector3 swingPoint, grapplePoint;
 
     public bool activeGrapple;
     public bool swinging;
     public bool shortenCable;
-    public bool shootGrapple;
+
+    public bool hasGrabbed;
 
     private bool shouldEnableController = true;
 
@@ -48,9 +56,12 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void Start()
     {
-        pm = GetComponent<P_Character_Move>();
+        pm = GetComponent<P_Character_Move_v2>();
+        pc = GetComponent<P_Character_Combat>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        hookAnim = GetComponent<PA_Hook>();
+        cam = Camera.main?.transform;
 
         if (!cam || !gunTip || !predictionPoint || !lr)
         {
@@ -61,7 +72,7 @@ public class P_Character_HookSwing : MonoBehaviour
     void Update()
     {
         #region --GrapplingCooldown
-        if (grapplingCDTimer > 0)
+        if (grapplingCDTimer > 0 && hookAnim.retracted)
         {
             grapplingCDTimer -= Time.deltaTime;
         }
@@ -69,26 +80,37 @@ public class P_Character_HookSwing : MonoBehaviour
         if (grapplingCDTimer < 0) grapplingCDTimer = 0;
         #endregion
 
+        #region --ReenableController
         if (!shouldEnableController)
         {
             controller.enabled = false;
-        }
-
-        if (swinging)
-        {
-            pm.playerSpeed = pm.swingSpeed;
+            rb.isKinematic = false;
         }
         else
         {
-            pm.playerSpeed = 10;
+            controller.enabled = true;
+            rb.isKinematic = true;
         }
 
+        if (pm.isGrounded && !swinging && !activeGrapple)
+        {
+            controller.enabled = true;
+            rb.isKinematic = true;
+        }
+
+        #endregion
+
+        CheckForSwingPoints();
+
+        hC.currentCooldownTime = grapplingCDTimer;
+    }
+
+    private void FixedUpdate()
+    {
         if (swinging)
         {
             AirMovement();
         }
-
-        CheckForSwingPoints();
     }
 
     /*private void LateUpdate()
@@ -104,10 +126,15 @@ public class P_Character_HookSwing : MonoBehaviour
         }
         else if (context.canceled)
         {
-            StopSwing();
+            if (swinging)
+            {
+                ResetRestrictions();
+                StopSwing();
+            }
         }
     }
 
+    /*
     public void Retract(InputAction.CallbackContext context)
     {
         if (predictionHit.point == Vector3.zero) return;
@@ -121,9 +148,10 @@ public class P_Character_HookSwing : MonoBehaviour
 
             if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
 
-            JumpToPosition(predictionHit.point, highestPointOnArc);
+            //JumpToPosition(predictionHit.point, highestPointOnArc);
         }
     }
+    */
 
     public void ShortenCable(InputAction.CallbackContext context)
     {
@@ -158,18 +186,23 @@ public class P_Character_HookSwing : MonoBehaviour
             realHitPoint = sphereCastHit.point;
         }
 
-        if (realHitPoint != Vector3.zero)
+        if (Vector3.Distance(transform.position, realHitPoint) > 1f)
         {
-            predictionPoint.gameObject.SetActive(true);
-            predictionPoint.position = realHitPoint;
-        }
-        else
-        {
-            predictionPoint.gameObject.SetActive(false);
-            predictionPoint.position = cam.position + cam.forward * maxSwingDistance;
+            if (realHitPoint != Vector3.zero)
+            {
+                predictionPoint.gameObject.SetActive(true);
+                predictionPoint.position = realHitPoint;
+            }
+            else
+            {
+                predictionPoint.gameObject.SetActive(false);
+                predictionPoint.position = cam.position + cam.forward * maxSwingDistance;
+            }
+
+            predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
         }
 
-        predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
+        //Vector3.Distance(transform.position, swingPoint)
     }
 
     void AirMovement()
@@ -194,13 +227,28 @@ public class P_Character_HookSwing : MonoBehaviour
             float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
             joint.maxDistance = Mathf.Max(joint.maxDistance - shortenSpeed * Time.deltaTime, distanceFromPoint * 0.5f);
         }
+
+        LimitMovement();
+    }
+    private void LimitMovement()
+    {
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            rb.velocity = rb.velocity.normalized * maxSpeed;
+        }
     }
 
     void StartSwing()
     {
-        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0) return;
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed && activeGrapple) return;
 
         ResetRestrictions();
+
+        hC.UseHook();
+
+        Invoke(nameof(ExecuteGrapple), 0.2f);
+
+        pc.SoundEmitter();
 
         activeGrapple = true;
         swinging = true;
@@ -216,23 +264,46 @@ public class P_Character_HookSwing : MonoBehaviour
 
         float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
         joint.maxDistance = distanceFromPoint * 0.8f;
-        joint.minDistance = distanceFromPoint * 0.25f;
+        joint.minDistance = distanceFromPoint * 0.2f;
 
         joint.spring = 15f;
         joint.damper = 2f;
-        joint.massScale = 4f;
+        joint.massScale = 15f;
         /*
         lr.enabled = true;
         lr.positionCount = 2;
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, swingPoint);*/
+
+        grapplingCDTimer = grapplingCD;
     }
+
+    private void ExecuteGrapple()
+    {
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed && activeGrapple) return;
+
+        controller.enabled = false;
+        rb.isKinematic = false;
+        grapplePoint = predictionHit.point;
+
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
+
+        JumpToPosition(grapplePoint, highestPointOnArc);
+        Invoke(nameof(ResetRestrictions), 1f);
+    }
+
+    
     public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
     {
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
         Invoke(nameof(SetVelocity), 0.1f);
 
-        Invoke(nameof(ResetRestrictions), 2f);
+        //Invoke(nameof(ResetRestrictions), 1f);
     }
 
     private Vector3 velocityToSet;
@@ -240,6 +311,7 @@ public class P_Character_HookSwing : MonoBehaviour
     {
         rb.velocity = velocityToSet;
     }
+
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
     {
@@ -261,29 +333,14 @@ public class P_Character_HookSwing : MonoBehaviour
         shouldEnableController = false;
     }
 
-    void StopSwing()
-    {
-        //lr.enabled = false;
-        activeGrapple = false;
-
-        if (joint != null)
-        {
-            Destroy(joint);
-        }
-
-        grapplingCDTimer = grapplingCD;
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
-        if (swinging && collision.collider.CompareTag("Ground"))
+        if (!swinging || !activeGrapple)
         {
-            ResetRestrictions();
-
             StartCoroutine(ReenableCharacterController());
         }
     }
-
+    
     private IEnumerator ReenableCharacterController()
     {
         yield return new WaitForSeconds(0.1f);
@@ -293,6 +350,19 @@ public class P_Character_HookSwing : MonoBehaviour
         rb.isKinematic = true;
         StopSwing();
     }
+
+    void StopSwing()
+    {
+        //lr.enabled = false;
+        activeGrapple = false;
+
+        if (joint != null)
+        {
+            Destroy(joint);
+        }
+        StopCoroutine(ReenableCharacterController());
+    }
+
 
     /*public void DrawRope()
     {

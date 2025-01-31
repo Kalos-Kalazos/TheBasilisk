@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class P_Sneak_Controller : MonoBehaviour
 {
-
+    /*
     AudioSource audio;
     P_Character_Move Sneak;
      void Start()
@@ -43,4 +43,5 @@ public class P_Sneak_Controller : MonoBehaviour
             audio.volume = 1.5f;
         }
     }
+    */
 }

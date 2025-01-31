@@ -42,6 +42,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ChangeAmmoType",
+                    "type": "Button",
+                    "id": "ed9bff0c-6bb4-4a8c-879c-32f2b3fb5546",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Move",
                     "type": "Value",
                     "id": "aa209517-028f-4eb5-9825-f214a2e7fa3d",
@@ -87,9 +96,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Retract",
+                    "name": "Interact",
                     "type": "Button",
-                    "id": "8ae4905c-653c-4747-9102-1fbf923ccec4",
+                    "id": "ec592cef-93a0-425f-9910-c9535771b966",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CallPause",
+                    "type": "Button",
+                    "id": "432ce07a-0eab-4e88-8408-bcf5aa0ddffe",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -132,17 +150,6 @@
                 },
                 {
                     "name": "",
-                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "ShootSingle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -154,41 +161,8 @@
                 },
                 {
                     "name": "",
-                    "id": "886e731e-7071-4ae4-95c0-e61739dad6fd",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Touch",
-                    "action": "ShootSingle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ee3d0cd2-254e-47a7-a8cb-bc94d9658c54",
-                    "path": "<Joystick>/trigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "ShootSingle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8255d333-5683-4943-a58a-ccb207ff1dce",
-                    "path": "<XRController>/{PrimaryAction}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
-                    "action": "ShootSingle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ca73a365-ffa9-47e0-bb98-96cc4c235226",
-                    "path": "<Mouse>/rightButton",
+                    "id": "aa0128b2-3a19-4831-beb5-46c99813c73b",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -286,30 +260,8 @@
                 },
                 {
                     "name": "",
-                    "id": "c5fd4a8a-4933-44b2-ab16-eaa6c8bd8f8f",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Hook",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8218c86a-1997-4f31-ada8-d839dad4c5ec",
-                    "path": "<Mouse>/middleButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Hook",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "505a3fa2-184d-43f3-9f1a-b38c57bc332d",
-                    "path": "<Keyboard>/rightShift",
+                    "id": "8b78594e-de7d-455c-a18b-aa91ce0862d5",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -330,12 +282,45 @@
                 },
                 {
                     "name": "",
-                    "id": "9704e1d1-db96-449a-a851-0e3ccde0e36e",
-                    "path": "<Keyboard>/space",
+                    "id": "24bd93e2-1dd7-4b16-9490-fedf5a1d0b14",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ChangeAmmoType",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6d7cc748-04d9-4a80-83d6-c9cdfb841d43",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Retract",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86f03023-11a7-40ce-841b-b3a35810d13c",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CallPause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f23e138f-b3da-4bf3-a9bc-3467aa53b19e",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CallPause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -431,6 +416,24 @@
                     "type": "PassThrough",
                     "id": "b4c87cf2-54cf-48aa-a0d6-d247ecd5d62b",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "0fe2bb2a-7227-4b25-a7d6-767179c34b7b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "QuitGame",
+                    "type": "Button",
+                    "id": "b70417ec-a0c4-4c1c-9eda-23c973a3a858",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -852,6 +855,28 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d7362f38-bc00-4e91-935d-c6d8ac31d1ed",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Touch",
+                    "action": "Restart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "950a6cf3-371e-41ba-a8ca-fc6cf85a005a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Touch",
+                    "action": "QuitGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
