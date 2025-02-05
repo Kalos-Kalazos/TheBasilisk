@@ -54,11 +54,20 @@ public class P_Enviroment_DD : MonoBehaviour
 
         if (checkStatus && interacted)
         {
-            //StopCoroutine(nameof(CloseTheDoor));
-            startPositionR = doorR.transform.position;
-            startPositionL = doorL.transform.position;
-            TriggerDoors();
-            checkStatus = false;
+            if (CompareTag("SingleDoor"))
+            {
+                TriggerSingleDoor();
+                checkStatus = false;
+            }
+            else
+            {
+                //StopCoroutine(nameof(CloseTheDoor));
+                startPositionR = doorR.transform.position;
+                startPositionL = doorL.transform.position;
+                TriggerDoors();
+                checkStatus = false;
+            }
+
         }
     }
 
