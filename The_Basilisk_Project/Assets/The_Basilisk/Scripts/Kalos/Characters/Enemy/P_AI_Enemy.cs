@@ -43,7 +43,11 @@ public class P_AI_Enemy : MonoBehaviour
 
     float timeElapsedChase = 0;
 
-    [SerializeField] VisualEffect vfx_Burned;
+    [SerializeField] VisualEffect vfx_Burned; 
+    [SerializeField] float stuckTimeThreshold = 3f;
+    [SerializeField] float minDistanceThreshold = 0.2f;
+    private float stuckTimer = 0f;
+    private Vector3 lastPosition;
 
     #region --Search on sound heard
     Coroutine currentCoroutineState;
@@ -258,7 +262,7 @@ public class P_AI_Enemy : MonoBehaviour
         vfx_Burned.Stop();
     }
     #endregion
-
+    /*
     void Patrol()
     {
         if (isPausing) return;
@@ -272,6 +276,50 @@ public class P_AI_Enemy : MonoBehaviour
                 StartCoroutine(PauseAtPatrolPoint());
             }            
         }
+    }*/
+
+    void Patrol()
+    {
+        if (isPausing) return;
+
+        if (agent.enabled)
+        {
+            agent.isStopped = false;
+
+            if (Vector3.Distance(transform.position, lastPosition) < minDistanceThreshold)
+            {
+                stuckTimer += Time.deltaTime;
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
+
+            if (stuckTimer >= stuckTimeThreshold)
+            {
+                ChangePatrolPoint();
+            }
+
+            lastPosition = transform.position;
+
+            if (!agent.pathPending && agent.remainingDistance < 1f)
+            {
+                StartCoroutine(PauseAtPatrolPoint());
+            }
+        }
+    }
+    void ChangePatrolPoint()
+    {
+        stuckTimer = 0f;
+
+        int previousIndex = currentPatrolIndex;
+
+        while (currentPatrolIndex == previousIndex && patrolPoints.Length > 1)
+        {
+            currentPatrolIndex = Random.Range(0, patrolPoints.Length);
+        }
+
+        agent.destination = patrolPoints[currentPatrolIndex].position;
     }
 
     private IEnumerator PauseAtPatrolPoint()
