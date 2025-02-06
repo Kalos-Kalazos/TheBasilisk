@@ -167,7 +167,7 @@ public class P_Character_HookGrab : MonoBehaviour
             if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 1f && playerSwing.hasGrabbed)//  && !grabbed)
             {
                 grabbedObjectRB.gameObject.transform.SetParent(hookOrigin);
-                grabbedObjectRB.gameObject.GetComponent<BoxCollider>().enabled = false;
+                //grabbedObjectRB.gameObject.GetComponent<BoxCollider>().enabled = false;
                 grabbedObjectRB.isKinematic = true;
                 grabbed = true;
             }
