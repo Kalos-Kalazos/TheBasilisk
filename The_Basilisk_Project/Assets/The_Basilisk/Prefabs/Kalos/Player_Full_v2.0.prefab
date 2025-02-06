@@ -1561,9 +1561,21 @@ MonoBehaviour:
     m_ActionId: ec592cef-93a0-425f-9910-c9535771b966
     m_ActionName: Player/Interact[/Keyboard/f,/Keyboard/e]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: CallPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 432ce07a-0eab-4e88-8408-bcf5aa0ddffe
-    m_ActionName: Player/CallPause[/Keyboard/p,/Keyboard/escape]
+    m_ActionName: Player/CallPause[/Keyboard/p]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 0fe2bb2a-7227-4b25-a7d6-767179c34b7b
@@ -1803,6 +1815,7 @@ MonoBehaviour:
   grabbed: 0
   predictionPointObject: {fileID: 0}
   joint: {fileID: 0}
+  inputPressed: 0
 --- !u!114 &4455183056764108645
 MonoBehaviour:
   m_ObjectHideFlags: 0
