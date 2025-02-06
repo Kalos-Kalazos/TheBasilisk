@@ -42,7 +42,7 @@ public class P_Character_HookGrab : MonoBehaviour
         if (grabbedObjectRB != null && !grabbed)
         {
             float distanceToHook = Vector3.Distance(hookOrigin.position, grabbedObjectRB.position);
-            if (distanceToHook < 0.8f && !playerPA_Hook.retracted)
+            if (distanceToHook < 0.8f && playerPA_Hook.retracted && !playerPA_Hook.launched)
             {
                 StopGrab();
                 AlignWithHook();
