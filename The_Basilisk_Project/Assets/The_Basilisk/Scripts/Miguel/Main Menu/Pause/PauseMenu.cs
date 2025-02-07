@@ -10,10 +10,12 @@ public class PauseMenu : MonoBehaviour
     private bool isMenuActive = false;
     public PlayerInput playerInput;
     [SerializeField] P_Mouse_Controller mouseController;
+    GameObject playerObject;
 
     private void Start()
     {
-        
+        playerObject = playerInput.gameObject;
+
         //Asegurarte de que el menu este desactivado al inicio
         if (menu != null)
         {
@@ -67,6 +69,8 @@ public class PauseMenu : MonoBehaviour
 
         mouseController.enabled = false;
 
+        playerObject.SetActive(false);
+
         Time.timeScale = 0f; //Pausar el juego
 
     }
@@ -79,6 +83,8 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         mouseController.enabled = true;
+
+        playerObject.SetActive(true);
 
         Time.timeScale = 1f; //reanudar el juego
 

@@ -24,6 +24,8 @@ public class P_Character_HookGrab : MonoBehaviour
 
     public SpringJoint joint;
 
+    [SerializeField] bool inputPressed;
+
     private void Start()
     {
         playerSwing = gameObject.GetComponent<P_Character_HookSwing>();
@@ -40,7 +42,7 @@ public class P_Character_HookGrab : MonoBehaviour
         if (grabbedObjectRB != null && !grabbed)
         {
             float distanceToHook = Vector3.Distance(hookOrigin.position, grabbedObjectRB.position);
-            if (distanceToHook < 1f)
+            if (distanceToHook < 0.8f && playerPA_Hook.retracted && !playerPA_Hook.launched)
             {
                 StopGrab();
                 AlignWithHook();
@@ -51,9 +53,12 @@ public class P_Character_HookGrab : MonoBehaviour
 
     void AlignWithHook()
     {
-        grabbedObjectRB.transform.SetPositionAndRotation(hookOrigin.position, hookOrigin.rotation);
-        grabbedObjectRB.transform.SetParent(hookOrigin);
-        grabbedObjectRB.isKinematic = true;
+        if (!inputPressed)
+        {
+            grabbedObjectRB.transform.SetPositionAndRotation(hookOrigin.position, hookOrigin.rotation);
+            grabbedObjectRB.transform.SetParent(hookOrigin);
+            grabbedObjectRB.isKinematic = true;
+        }
     }
 
     public void GrabObject(InputAction.CallbackContext context)
@@ -61,9 +66,12 @@ public class P_Character_HookGrab : MonoBehaviour
         if (context.started && !grabbed)
         {
             StartGrab();
+            inputPressed = true;
         }
         else if (context.canceled)
         {
+            inputPressed = false;
+
             if (grabbed)
                 ReleaseGrab();
             else
@@ -158,8 +166,8 @@ public class P_Character_HookGrab : MonoBehaviour
 
             if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 1f && playerSwing.hasGrabbed)//  && !grabbed)
             {
+                //grabbedObjectRB.gameObject.GetComponent<BoxCollider>().enabled = false;
                 grabbedObjectRB.gameObject.transform.SetParent(hookOrigin);
-                grabbedObjectRB.gameObject.GetComponent<BoxCollider>().enabled = false;
                 grabbedObjectRB.isKinematic = true;
                 grabbed = true;
             }
