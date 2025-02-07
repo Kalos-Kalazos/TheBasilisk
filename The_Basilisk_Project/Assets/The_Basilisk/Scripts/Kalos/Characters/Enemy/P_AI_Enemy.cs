@@ -35,6 +35,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     [Header("=== Enemy Animation Settings ===")]
     Animator animator;
+    float animSpeed_Walk = 1;
     bool isPausing = false;
 
     [SerializeField] P_GameManager gm;
@@ -126,7 +127,7 @@ public class P_AI_Enemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         player = FindAnyObjectByType<P_Mouse_Controller>().transform;
         gm = FindAnyObjectByType<P_GameManager>();
         batterySystem = ui.GetComponentInChildren<BatterySystem>();
@@ -160,12 +161,13 @@ public class P_AI_Enemy : MonoBehaviour
                 Patrol();
                 DetectPlayer();
                 agent.speed = speedDefault;
+                animator.SetFloat("Speed_Walk", 1);
                 break; 
 
             case EnemyState.Chasing:
                 ChasePlayer();
                 agent.speed = speedChase;
-
+                animator.SetFloat("Speed_Walk", 1.5f);
                 #region --TimeSearching
                 while (timeElapsedChase < searchTime)
                 {
@@ -216,6 +218,10 @@ public class P_AI_Enemy : MonoBehaviour
             }
         }*/
 
+        //ANIMATION WALKING
+
+        bool isMoving = agent.velocity.magnitude > 0.1f && agent.remainingDistance > agent.stoppingDistance;
+        animator.SetBool("Walking", isMoving);
 
         #region --PJ on Stealth
         if (player.GetComponent<P_Character_Move_v2>().isCrouched)
@@ -469,7 +475,7 @@ public class P_AI_Enemy : MonoBehaviour
             Debug.Log("Enemy Attack2");
             attackCD = attackRate;
             //Animation
-            //animator.SetTrigger("Attack");
+            animator.SetTrigger("Attack");
 
             TryApplyDamage();
         }
