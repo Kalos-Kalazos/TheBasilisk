@@ -42,7 +42,7 @@ public class P_Character_HookGrab : MonoBehaviour
         if (grabbedObjectRB != null && !grabbed)
         {
             float distanceToHook = Vector3.Distance(hookOrigin.position, grabbedObjectRB.position);
-            if (distanceToHook < 0.8f && playerPA_Hook.retracted && !playerPA_Hook.launched)
+            if (distanceToHook < 0.5f)
             {
                 StopGrab();
                 AlignWithHook();
@@ -53,12 +53,9 @@ public class P_Character_HookGrab : MonoBehaviour
 
     void AlignWithHook()
     {
-        if (!inputPressed)
-        {
-            grabbedObjectRB.transform.SetPositionAndRotation(hookOrigin.position, hookOrigin.rotation);
-            grabbedObjectRB.transform.SetParent(hookOrigin);
-            grabbedObjectRB.isKinematic = true;
-        }
+        grabbedObjectRB.isKinematic = true;
+        grabbedObjectRB.transform.SetPositionAndRotation(hookOrigin.position, hookOrigin.rotation);
+        grabbedObjectRB.transform.SetParent(hookOrigin);
     }
 
     public void GrabObject(InputAction.CallbackContext context)
@@ -66,13 +63,10 @@ public class P_Character_HookGrab : MonoBehaviour
         if (context.started && !grabbed)
         {
             StartGrab();
-            inputPressed = true;
         }
         else if (context.canceled)
         {
-            inputPressed = false;
-
-            if (grabbed)
+            if (grabbed && playerPA_Hook.retracted && !playerPA_Hook.returning)
                 ReleaseGrab();
             else
                 StopGrab();
