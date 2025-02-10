@@ -33,9 +33,7 @@ public class AmmoPickUp : MonoBehaviour
 
             }
 
-
         }
-
 
     }
 

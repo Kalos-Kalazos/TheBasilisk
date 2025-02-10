@@ -15,7 +15,6 @@ public class FlickeringLight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         if (flickerLight == null)
         {
 
@@ -25,7 +24,6 @@ public class FlickeringLight : MonoBehaviour
             Random.Range(0f, 100f);
 
         }
-
     }
 
     // Update is called once per frame

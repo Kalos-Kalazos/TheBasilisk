@@ -15,17 +15,14 @@ public class BlinkingLightSmooth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         if (emergencyLight == null)
             emergencyLight = GetComponent<Light>();
         targetIntensity = maxIntensity;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
         //Interpola suavemente entre intensidades
         emergencyLight.intensity = Mathf.MoveTowards(emergencyLight.intensity, targetIntensity, speed * Time.deltaTime);
 
@@ -35,7 +32,6 @@ public class BlinkingLightSmooth : MonoBehaviour
 
             targetIntensity = (targetIntensity == maxIntensity) ?
                 minIntensity : maxIntensity;
-
         }
     }
 }
