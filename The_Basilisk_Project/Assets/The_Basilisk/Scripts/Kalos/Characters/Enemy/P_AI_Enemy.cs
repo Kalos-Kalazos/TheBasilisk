@@ -220,7 +220,7 @@ public class P_AI_Enemy : MonoBehaviour
 
         //ANIMATION WALKING
 
-        bool isMoving = agent.velocity.magnitude > 0.05f && agent.remainingDistance > agent.stoppingDistance;
+        bool isMoving = agent.velocity.magnitude > 0.01f && agent.remainingDistance > agent.stoppingDistance;
         animator.SetBool("Walking", isMoving);
 
         #region --PJ on Stealth
@@ -486,6 +486,8 @@ public class P_AI_Enemy : MonoBehaviour
         }
         
     }
+
+
     public void TryApplyDamage()
     {
         if (currentState == EnemyState.Dead) return;
