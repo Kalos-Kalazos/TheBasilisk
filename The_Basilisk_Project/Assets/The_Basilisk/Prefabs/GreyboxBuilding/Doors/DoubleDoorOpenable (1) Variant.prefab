@@ -551,6 +551,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 74124787953213481}
+    - targetCorrespondingSourceObject: {fileID: 2229881317729750685, guid: 9cc331b26e5456c42814963e71c70cf3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6075333581824699853}
+    - targetCorrespondingSourceObject: {fileID: 2229881317729750685, guid: 9cc331b26e5456c42814963e71c70cf3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4151348712920025392}
     - targetCorrespondingSourceObject: {fileID: 7224181591280957376, guid: 9cc331b26e5456c42814963e71c70cf3,
         type: 3}
       insertIndex: -1
@@ -673,6 +681,48 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!65 &6075333581824699853
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5402454130012028577}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.92, y: 3.62, z: 0.78}
+  m_Center: {x: 1.56, y: 0.6, z: -0.06}
+--- !u!65 &4151348712920025392
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5402454130012028577}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9, y: 3.62, z: 0.78}
+  m_Center: {x: -1.55, y: 0.6, z: -0.06}
 --- !u!4 &7071956512571492041 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3904582036113798901, guid: 9cc331b26e5456c42814963e71c70cf3,
