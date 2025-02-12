@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1213682487330245253}
   - component: {fileID: 7889074234191778571}
+  - component: {fileID: 8729578039996776550}
   m_Layer: 0
   m_Name: modulo_pilar_low
   m_TagString: Untagged
@@ -54,6 +55,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5848833, y: 4.011365, z: 0.6873268}
   m_Center: {x: -0.29785123, y: 2.000328, z: 0.3378319}
+--- !u!208 &8729578039996776550
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5163139598817239644}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1.975, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.43, y: 1.99, z: 0.39}
+  m_TimeToStationary: 0.5
 --- !u!1 &5293897508395428620
 GameObject:
   m_ObjectHideFlags: 0
