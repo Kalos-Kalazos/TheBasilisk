@@ -42,8 +42,6 @@ public class PA_Hook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (grabControl.grabbed) return;
-
         launch = hookControl.activeGrapple;
 
         if (hookControl.hasGrabbed)

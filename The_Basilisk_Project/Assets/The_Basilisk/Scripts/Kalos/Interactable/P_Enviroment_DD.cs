@@ -19,6 +19,7 @@ public class P_Enviroment_DD : MonoBehaviour
     bool interacted;
     bool checkStatus;
     GameObject player;
+    [SerializeField] GameObject interactImage;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -26,6 +27,7 @@ public class P_Enviroment_DD : MonoBehaviour
         {
             player = other.gameObject;
             checkStatus = true;
+            interactImage.SetActive(true);
         }
         /* LOS ENEMIGOS ABREN PUERTAS:
          * 
@@ -42,6 +44,7 @@ public class P_Enviroment_DD : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             checkStatus = false;
+            interactImage.SetActive(false);
         }
     }
 
@@ -54,11 +57,20 @@ public class P_Enviroment_DD : MonoBehaviour
 
         if (checkStatus && interacted)
         {
-            //StopCoroutine(nameof(CloseTheDoor));
-            startPositionR = doorR.transform.position;
-            startPositionL = doorL.transform.position;
-            TriggerDoors();
-            checkStatus = false;
+            if (CompareTag("SingleDoor"))
+            {
+                TriggerSingleDoor();
+                checkStatus = false;
+            }
+            else
+            {
+                //StopCoroutine(nameof(CloseTheDoor));
+                startPositionR = doorR.transform.position;
+                startPositionL = doorL.transform.position;
+                TriggerDoors();
+                checkStatus = false;
+            }
+
         }
     }
 
