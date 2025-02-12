@@ -247,8 +247,10 @@ public class P_AI_Enemy : MonoBehaviour
         if (burnCoroutine != null)
         {
             StopCoroutine(burnCoroutine);
+            animator.SetBool("Burning", false);
         }
         burnCoroutine = StartCoroutine(BurnEnemy(burnDuration, burnDamagePerSecond));
+        animator.SetBool("Burning", true);
     }
 
     private IEnumerator BurnEnemy(float burnDuration, float burnDamagePerSecond)

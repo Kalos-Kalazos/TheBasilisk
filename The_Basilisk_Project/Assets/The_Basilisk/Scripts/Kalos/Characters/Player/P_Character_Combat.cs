@@ -84,6 +84,11 @@ public class P_Character_Combat : MonoBehaviour
         if (ammoSingle < 0) ammoSingle = 0;
 
         #endregion
+
+        if (wpControl.simple)
+            smallFlameVFX.Stop();
+        else
+            smallFlameVFX.Play();
     }
 
     public void Shooting(InputAction.CallbackContext context)
@@ -231,7 +236,6 @@ public class P_Character_Combat : MonoBehaviour
     IEnumerator Flames()
     {
         flamesVFX.Play();
-        smallFlameVFX.Play();
         Debug.Log("Se activan las llamas");
 
         while (currentAmmoFlame > 0)
@@ -242,7 +246,6 @@ public class P_Character_Combat : MonoBehaviour
         }
 
         flamesVFX.Stop();
-        smallFlameVFX.Stop();
     }
 
     void DealFlameDamage()

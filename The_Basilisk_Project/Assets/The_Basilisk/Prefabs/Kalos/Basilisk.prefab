@@ -3765,8 +3765,6 @@ Transform:
   m_LocalScale: {x: 1.40604, y: 1.40604, z: 1.40604}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 370109507623958118}
-  - {fileID: 8255021365270060505}
   - {fileID: 8053740636350331056}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5043,12 +5041,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5725235468719369855}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.008430386, y: 0.07089628, z: 0.19897573, w: 0.97740036}
-  m_LocalPosition: {x: -0.25378546, y: 0.3416431, z: 0.076058455}
-  m_LocalScale: {x: 0.71121734, y: 0.71121734, z: 0.71121734}
+  m_LocalRotation: {x: -0.09056583, y: -0.6970875, z: -0.6851653, w: 0.19082832}
+  m_LocalPosition: {x: 0.00946, y: -0.00367, z: 0.02338}
+  m_LocalScale: {x: 0.010832645, y: 0.010832645, z: 0.010832647}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2916210257480553851}
+  m_Father: {fileID: 4918933736401599085}
   m_LocalEulerAnglesHint: {x: -0.672, y: 8.161, z: 22.966}
 --- !u!2083052967 &3841446549068533832
 VisualEffect:
@@ -5391,7 +5389,9 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 370109507623958118}
+  - {fileID: 8255021365270060505}
   m_Father: {fileID: 8053740636350331056}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &7738813690563736019
@@ -6324,12 +6324,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6725314138438871461}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.17114282, w: 0.98524624}
-  m_LocalPosition: {x: 0.117469534, y: 0.40565208, z: 0.076058455}
-  m_LocalScale: {x: 0.71121734, y: 0.71121734, z: 0.71121734}
+  m_LocalRotation: {x: 0.121016234, y: -0.6966742, z: -0.69667435, w: -0.12101626}
+  m_LocalPosition: {x: 0.00989, y: -0.00403, z: 0.02239}
+  m_LocalScale: {x: 0.010832646, y: 0.010832648, z: 0.010832648}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2916210257480553851}
+  m_Father: {fileID: 4918933736401599085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -19.709}
 --- !u!2083052967 &1488323462710220797
 VisualEffect:
@@ -6419,6 +6419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8053740636350331056}
   - component: {fileID: 6956014402161060186}
+  - component: {fileID: 6442610390631816723}
   m_Layer: 0
   m_Name: basilisk_mesh
   m_TagString: Untagged
@@ -6518,6 +6519,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6442610390631816723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7246136617708708362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6091e79309289144080126022c934bbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7386629854482332973
 GameObject:
   m_ObjectHideFlags: 0
