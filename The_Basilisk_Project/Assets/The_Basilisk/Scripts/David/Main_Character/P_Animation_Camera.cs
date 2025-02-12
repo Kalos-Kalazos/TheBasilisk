@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class P_Animation_Camera : MonoBehaviour
-{
+{/*
     public Animator animation;
     private P_Character_Move playerMoving;
 
@@ -39,4 +39,5 @@ public class P_Animation_Camera : MonoBehaviour
             }
         }
     }
+    */
 }

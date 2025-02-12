@@ -67,6 +67,7 @@ public class P_Generators : MonoBehaviour
             if (other.CompareTag("Fuel") && playerGrab.grabbed && !charging)
             {
                 StartCoroutine(AddFuel(5));
+                playerGrab.playerPA_Hook.hookHead.GetComponent<P_Reference_HeadHook>().isHooked = false;
                 Destroy(other.gameObject);
             }
 

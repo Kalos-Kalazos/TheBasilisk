@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 public class P_AI_Enemy : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float health = 100;
     [SerializeField] float speedChase = 7;
     [SerializeField] float speedDefault = 3.5f;
-    [SerializeField] int damage = 2;
     public EnemyState currentState;
 
     [Header("=== Enemy Patrol Settings ===")]
@@ -22,9 +22,7 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float detectionRange = 15;
     [SerializeField] float detectionCloseRange = 5;
     [SerializeField] Transform player;
-    [SerializeField] GameObject tempPP;
-    [SerializeField] bool isChasing = false;
-    [SerializeField] bool isChecking = false;
+    //[SerializeField] GameObject tempPP;
     [SerializeField] bool playerIsCrouched = false;
     [SerializeField] bool playerIsWalking = false;
     [SerializeField] float maxDetectionAngle = 45;
@@ -37,6 +35,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     [Header("=== Enemy Animation Settings ===")]
     Animator animator;
+    float animSpeed_Walk = 1;
     bool isPausing = false;
 
     [SerializeField] P_GameManager gm;
@@ -44,6 +43,12 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] GameObject ui;
 
     float timeElapsedChase = 0;
+
+    [SerializeField] VisualEffect vfx_Burned; 
+    [SerializeField] float stuckTimeThreshold = 3f;
+    [SerializeField] float minDistanceThreshold = 0.2f;
+    private float stuckTimer = 0f;
+    private Vector3 lastPosition;
 
     #region --Search on sound heard
     Coroutine currentCoroutineState;
@@ -122,11 +127,12 @@ public class P_AI_Enemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         player = FindAnyObjectByType<P_Mouse_Controller>().transform;
         gm = FindAnyObjectByType<P_GameManager>();
         batterySystem = ui.GetComponentInChildren<BatterySystem>();
         died = false;
+        vfx_Burned.Stop();
 
         if (patrolPoints.Length > 0)
         {
@@ -146,8 +152,6 @@ public class P_AI_Enemy : MonoBehaviour
 
     void Update()
     {
-        DetectPlayer();
-
         playerIsCrouched = player.GetComponent<P_Character_Move_v2>().isCrouched;
         playerIsWalking = player.GetComponent<P_Character_Move_v2>().isWalking;
 
@@ -157,12 +161,13 @@ public class P_AI_Enemy : MonoBehaviour
                 Patrol();
                 DetectPlayer();
                 agent.speed = speedDefault;
+                animator.SetFloat("Speed_Walk", 1);
                 break; 
 
             case EnemyState.Chasing:
                 ChasePlayer();
                 agent.speed = speedChase;
-
+                animator.SetFloat("Speed_Walk", 1.5f);
                 #region --TimeSearching
                 while (timeElapsedChase < searchTime)
                 {
@@ -213,6 +218,10 @@ public class P_AI_Enemy : MonoBehaviour
             }
         }*/
 
+        //ANIMATION WALKING
+
+        bool isMoving = agent.velocity.magnitude > 0.01f && agent.remainingDistance > agent.stoppingDistance;
+        animator.SetBool("Walking", isMoving);
 
         #region --PJ on Stealth
         if (player.GetComponent<P_Character_Move_v2>().isCrouched)
@@ -238,14 +247,17 @@ public class P_AI_Enemy : MonoBehaviour
         if (burnCoroutine != null)
         {
             StopCoroutine(burnCoroutine);
+            animator.SetBool("Burning", false);
         }
-
         burnCoroutine = StartCoroutine(BurnEnemy(burnDuration, burnDamagePerSecond));
+        animator.SetBool("Burning", true);
     }
 
     private IEnumerator BurnEnemy(float burnDuration, float burnDamagePerSecond)
     {
         float elapsedTime = 0f;
+
+        vfx_Burned.Play();
 
         while (elapsedTime < burnDuration)
         {
@@ -254,9 +266,11 @@ public class P_AI_Enemy : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        vfx_Burned.Stop();
     }
     #endregion
-
+    /*
     void Patrol()
     {
         if (isPausing) return;
@@ -270,6 +284,50 @@ public class P_AI_Enemy : MonoBehaviour
                 StartCoroutine(PauseAtPatrolPoint());
             }            
         }
+    }*/
+
+    void Patrol()
+    {
+        if (isPausing) return;
+
+        if (agent.enabled)
+        {
+            agent.isStopped = false;
+
+            if (Vector3.Distance(transform.position, lastPosition) < minDistanceThreshold)
+            {
+                stuckTimer += Time.deltaTime;
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
+
+            if (stuckTimer >= stuckTimeThreshold)
+            {
+                ChangePatrolPoint();
+            }
+
+            lastPosition = transform.position;
+
+            if (!agent.pathPending && agent.remainingDistance < 1f)
+            {
+                StartCoroutine(PauseAtPatrolPoint());
+            }
+        }
+    }
+    void ChangePatrolPoint()
+    {
+        stuckTimer = 0f;
+
+        int previousIndex = currentPatrolIndex;
+
+        while (currentPatrolIndex == previousIndex && patrolPoints.Length > 1)
+        {
+            currentPatrolIndex = Random.Range(0, patrolPoints.Length);
+        }
+
+        agent.destination = patrolPoints[currentPatrolIndex].position;
     }
 
     private IEnumerator PauseAtPatrolPoint()
@@ -396,6 +454,7 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (distanceToPlayer <= attackRange)
         {
+            Debug.Log("Enemy Attack1");
             currentState = EnemyState.Attacking;
         }
         else if (distanceToPlayer > detectionRange && timeElapsedChase >= searchTime)
@@ -415,22 +474,23 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (attackCD <= 0)
         {
-            Debug.Log("Enemy Attack");
+            Debug.Log("Enemy Attack2");
             attackCD = attackRate;
             //Animation
             animator.SetTrigger("Attack");
-
-            TryApplyDamage();
         }
-
+        
         if (Vector3.Distance(transform.position, player.position) > attackRange)
         {
             currentState = EnemyState.Chasing;
 
             if (agent.enabled) agent.isStopped = false;
         }
+        
     }
-    void TryApplyDamage()
+
+
+    public void TryApplyDamage()
     {
         if (currentState == EnemyState.Dead) return;
 

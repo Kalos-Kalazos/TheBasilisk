@@ -9,6 +9,7 @@ public class P_Character_HookSwing : MonoBehaviour
     [Header("=== References ===")]
     private P_Character_Move_v2 pm; //Player Move
     private P_Character_Combat pc;  //Player Combat
+    private P_Character_HookGrab pg;  //Player Grab Items
     private PA_Hook hookAnim;
     private CharacterController controller;
     Rigidbody rb;
@@ -58,6 +59,7 @@ public class P_Character_HookSwing : MonoBehaviour
     {
         pm = GetComponent<P_Character_Move_v2>();
         pc = GetComponent<P_Character_Combat>();
+        pg = GetComponent<P_Character_HookGrab>();
         controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         hookAnim = GetComponent<PA_Hook>();
@@ -99,15 +101,6 @@ public class P_Character_HookSwing : MonoBehaviour
         }
 
         #endregion
-
-        if (swinging)
-        {
-            pm.playerSpeed = pm.swingSpeed;
-        }
-        else
-        {
-            pm.playerSpeed = 10;
-        }
 
         CheckForSwingPoints();
 
@@ -249,7 +242,7 @@ public class P_Character_HookSwing : MonoBehaviour
 
     void StartSwing()
     {
-        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed && activeGrapple) return;
+        if (predictionHit.point == Vector3.zero || grapplingCDTimer > 0 || !hasGrabbed && !pg.grabbed && activeGrapple) return;
 
         ResetRestrictions();
 
