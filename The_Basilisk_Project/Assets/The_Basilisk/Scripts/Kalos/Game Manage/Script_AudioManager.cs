@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Audio;
 
 public class Script_AudioManager : MonoBehaviour
 {
@@ -26,64 +27,87 @@ public class Script_AudioManager : MonoBehaviour
     //Llamada sin referencia: Script_AudioManager.Instance.PlaySFX(1);
 
     [Header("=== Audio Source References ===")]
-    public AudioSource musicSource;
-    public AudioSource sfxSource;
+    public AudioSource ambienceMusic;
+    public AudioSource combatMusic;
+    public AudioMixer audioMixer;
 
-    [Header("=== Clip Library ===")]
-    public AudioClip[] musicArray;
-    public AudioClip[] sfxArray;
+    public bool isInCombat = false;
 
     [Range(0f, 1f)] public float globalSFXVolume = 1.0f;
 
-
-    private void Awake()
+    private void Start()
     {
-        //El Singleton se referencia a si mismo
-        instance = this;
+        ambienceMusic.Play();
+    }
+    public void EnterCombat()
+    {
+        if (!combatMusic.isPlaying) 
+        {
+            combatMusic.Play();
+        }
+
+        if (!isInCombat)
+        {
+            isInCombat = true;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("NormalMusic", "CombatMusic", 1.5f));
+        }
+    }
+
+    public void ExitCombat()
+    {
+        if (!ambienceMusic.isPlaying)
+        {
+            ambienceMusic.Play();
+        }
+
+        if (isInCombat)
+        {
+            isInCombat = false;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("CombatMusic", "NormalMusic", 2f));
+        }
+    }
+
+    private IEnumerator FadeMusic(string fadeOutGroup, string fadeInGroup, float duration)
+    {
+        float startVolume, endVolume;
+        audioMixer.GetFloat(fadeOutGroup, out startVolume);
+        audioMixer.GetFloat(fadeInGroup, out endVolume);
+
+        float timer = 0;
+        while (timer < duration)
+        {
+            float newVolumeOut = Mathf.Lerp(startVolume, -80f, timer / duration);
+            float newVolumeIn = Mathf.Lerp(endVolume, 0f, timer / duration);
+
+            audioMixer.SetFloat(fadeOutGroup, newVolumeOut);
+            audioMixer.SetFloat(fadeInGroup, newVolumeIn);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioMixer.SetFloat(fadeOutGroup, -80f);
+        audioMixer.SetFloat(fadeInGroup, 0f);
+
+        if (isInCombat)
+        {
+            ambienceMusic.Stop();
+        }
+        else
+        {
+            combatMusic.Stop();
+        }
     }
 
     //En un Singleton podemos declarar cualquier ACCION LLAMABLE siempre y cuando sea PUBLIC
     #region Music Methods
-    public void PlayMusic(int musicToPlay)
-    {
-        musicSource.clip = musicArray[musicToPlay];
-        musicSource.Play();
-    }
 
-    public void PauseMusic()
-    {
-        musicSource.Pause();
-    }
-
-    public void StopMusic()
-    {
-        musicSource.Stop();
-    }
     #endregion
 
     #region SFX Methods
 
-    public void PlaySFX(int sfxToPlay, float volume)
-    {
-        sfxSource.loop = false;
-        sfxSource.PlayOneShot(sfxArray[sfxToPlay]);
-    }
-
-    public void PlaySFXLoop(int sfxToPlay, float volume)
-    {
-        sfxSource.clip = sfxArray[sfxToPlay];
-        sfxSource.volume = Mathf.Clamp01(volume * globalSFXVolume);
-        sfxSource.loop = true;
-        sfxSource.Play();
-
-        //sfxSource.PlayOneShot(sfxArray[sfxToPlay]);
-    }
-    public void StopSFXLoop(int sfxToPlay)
-    {
-        sfxSource.clip = sfxArray[sfxToPlay];
-        sfxSource.loop = false;
-        sfxSource.Stop();
-    }
 
     #endregion
 }

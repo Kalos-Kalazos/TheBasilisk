@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.VFX;
 
 public class P_AI_Enemy : MonoBehaviour
@@ -49,6 +50,8 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float minDistanceThreshold = 0.2f;
     private float stuckTimer = 0f;
     private Vector3 lastPosition;
+
+    [SerializeField] Script_AudioManager musicManager;
 
     #region --Search on sound heard
     Coroutine currentCoroutineState;
@@ -228,15 +231,34 @@ public class P_AI_Enemy : MonoBehaviour
         {
             detectionRange = 7;
             maxDetectionAngle = 30;
-            searchTime = 10;
+            searchTime = 20;
         }
         else
         {
             detectionRange = 14;
             maxDetectionAngle = 60;
-            searchTime = 15;
+            searchTime = 30;
         }
         #endregion
+    }
+
+
+    void ChangeState(EnemyState newState)
+    {
+        currentState = newState;
+
+        switch (newState)
+        {
+            case EnemyState.Chasing:
+                musicManager.EnterCombat(); 
+                agent.isStopped = false;
+                break;
+
+            case EnemyState.Patrolling:
+                musicManager.ExitCombat();  
+                agent.isStopped = false;
+                break;
+        }
     }
 
     #region -- Burn Logic
@@ -389,7 +411,7 @@ public class P_AI_Enemy : MonoBehaviour
         if (currentState == EnemyState.Iddle && agent.enabled)
         {
             agent.isStopped = false;
-            currentState = EnemyState.Patrolling;
+            ChangeState(EnemyState.Patrolling);
             agent.destination = patrolPoints[currentPatrolIndex].position;
         }
     }
@@ -410,7 +432,7 @@ public class P_AI_Enemy : MonoBehaviour
             {
                 timeElapsedChase = 0;
                 Warn();
-                currentState = EnemyState.Chasing;
+                ChangeState(EnemyState.Chasing);
             }
         }
 
@@ -418,7 +440,7 @@ public class P_AI_Enemy : MonoBehaviour
         {
             timeElapsedChase = 0;
             Warn();
-            currentState = EnemyState.Chasing;
+            ChangeState(EnemyState.Chasing);
         }
     }
 
@@ -482,7 +504,7 @@ public class P_AI_Enemy : MonoBehaviour
         
         if (Vector3.Distance(transform.position, player.position) > attackRange)
         {
-            currentState = EnemyState.Chasing;
+            ChangeState(EnemyState.Chasing);
 
             if (agent.enabled) agent.isStopped = false;
         }
@@ -575,7 +597,8 @@ public class P_AI_Enemy : MonoBehaviour
     {
         if (currentState == EnemyState.Dead) return;
 
-        currentState = EnemyState.Chasing;
+        timeElapsedChase = 0;
+        ChangeState(EnemyState.Chasing);
     }
 
     private void OnDrawGizmosSelected()
