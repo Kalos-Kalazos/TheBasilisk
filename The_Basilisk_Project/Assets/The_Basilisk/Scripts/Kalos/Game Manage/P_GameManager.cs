@@ -146,17 +146,17 @@ public class P_GameManager : MonoBehaviour
 
     int ActualSceneID()
     {
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL1")))
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Def_LvL1")))
         {
             return 1;
         }
         else
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL2")))
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Def_LvL2")))
         {
             return 2;
         }
         else
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL3")))
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("MainMenu")))
         {
             return 3;
         }
