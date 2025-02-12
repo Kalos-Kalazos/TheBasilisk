@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
     {
         //Cambiar "GameScene" por el nombre de tu scena principal
 
-        SceneManager.LoadScene("GL_LvL1");
+        SceneManager.LoadScene("Def_LvL1");
     }
 
     public void OpenOptions()

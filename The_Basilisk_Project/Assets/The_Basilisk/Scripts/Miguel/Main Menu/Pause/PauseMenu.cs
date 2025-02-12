@@ -107,10 +107,10 @@ public class PauseMenu : MonoBehaviour
         mouseController.enabled = false;
 
         playerObject.SetActive(false);
+        gameOverMenu.SetActive(true);
 
         Time.timeScale = 0f; //Pausar el juego
 
-        gameOverMenu.SetActive(true);
 
     }
 

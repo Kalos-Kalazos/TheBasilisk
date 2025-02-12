@@ -114,10 +114,10 @@ public class P_GameManager : MonoBehaviour
     {
         switch (actualScene)
         {
-            case 3:
+            case 2:
                 SceneManager.LoadScene("Def_LvL2");
                 break;
-            case 0:
+            case 3:
                 SceneManager.LoadScene("MainMenu");
                 break;
         }
