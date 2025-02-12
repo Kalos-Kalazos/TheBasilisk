@@ -17,8 +17,11 @@ public class P_GameManager : MonoBehaviour
     public static P_GameManager Instance;
 
     [SerializeField] P_Enviroment_DD[] doorsToOpen;
+    [SerializeField] P_AI_Enemy[] enemiesOnScene;
 
     bool doorsOpenned, azazelInteracted;
+    public bool isCombatActive;
+    public bool isCombatBasilisk;
 
     P_Azazel_Talk azazel;
 
@@ -26,11 +29,15 @@ public class P_GameManager : MonoBehaviour
 
     [SerializeField] GameObject UI_GameOver;
 
+    [SerializeField] Script_AudioManager musicManager;
+
     void Start()
     {
         actualScene = ActualSceneID();
 
         pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
+
+        enemiesOnScene = FindObjectsOfType<P_AI_Enemy>();
 
         Time.timeScale = 1f;
                 
@@ -79,6 +86,45 @@ public class P_GameManager : MonoBehaviour
             }
         }
     }
+
+    public void CheckOnCombat()
+    {
+        isCombatActive = false;
+        isCombatBasilisk = false;
+
+        for (int i = 0; i < enemiesOnScene.Length; i++)
+        {
+            if (enemiesOnScene[i].onCombat && enemiesOnScene[i].health < 200)
+            {
+                isCombatActive = true;
+                break;
+            }
+            else if (enemiesOnScene[i].onCombat && enemiesOnScene[i].health > 200)
+            {
+                isCombatBasilisk = true;
+                break;
+            }
+        }
+
+        if (isCombatActive)
+        {
+            musicManager.EnterCombat();
+        }
+        else
+        {
+            musicManager.ExitCombat();
+        }
+
+        if (isCombatBasilisk)
+        {
+            musicManager.BasiliskCombat();
+        }
+        else
+        {
+            musicManager.BasiliskExitCombat();
+        }
+    }
+
     void Interaction(GameObject player)
     {
         azazelInteracted = player.GetComponent<P_DoorInteraction>().performed;

@@ -9,7 +9,7 @@ using UnityEngine.VFX;
 public class P_AI_Enemy : MonoBehaviour
 {
     [Header("=== Enemy Status Settings ===")]
-    [SerializeField] float health = 100;
+    public float health = 150;
     [SerializeField] float speedChase = 7;
     [SerializeField] float speedDefault = 3.5f;
     public EnemyState currentState;
@@ -50,6 +50,9 @@ public class P_AI_Enemy : MonoBehaviour
     [SerializeField] float minDistanceThreshold = 0.2f;
     private float stuckTimer = 0f;
     private Vector3 lastPosition;
+
+    public bool onCombat = false;
+
 
     [SerializeField] Script_AudioManager musicManager;
 
@@ -202,7 +205,6 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (attackCD < 0) attackCD = 0;
         #endregion
-
         /*
         if (isChasing)
         {
@@ -250,12 +252,14 @@ public class P_AI_Enemy : MonoBehaviour
         switch (newState)
         {
             case EnemyState.Chasing:
-                musicManager.EnterCombat(); 
+                onCombat = true;
+                gm.CheckOnCombat();
                 agent.isStopped = false;
                 break;
 
             case EnemyState.Patrolling:
-                musicManager.ExitCombat();  
+                onCombat = false;
+                gm.CheckOnCombat();
                 agent.isStopped = false;
                 break;
         }
@@ -425,6 +429,11 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (distanceToPlayer <= detectionRange)
         {
+            if (health > 200)
+            {
+                musicManager.isInRangeB = true;
+            }
+
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
             float angleToTarget = Vector3.Angle(transform.forward, directionToPlayer);
 
@@ -435,6 +444,11 @@ public class P_AI_Enemy : MonoBehaviour
                 ChangeState(EnemyState.Chasing);
             }
         }
+        else
+            if (health > 200)
+            {
+                musicManager.isInRangeB = false;
+            }
 
         if (distanceToPlayer <= detectionCloseRange && !playerIsCrouched && playerIsWalking)
         {
@@ -583,6 +597,8 @@ public class P_AI_Enemy : MonoBehaviour
         {
             agent.enabled = false;  // Desactiva el agente antes de destruir
         }
+        onCombat = false;
+        gm.CheckOnCombat();
         gm.deadCount++;
         gm.CheckToOpen();
         GameObject hitBloodLoopTemp = Instantiate(vfxBlood, pivotVFX.position, pivotVFX.rotation);

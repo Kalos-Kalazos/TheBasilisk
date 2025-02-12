@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-7387777017005258996
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 202e7e9caad1d1b498e8e23db2d15b8d
+  m_EffectName: Attenuation
+  m_MixLevel: c9312e17568b3bd42ac2b605fc535e39
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &-5906514735168320401
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: c8d54148e23abf04c8349dab7f5e1e23
+  m_EffectName: Attenuation
+  m_MixLevel: a980c149d00fcd243838a8c83338a4fc
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &-4017657965654240148
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: OrganMusic
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: a55a6429f4a64794d91e8aa8e731a5a5
+  m_Children: []
+  m_Volume: bd02e3f40c2c80f4fa2483673091940a
+  m_Pitch: 1a6044f7be511dd45a083e0dab29a574
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -7387777017005258996}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &-1007504278878012543
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -30,15 +77,21 @@ AudioMixerController:
   m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters:
+  - guid: 886d86603f604ae4b9b7be040d20048b
+    name: BasiliskMusic
   - guid: 2db71f658c62ec04893f4573bdb447a6
     name: CombatMusic
   - guid: 3bf1c83db4551ab43af0b8dd18a826f6
     name: NormalMusic
+  - guid: bd02e3f40c2c80f4fa2483673091940a
+    name: OrganMusic
   m_AudioMixerGroupViews:
   - guids:
     - 13e48ba19112d554889778481a9f13a9
     - b76fe9f8976dd3840b9e3937d91803bb
     - c5d0f885095d8da4b8dc10125e842dbd
+    - a55a6429f4a64794d91e8aa8e731a5a5
+    - 8983d24bc7ea36d428018ff7537295dc
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -54,6 +107,8 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: 6946645341819001920}
   - {fileID: 5234754104456201800}
+  - {fileID: 4578429680541528671}
+  - {fileID: -4017657965654240148}
   m_Volume: ba6be77a46441924f86e8451b07e14c2
   m_Pitch: b3e1fd9b213e2744a8d1c7187df6eabe
   m_Send: 00000000000000000000000000000000
@@ -102,6 +157,25 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &4578429680541528671
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BasiliskMusic
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 8983d24bc7ea36d428018ff7537295dc
+  m_Children: []
+  m_Volume: 886d86603f604ae4b9b7be040d20048b
+  m_Pitch: 28dcaa5fa8a80dd4aa586842314e020f
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -5906514735168320401}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &5234754104456201800
 AudioMixerGroupController:
   m_ObjectHideFlags: 0

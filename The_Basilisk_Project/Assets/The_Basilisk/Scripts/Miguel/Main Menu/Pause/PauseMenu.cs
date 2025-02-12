@@ -13,10 +13,15 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] P_Mouse_Controller mouseController;
     GameObject playerObject;
     [SerializeField] BatterySystem playerHealth;
+    [SerializeField] Script_AudioManager musicManager;
+    [SerializeField] P_GameManager gm;
 
     private void Start()
     {
         playerObject = playerInput.gameObject;
+
+        musicManager = FindObjectOfType<Script_AudioManager>();
+        gm = FindObjectOfType<P_GameManager>();
 
         //Asegurarte de que el menu este desactivado al inicio
         if (menu != null)
@@ -78,6 +83,8 @@ public class PauseMenu : MonoBehaviour
 
         playerObject.SetActive(false);
 
+        musicManager.ExitCombat();
+
         Time.timeScale = 0f; //Pausar el juego
 
     }
@@ -92,6 +99,11 @@ public class PauseMenu : MonoBehaviour
         mouseController.enabled = true;
 
         playerObject.SetActive(true);
+
+        if (gm.isCombatActive)
+        {
+            musicManager.EnterCombat();
+        }
 
         Time.timeScale = 1f; //reanudar el juego
 

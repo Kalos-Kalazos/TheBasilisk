@@ -29,16 +29,27 @@ public class Script_AudioManager : MonoBehaviour
     [Header("=== Audio Source References ===")]
     public AudioSource ambienceMusic;
     public AudioSource combatMusic;
+    public AudioSource organMusic;
+    public AudioSource metalMusic;
     public AudioMixer audioMixer;
 
     public bool isInCombat = false;
+    public bool basiliskInCombat = false;
+    public bool isInRangeB = false;
 
     [Range(0f, 1f)] public float globalSFXVolume = 1.0f;
 
     private void Start()
     {
         ambienceMusic.Play();
+        audioMixer.SetFloat("OrganMusic", -40f);
+        organMusic.Play();
+        audioMixer.SetFloat("CombatMusic", -40f);
+        combatMusic.Play();
+        audioMixer.SetFloat("BasiliskMusic", -80f);
+        metalMusic.Play();
     }
+
     public void EnterCombat()
     {
         if (!combatMusic.isPlaying) 
@@ -50,7 +61,29 @@ public class Script_AudioManager : MonoBehaviour
         {
             isInCombat = true;
             StopAllCoroutines();
-            StartCoroutine(FadeMusic("NormalMusic", "CombatMusic", 1.5f));
+            StartCoroutine(FadeMusic("NormalMusic", "CombatMusic", 0.5f));
+            audioMixer.SetFloat("OrganMusic", -40f);
+        }
+    }
+
+    public void BasiliskCombat()
+    {
+        if (!basiliskInCombat && isInRangeB)
+        {
+            basiliskInCombat = true;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("OrganMusic", "BasiliskMusic", 0.5f));
+            audioMixer.SetFloat("CombatMusic", -10f);
+        }
+    }
+    public void BasiliskExitCombat()
+    {
+        if (basiliskInCombat && isInRangeB)
+        {
+            basiliskInCombat = false;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("BasiliskMusic", "OrganMusic", 0.5f));
+            audioMixer.SetFloat("NormalMusic", -20f);
         }
     }
 
@@ -65,7 +98,8 @@ public class Script_AudioManager : MonoBehaviour
         {
             isInCombat = false;
             StopAllCoroutines();
-            StartCoroutine(FadeMusic("CombatMusic", "NormalMusic", 2f));
+            StartCoroutine(FadeMusic("CombatMusic", "NormalMusic", 0.5f));
+            audioMixer.SetFloat("BasiliskMusic", -80f);
         }
     }
 
@@ -78,7 +112,7 @@ public class Script_AudioManager : MonoBehaviour
         float timer = 0;
         while (timer < duration)
         {
-            float newVolumeOut = Mathf.Lerp(startVolume, -80f, timer / duration);
+            float newVolumeOut = Mathf.Lerp(startVolume, -40f, timer / duration);
             float newVolumeIn = Mathf.Lerp(endVolume, 0f, timer / duration);
 
             audioMixer.SetFloat(fadeOutGroup, newVolumeOut);
@@ -88,22 +122,44 @@ public class Script_AudioManager : MonoBehaviour
             yield return null;
         }
 
-        audioMixer.SetFloat(fadeOutGroup, -80f);
+        audioMixer.SetFloat(fadeOutGroup, -40f);
         audioMixer.SetFloat(fadeInGroup, 0f);
-
-        if (isInCombat)
-        {
-            ambienceMusic.Stop();
-        }
-        else
-        {
-            combatMusic.Stop();
-        }
     }
 
-    //En un Singleton podemos declarar cualquier ACCION LLAMABLE siempre y cuando sea PUBLIC
     #region Music Methods
 
+
+    private void PlayOrganMusic()
+    {
+        // Toca la música del órgano si el Basilisco está cerca y no está en combate
+        audioMixer.SetFloat("OrganMusic", 0f);
+        organMusic.Play();
+        audioMixer.SetFloat("BasiliskMusic", -80f);  // Baja la música del combate si suena órgano
+    }
+
+    private void PlayMetalMusic()
+    {
+        // Toca la música del metal si el Basilisco está en combate
+        audioMixer.SetFloat("CombatMusic", -40f);  // Baja la música de combate si suena metal
+        audioMixer.SetFloat("BasiliskMusic", 0f);  // Sube la música del Basilisco
+        metalMusic.Play();
+    }
+
+    private void PlayCombatMusic()
+    {
+        // Si estamos en combate, toca la música de combate
+        audioMixer.SetFloat("CombatMusic", 0f);
+        combatMusic.Play();
+        audioMixer.SetFloat("OrganMusic", -80f);  // Baja la música del órgano si hay combate
+    }
+
+    private void PlayAmbienceMusic()
+    {
+        // Si no hay combate ni Basilisco cerca, toca música ambiental
+        audioMixer.SetFloat("BasiliskMusic", -80f);
+        audioMixer.SetFloat("OrganMusic", -40f);  // Baja el volumen de la música del órgano
+        ambienceMusic.Play();
+    }
     #endregion
 
     #region SFX Methods
