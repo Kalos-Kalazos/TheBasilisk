@@ -34,7 +34,7 @@ public class P_GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
                 
-        if (actualScene == 1)
+        if (actualScene == 2)
         {
             //Scripts deactivated
             player.GetComponent<P_Character_HookSwing>().enabled = false;
@@ -48,7 +48,7 @@ public class P_GameManager : MonoBehaviour
             pjHook.SetActive(false);
             pjFlames.SetActive(false);
         }
-        else if (actualScene == 2)
+        else if (actualScene == 3)
         {
             azazel = FindAnyObjectByType<P_Azazel_Talk>();
             //Scripts Deactivated
@@ -88,13 +88,13 @@ public class P_GameManager : MonoBehaviour
     {
         switch (actualScene)
         {
-            case 1:
+            case 2:
                 if (deadCount >= 1)
                 {
                     elevatorDoor.canBeOpenned = true;
                 }
                 break;
-            case 2:
+            case 3:
                 if (deadCount >= 4)
                 {
                     basiliskDoor.canBeOpenned = true;
@@ -114,11 +114,11 @@ public class P_GameManager : MonoBehaviour
     {
         switch (actualScene)
         {
-            case 1:
-                SceneManager.LoadScene("GL_LvL2");
+            case 3:
+                SceneManager.LoadScene("Def_LvL2");
                 break;
-            case 2:
-                SceneManager.LoadScene("GL_LvL3");
+            case 0:
+                SceneManager.LoadScene("MainMenu");
                 break;
         }
     }
@@ -148,18 +148,18 @@ public class P_GameManager : MonoBehaviour
     {
         if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Def_LvL1")))
         {
-            return 1;
+            return 2;
         }
         else
         if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Def_LvL2")))
         {
-            return 2;
+            return 3;
         }
         else
         if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("MainMenu")))
         {
-            return 3;
+            return 0;
         }
-        else return 0;
+        else return 1;
     }
 }

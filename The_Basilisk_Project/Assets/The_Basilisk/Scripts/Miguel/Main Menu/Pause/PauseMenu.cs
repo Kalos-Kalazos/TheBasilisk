@@ -7,10 +7,12 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject menu;
+    public GameObject gameOverMenu;
     private bool isMenuActive = false;
     public PlayerInput playerInput;
     [SerializeField] P_Mouse_Controller mouseController;
     GameObject playerObject;
+    [SerializeField] BatterySystem playerHealth;
 
     private void Start()
     {
@@ -33,8 +35,11 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerHealth.currentPiles <= 0)
+        {
+            GameOverBehavoir();
+        }
 
-        
     }
 
     public void CallPause(InputAction.CallbackContext context)
@@ -59,6 +64,8 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
+
+
     
     public void PauseBehavoir()
     {
@@ -87,6 +94,23 @@ public class PauseMenu : MonoBehaviour
         playerObject.SetActive(true);
 
         Time.timeScale = 1f; //reanudar el juego
+
+    }
+
+    public void GameOverBehavoir()
+    {
+        //Mostrar el cursor y detener el juego
+        Cursor.visible = true;
+
+        Cursor.lockState = CursorLockMode.None;
+
+        mouseController.enabled = false;
+
+        playerObject.SetActive(false);
+
+        Time.timeScale = 0f; //Pausar el juego
+
+        gameOverMenu.SetActive(true);
 
     }
 

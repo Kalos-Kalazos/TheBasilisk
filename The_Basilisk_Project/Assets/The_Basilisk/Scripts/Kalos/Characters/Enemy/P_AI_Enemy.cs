@@ -497,7 +497,16 @@ public class P_AI_Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Hit!");
-            batterySystem.LoseBattery();
+            if (health > 200)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    batterySystem.LoseBattery();
+                }
+
+            }
+            else
+                batterySystem.LoseBattery();
         }
         else Debug.Log("Attack missed!");
     }
