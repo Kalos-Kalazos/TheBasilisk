@@ -10,6 +10,7 @@ public class ButtonsPause : MonoBehaviour
     public GameObject PauseMenuUI;//Referencia al panel del de pausa
     public GameObject optionsMenuUI; //Referencia al panel de opciones
     [SerializeField] PauseMenu pauseControl;
+    [SerializeField] P_GameManager gameManager;
 
     private bool isPaused = false;
 
@@ -53,12 +54,21 @@ public class ButtonsPause : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
 
     }
+    public void RestartScene()
+    {
+
+        Time.timeScale = 1f;// Asegurar de que reanuda el tiempo
+        //alternativamente carga la scena de nuevo:
+
+        SceneManager.LoadScene(gameManager.actualScene);
+
+    }
 
     public void QuitGame()
     {
 
         Debug.Log("Saliendo del Juego...");//funciona al copilar el juego
-
+        QuitGame();
     }
 
 }

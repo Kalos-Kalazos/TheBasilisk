@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.Audio;
 
 public class Script_AudioManager : MonoBehaviour
 {
@@ -21,69 +21,120 @@ public class Script_AudioManager : MonoBehaviour
 
     #endregion
 
-    //Declaracion de todos los valores de la base de datos (Todos los valores han de ser PUBLIC)
-
-    //Llamada sin referencia: Script_AudioManager.Instance.PlaySFX(1);
-
+    // Declaración de todas las referencias y valores
     [Header("=== Audio Source References ===")]
-    public AudioSource musicSource;
-    public AudioSource sfxSource;
+    public AudioSource ambienceMusic;
+    public AudioSource combatMusic;
+    public AudioSource organMusic;
+    public AudioSource metalMusic;
+    public AudioMixer audioMixer;
 
-    [Header("=== Clip Library ===")]
-    public AudioClip[] musicArray;
-    public AudioClip[] sfxArray;
+    public bool isInCombat = false;
+    public bool basiliskInCombat = false;
+    public bool isInRangeB = false;
 
     [Range(0f, 1f)] public float globalSFXVolume = 1.0f;
 
-
     private void Awake()
     {
-        //El Singleton se referencia a si mismo
-        instance = this;
+        // Asegurarse de que no haya más de una instancia del AudioManager
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // Mantener el AudioManager entre las escenas
+        }
+        else
+        {
+            Destroy(gameObject); // Destruir duplicados si ya existe una instancia
+        }
     }
 
-    //En un Singleton podemos declarar cualquier ACCION LLAMABLE siempre y cuando sea PUBLIC
-    #region Music Methods
-    public void PlayMusic(int musicToPlay)
+    private void Start()
     {
-        musicSource.clip = musicArray[musicToPlay];
-        musicSource.Play();
+        // Inicializa la música en el inicio de la escena
+        if (ambienceMusic != null) ambienceMusic.Play();
+        if (organMusic != null) audioMixer.SetFloat("OrganMusic", -40f);
+        if (organMusic != null) organMusic.Play();
+        if (combatMusic != null) audioMixer.SetFloat("CombatMusic", -40f);
+        if (combatMusic != null) combatMusic.Play();
+        if (metalMusic != null) audioMixer.SetFloat("BasiliskMusic", -80f);
+        if (metalMusic != null) metalMusic.Play();
     }
 
-    public void PauseMusic()
+    public void EnterCombat()
     {
-        musicSource.Pause();
+        if (!combatMusic.isPlaying)
+        {
+            combatMusic.Play();
+        }
+
+        if (!isInCombat)
+        {
+            isInCombat = true;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("NormalMusic", "CombatMusic", 0.5f));
+            audioMixer.SetFloat("OrganMusic", -40f);
+        }
     }
 
-    public void StopMusic()
+    public void BasiliskCombat()
     {
-        musicSource.Stop();
+        if (!basiliskInCombat && isInRangeB)
+        {
+            basiliskInCombat = true;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("OrganMusic", "BasiliskMusic", 0.5f));
+            audioMixer.SetFloat("CombatMusic", -10f);
+        }
     }
-    #endregion
 
-    #region SFX Methods
-
-    public void PlaySFX(int sfxToPlay, float volume)
+    public void BasiliskExitCombat()
     {
-        sfxSource.loop = false;
-        sfxSource.PlayOneShot(sfxArray[sfxToPlay]);
+        if (basiliskInCombat && isInRangeB)
+        {
+            basiliskInCombat = false;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("BasiliskMusic", "OrganMusic", 0.5f));
+            audioMixer.SetFloat("NormalMusic", -20f);
+        }
     }
 
-    public void PlaySFXLoop(int sfxToPlay, float volume)
+    public void ExitCombat()
     {
-        sfxSource.clip = sfxArray[sfxToPlay];
-        sfxSource.volume = Mathf.Clamp01(volume * globalSFXVolume);
-        sfxSource.loop = true;
-        sfxSource.Play();
+        if (!ambienceMusic.isPlaying)
+        {
+            ambienceMusic.Play();
+        }
 
-        //sfxSource.PlayOneShot(sfxArray[sfxToPlay]);
+        if (isInCombat)
+        {
+            isInCombat = false;
+            StopAllCoroutines();
+            StartCoroutine(FadeMusic("CombatMusic", "NormalMusic", 0.5f));
+            audioMixer.SetFloat("BasiliskMusic", -80f);
+        }
     }
-    public void StopSFXLoop(int sfxToPlay)
+
+    private IEnumerator FadeMusic(string fadeOutGroup, string fadeInGroup, float duration)
     {
-        sfxSource.clip = sfxArray[sfxToPlay];
-        sfxSource.loop = false;
-        sfxSource.Stop();
-    }
+        float startVolume, endVolume;
+        audioMixer.GetFloat(fadeOutGroup, out startVolume);
+        audioMixer.GetFloat(fadeInGroup, out endVolume);
 
-    #endregion
+        float timer = 0;
+        while (timer < duration)
+        {
+            float newVolumeOut = Mathf.Lerp(startVolume, -40f, timer / duration);
+            float newVolumeIn = Mathf.Lerp(endVolume, 0f, timer / duration);
+
+            audioMixer.SetFloat(fadeOutGroup, newVolumeOut);
+            audioMixer.SetFloat(fadeInGroup, newVolumeIn);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioMixer.SetFloat(fadeOutGroup, -40f);
+        audioMixer.SetFloat(fadeInGroup, 0f);
+    }
 }

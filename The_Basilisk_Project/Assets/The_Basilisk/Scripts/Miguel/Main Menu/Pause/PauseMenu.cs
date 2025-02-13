@@ -7,14 +7,21 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject menu;
+    public GameObject gameOverMenu;
     private bool isMenuActive = false;
     public PlayerInput playerInput;
     [SerializeField] P_Mouse_Controller mouseController;
     GameObject playerObject;
+    [SerializeField] BatterySystem playerHealth;
+    [SerializeField] Script_AudioManager musicManager;
+    [SerializeField] P_GameManager gm;
 
     private void Start()
     {
         playerObject = playerInput.gameObject;
+
+        musicManager = FindObjectOfType<Script_AudioManager>();
+        gm = FindObjectOfType<P_GameManager>();
 
         //Asegurarte de que el menu este desactivado al inicio
         if (menu != null)
@@ -33,8 +40,11 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerHealth.currentPiles <= 0)
+        {
+            GameOverBehavoir();
+        }
 
-        
     }
 
     public void CallPause(InputAction.CallbackContext context)
@@ -59,6 +69,8 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
+
+
     
     public void PauseBehavoir()
     {
@@ -70,6 +82,8 @@ public class PauseMenu : MonoBehaviour
         mouseController.enabled = false;
 
         playerObject.SetActive(false);
+
+        musicManager.ExitCombat();
 
         Time.timeScale = 0f; //Pausar el juego
 
@@ -86,7 +100,29 @@ public class PauseMenu : MonoBehaviour
 
         playerObject.SetActive(true);
 
+        if (gm.isCombatActive)
+        {
+            musicManager.EnterCombat();
+        }
+
         Time.timeScale = 1f; //reanudar el juego
+
+    }
+
+    public void GameOverBehavoir()
+    {
+        //Mostrar el cursor y detener el juego
+        Cursor.visible = true;
+
+        Cursor.lockState = CursorLockMode.None;
+
+        mouseController.enabled = false;
+
+        playerObject.SetActive(false);
+        gameOverMenu.SetActive(true);
+
+        Time.timeScale = 0f; //Pausar el juego
+
 
     }
 

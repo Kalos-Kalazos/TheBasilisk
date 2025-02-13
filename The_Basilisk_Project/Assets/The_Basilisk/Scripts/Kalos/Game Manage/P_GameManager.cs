@@ -17,8 +17,11 @@ public class P_GameManager : MonoBehaviour
     public static P_GameManager Instance;
 
     [SerializeField] P_Enviroment_DD[] doorsToOpen;
+    [SerializeField] P_AI_Enemy[] enemiesOnScene;
 
     bool doorsOpenned, azazelInteracted;
+    public bool isCombatActive;
+    public bool isCombatBasilisk;
 
     P_Azazel_Talk azazel;
 
@@ -26,15 +29,19 @@ public class P_GameManager : MonoBehaviour
 
     [SerializeField] GameObject UI_GameOver;
 
+    [SerializeField] Script_AudioManager musicManager;
+
     void Start()
     {
         actualScene = ActualSceneID();
 
         pjFlames = player.GetComponent<P_Character_Combat>().flameThrowTank;
 
+        enemiesOnScene = FindObjectsOfType<P_AI_Enemy>();
+
         Time.timeScale = 1f;
                 
-        if (actualScene == 1)
+        if (actualScene == 2)
         {
             //Scripts deactivated
             player.GetComponent<P_Character_HookSwing>().enabled = false;
@@ -48,7 +55,7 @@ public class P_GameManager : MonoBehaviour
             pjHook.SetActive(false);
             pjFlames.SetActive(false);
         }
-        else if (actualScene == 2)
+        else if (actualScene == 3)
         {
             azazel = FindAnyObjectByType<P_Azazel_Talk>();
             //Scripts Deactivated
@@ -79,6 +86,45 @@ public class P_GameManager : MonoBehaviour
             }
         }
     }
+
+    public void CheckOnCombat()
+    {
+        isCombatActive = false;
+        isCombatBasilisk = false;
+
+        for (int i = 0; i < enemiesOnScene.Length; i++)
+        {
+            if (enemiesOnScene[i].onCombat && enemiesOnScene[i].health < 200)
+            {
+                isCombatActive = true;
+                break;
+            }
+            else if (enemiesOnScene[i].onCombat && enemiesOnScene[i].health > 200)
+            {
+                isCombatBasilisk = true;
+                break;
+            }
+        }
+
+        if (isCombatActive)
+        {
+            musicManager.EnterCombat();
+        }
+        else
+        {
+            musicManager.ExitCombat();
+        }
+
+        if (isCombatBasilisk)
+        {
+            musicManager.BasiliskCombat();
+        }
+        else
+        {
+            musicManager.BasiliskExitCombat();
+        }
+    }
+
     void Interaction(GameObject player)
     {
         azazelInteracted = player.GetComponent<P_DoorInteraction>().performed;
@@ -88,13 +134,17 @@ public class P_GameManager : MonoBehaviour
     {
         switch (actualScene)
         {
-            case 1:
-                if (deadCount >= 1)
+            case 2:
+                if (player.GetComponent<P_Character_Combat>().enabled == true)
                 {
                     elevatorDoor.canBeOpenned = true;
+                    for (int i = 0; i < doorsToOpen.Length; i++)
+                    {
+                        doorsToOpen[i].TriggerDoors();
+                    }
                 }
                 break;
-            case 2:
+            case 3:
                 if (deadCount >= 4)
                 {
                     basiliskDoor.canBeOpenned = true;
@@ -114,11 +164,11 @@ public class P_GameManager : MonoBehaviour
     {
         switch (actualScene)
         {
-            case 1:
-                SceneManager.LoadScene("GL_LvL2");
-                break;
             case 2:
-                SceneManager.LoadScene("GL_LvL3");
+                SceneManager.LoadScene("Def_LvL2");
+                break;
+            case 3:
+                SceneManager.LoadScene("MainMenu");
                 break;
         }
     }
@@ -146,20 +196,20 @@ public class P_GameManager : MonoBehaviour
 
     int ActualSceneID()
     {
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL1")))
-        {
-            return 1;
-        }
-        else
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL2")))
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Def_LvL1")))
         {
             return 2;
         }
         else
-        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("GL_LvL3")))
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("Def_LvL2")))
         {
             return 3;
         }
-        else return 0;
+        else
+        if (SceneManager.Equals(SceneManager.GetActiveScene(), SceneManager.GetSceneByName("MainMenu")))
+        {
+            return 0;
+        }
+        else return 1;
     }
 }

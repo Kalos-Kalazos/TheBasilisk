@@ -5,6 +5,7 @@ using UnityEngine;
 public class P_Trigger_NextLVL : MonoBehaviour
 {
     public P_GameManager gm;
+    public GameObject fadeIn;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,8 +19,17 @@ public class P_Trigger_NextLVL : MonoBehaviour
             }
             if (gameObject.CompareTag("NextLVL"))
             {
-                gm.NextLevel();
+                StartCoroutine(nameof(FadeIn));
             }
         }
+    }
+
+    private IEnumerator FadeIn()
+    {
+        fadeIn.SetActive(true);
+
+        yield return new WaitForSeconds(1);
+
+        gm.NextLevel();
     }
 }
