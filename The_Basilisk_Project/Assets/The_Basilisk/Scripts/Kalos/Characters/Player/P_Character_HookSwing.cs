@@ -125,6 +125,7 @@ public class P_Character_HookSwing : MonoBehaviour
         if (context.started)
         {
             StartSwing();
+            hookAnim.launch = true;
         }
         else if (context.canceled)
         {

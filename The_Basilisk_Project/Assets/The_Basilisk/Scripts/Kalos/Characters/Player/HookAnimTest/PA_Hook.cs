@@ -10,7 +10,6 @@ public class PA_Hook : MonoBehaviour
     P_Character_HookGrab grabControl;
 
     [Header("=== Anim settings ===")]
-
     public bool launched;
     public bool launch;
     public bool returning;
@@ -47,12 +46,12 @@ public class PA_Hook : MonoBehaviour
         if (hookControl.hasGrabbed)
         {
             fallTime = 0;
-            targetPoint = grabControl.joint.connectedAnchor;
+            targetPoint = grabControl.grabPoint;  // Usamos el punto de agarre directamente
         }
         else if (launch)
         {
             fallTime = 0.5f;
-            targetPoint = hookControl.swingPoint;
+            targetPoint = hookControl.swingPoint;  // Usamos el punto de swing
         }
 
         if (!isProcessingAction)
