@@ -9,7 +9,7 @@ public class P_TakeGrapple : MonoBehaviour
 
     public bool openned;
 
-    public GameObject fakeGrapple, originalGrapple, fakeWeapon, originalWeapon, fakeFlames, originalFlames, openDoor;
+    public GameObject fakeGrapple, originalGrapple, fakeWeapon, originalWeapon, fakeFlames, originalFlames, openDoor, firstDoor;
 
     private void Start()
     {
@@ -23,6 +23,8 @@ public class P_TakeGrapple : MonoBehaviour
             originalGrapple = gm.pjHook;
             fakeGrapple.SetActive(false);
             originalGrapple.SetActive(true);
+            firstDoor.GetComponent<P_Enviroment_DD>().canBeOpenned = true;
+            firstDoor.GetComponent<P_Enviroment_DD>().TriggerDoors();
             other.GetComponent<P_Character_HookSwing>().enabled = true;
             other.GetComponent<P_Character_HookGrab>().enabled = true;
             other.GetComponent<PA_Hook>().enabled = true;
@@ -34,6 +36,7 @@ public class P_TakeGrapple : MonoBehaviour
             fakeWeapon.SetActive(false);
             originalWeapon.SetActive(true);
             other.GetComponent<P_Character_Combat>().enabled = true;
+            gm.CheckToOpen();
             if (!openned)
             {
                 for (int i = 0; i < openTrigger.doorsToOpen.Length; i++)

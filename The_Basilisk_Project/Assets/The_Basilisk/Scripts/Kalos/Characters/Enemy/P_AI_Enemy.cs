@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.VFX;
 
 public class P_AI_Enemy : MonoBehaviour
 {
     [Header("=== Enemy Status Settings ===")]
-    [SerializeField] float health = 100;
+    public float health = 150;
     [SerializeField] float speedChase = 7;
     [SerializeField] float speedDefault = 3.5f;
     public EnemyState currentState;
@@ -35,6 +36,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     [Header("=== Enemy Animation Settings ===")]
     Animator animator;
+    float animSpeed_Walk = 1;
     bool isPausing = false;
 
     [SerializeField] P_GameManager gm;
@@ -43,7 +45,16 @@ public class P_AI_Enemy : MonoBehaviour
 
     float timeElapsedChase = 0;
 
-    [SerializeField] VisualEffect vfx_Burned;
+    [SerializeField] VisualEffect vfx_Burned; 
+    [SerializeField] float stuckTimeThreshold = 3f;
+    [SerializeField] float minDistanceThreshold = 0.2f;
+    private float stuckTimer = 0f;
+    private Vector3 lastPosition;
+
+    public bool onCombat = false;
+
+
+    [SerializeField] Script_AudioManager musicManager;
 
     #region --Search on sound heard
     Coroutine currentCoroutineState;
@@ -122,7 +133,7 @@ public class P_AI_Enemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         player = FindAnyObjectByType<P_Mouse_Controller>().transform;
         gm = FindAnyObjectByType<P_GameManager>();
         batterySystem = ui.GetComponentInChildren<BatterySystem>();
@@ -156,12 +167,13 @@ public class P_AI_Enemy : MonoBehaviour
                 Patrol();
                 DetectPlayer();
                 agent.speed = speedDefault;
+                animator.SetFloat("Speed_Walk", 1);
                 break; 
 
             case EnemyState.Chasing:
                 ChasePlayer();
                 agent.speed = speedChase;
-
+                animator.SetFloat("Speed_Walk", 1.5f);
                 #region --TimeSearching
                 while (timeElapsedChase < searchTime)
                 {
@@ -193,7 +205,6 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (attackCD < 0) attackCD = 0;
         #endregion
-
         /*
         if (isChasing)
         {
@@ -212,21 +223,46 @@ public class P_AI_Enemy : MonoBehaviour
             }
         }*/
 
+        //ANIMATION WALKING
+
+        bool isMoving = agent.velocity.magnitude > 0.01f && agent.remainingDistance > agent.stoppingDistance;
+        animator.SetBool("Walking", isMoving);
 
         #region --PJ on Stealth
         if (player.GetComponent<P_Character_Move_v2>().isCrouched)
         {
             detectionRange = 7;
             maxDetectionAngle = 30;
-            searchTime = 10;
+            searchTime = 20;
         }
         else
         {
             detectionRange = 14;
             maxDetectionAngle = 60;
-            searchTime = 15;
+            searchTime = 30;
         }
         #endregion
+    }
+
+
+    void ChangeState(EnemyState newState)
+    {
+        currentState = newState;
+
+        switch (newState)
+        {
+            case EnemyState.Chasing:
+                onCombat = true;
+                gm.CheckOnCombat();
+                agent.isStopped = false;
+                break;
+
+            case EnemyState.Patrolling:
+                onCombat = false;
+                gm.CheckOnCombat();
+                agent.isStopped = false;
+                break;
+        }
     }
 
     #region -- Burn Logic
@@ -237,8 +273,10 @@ public class P_AI_Enemy : MonoBehaviour
         if (burnCoroutine != null)
         {
             StopCoroutine(burnCoroutine);
+            animator.SetBool("Burning", false);
         }
         burnCoroutine = StartCoroutine(BurnEnemy(burnDuration, burnDamagePerSecond));
+        animator.SetBool("Burning", true);
     }
 
     private IEnumerator BurnEnemy(float burnDuration, float burnDamagePerSecond)
@@ -258,7 +296,7 @@ public class P_AI_Enemy : MonoBehaviour
         vfx_Burned.Stop();
     }
     #endregion
-
+    /*
     void Patrol()
     {
         if (isPausing) return;
@@ -272,6 +310,50 @@ public class P_AI_Enemy : MonoBehaviour
                 StartCoroutine(PauseAtPatrolPoint());
             }            
         }
+    }*/
+
+    void Patrol()
+    {
+        if (isPausing) return;
+
+        if (agent.enabled)
+        {
+            agent.isStopped = false;
+
+            if (Vector3.Distance(transform.position, lastPosition) < minDistanceThreshold)
+            {
+                stuckTimer += Time.deltaTime;
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
+
+            if (stuckTimer >= stuckTimeThreshold)
+            {
+                ChangePatrolPoint();
+            }
+
+            lastPosition = transform.position;
+
+            if (!agent.pathPending && agent.remainingDistance < 1f)
+            {
+                StartCoroutine(PauseAtPatrolPoint());
+            }
+        }
+    }
+    void ChangePatrolPoint()
+    {
+        stuckTimer = 0f;
+
+        int previousIndex = currentPatrolIndex;
+
+        while (currentPatrolIndex == previousIndex && patrolPoints.Length > 1)
+        {
+            currentPatrolIndex = Random.Range(0, patrolPoints.Length);
+        }
+
+        agent.destination = patrolPoints[currentPatrolIndex].position;
     }
 
     private IEnumerator PauseAtPatrolPoint()
@@ -333,7 +415,7 @@ public class P_AI_Enemy : MonoBehaviour
         if (currentState == EnemyState.Iddle && agent.enabled)
         {
             agent.isStopped = false;
-            currentState = EnemyState.Patrolling;
+            ChangeState(EnemyState.Patrolling);
             agent.destination = patrolPoints[currentPatrolIndex].position;
         }
     }
@@ -347,6 +429,11 @@ public class P_AI_Enemy : MonoBehaviour
 
         if (distanceToPlayer <= detectionRange)
         {
+            if (health > 200)
+            {
+                musicManager.isInRangeB = true;
+            }
+
             Vector3 directionToPlayer = (player.position - transform.position).normalized;
             float angleToTarget = Vector3.Angle(transform.forward, directionToPlayer);
 
@@ -354,15 +441,20 @@ public class P_AI_Enemy : MonoBehaviour
             {
                 timeElapsedChase = 0;
                 Warn();
-                currentState = EnemyState.Chasing;
+                ChangeState(EnemyState.Chasing);
             }
         }
+        else
+            if (health > 200)
+            {
+                musicManager.isInRangeB = false;
+            }
 
         if (distanceToPlayer <= detectionCloseRange && !playerIsCrouched && playerIsWalking)
         {
             timeElapsedChase = 0;
             Warn();
-            currentState = EnemyState.Chasing;
+            ChangeState(EnemyState.Chasing);
         }
     }
 
@@ -371,13 +463,14 @@ public class P_AI_Enemy : MonoBehaviour
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange, PlayerLayer))
+        if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange))
         {
-            if(hit.transform == target)
+            if (hit.transform != target)
             {
-                return true;
+                return false; // Algo bloquea la visión
             }
-            //else return false;
+
+            return true; // No hay obstáculos, se ve al jugador
         }
 
         return false;
@@ -421,27 +514,36 @@ public class P_AI_Enemy : MonoBehaviour
             Debug.Log("Enemy Attack2");
             attackCD = attackRate;
             //Animation
-            //animator.SetTrigger("Attack");
-
-            TryApplyDamage();
+            animator.SetTrigger("Attack");
         }
         
         if (Vector3.Distance(transform.position, player.position) > attackRange)
         {
-            currentState = EnemyState.Chasing;
+            ChangeState(EnemyState.Chasing);
 
             if (agent.enabled) agent.isStopped = false;
         }
         
     }
-    void TryApplyDamage()
+
+
+    public void TryApplyDamage()
     {
         if (currentState == EnemyState.Dead) return;
 
         if (Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             Debug.Log("Hit!");
-            batterySystem.LoseBattery();
+            if (health > 200)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    batterySystem.LoseBattery();
+                }
+
+            }
+            else
+                batterySystem.LoseBattery();
         }
         else Debug.Log("Attack missed!");
     }
@@ -496,6 +598,8 @@ public class P_AI_Enemy : MonoBehaviour
         {
             agent.enabled = false;  // Desactiva el agente antes de destruir
         }
+        onCombat = false;
+        gm.CheckOnCombat();
         gm.deadCount++;
         gm.CheckToOpen();
         GameObject hitBloodLoopTemp = Instantiate(vfxBlood, pivotVFX.position, pivotVFX.rotation);
@@ -510,7 +614,8 @@ public class P_AI_Enemy : MonoBehaviour
     {
         if (currentState == EnemyState.Dead) return;
 
-        currentState = EnemyState.Chasing;
+        timeElapsedChase = 0;
+        ChangeState(EnemyState.Chasing);
     }
 
     private void OnDrawGizmosSelected()
