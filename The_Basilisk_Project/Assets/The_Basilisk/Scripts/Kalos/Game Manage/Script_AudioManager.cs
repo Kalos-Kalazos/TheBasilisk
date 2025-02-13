@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Audio;
 
 public class Script_AudioManager : MonoBehaviour
@@ -21,7 +22,10 @@ public class Script_AudioManager : MonoBehaviour
 
     #endregion
 
-    // Declaración de todas las referencias y valores
+    //Declaracion de todos los valores de la base de datos (Todos los valores han de ser PUBLIC)
+
+    //Llamada sin referencia: Script_AudioManager.Instance.PlaySFX(1);
+
     [Header("=== Audio Source References ===")]
     public AudioSource ambienceMusic;
     public AudioSource combatMusic;
@@ -33,37 +37,21 @@ public class Script_AudioManager : MonoBehaviour
     public bool basiliskInCombat = false;
     public bool isInRangeB = false;
 
-    [Range(0f, 1f)] public float globalSFXVolume = 1.0f;
-
-    private void Awake()
-    {
-        // Asegurarse de que no haya más de una instancia del AudioManager
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Mantener el AudioManager entre las escenas
-        }
-        else
-        {
-            Destroy(gameObject); // Destruir duplicados si ya existe una instancia
-        }
-    }
 
     private void Start()
     {
-        // Inicializa la música en el inicio de la escena
-        if (ambienceMusic != null) ambienceMusic.Play();
-        if (organMusic != null) audioMixer.SetFloat("OrganMusic", -40f);
-        if (organMusic != null) organMusic.Play();
-        if (combatMusic != null) audioMixer.SetFloat("CombatMusic", -40f);
-        if (combatMusic != null) combatMusic.Play();
-        if (metalMusic != null) audioMixer.SetFloat("BasiliskMusic", -80f);
-        if (metalMusic != null) metalMusic.Play();
+        ambienceMusic.Play();
+        audioMixer.SetFloat("OrganMusic", -40f);
+        organMusic.Play();
+        audioMixer.SetFloat("CombatMusic", -40f);
+        combatMusic.Play();
+        audioMixer.SetFloat("BasiliskMusic", -80f);
+        metalMusic.Play();
     }
 
     public void EnterCombat()
     {
-        if (!combatMusic.isPlaying)
+        if (!combatMusic.isPlaying) 
         {
             combatMusic.Play();
         }
@@ -87,7 +75,6 @@ public class Script_AudioManager : MonoBehaviour
             audioMixer.SetFloat("CombatMusic", -10f);
         }
     }
-
     public void BasiliskExitCombat()
     {
         if (basiliskInCombat && isInRangeB)
@@ -137,4 +124,12 @@ public class Script_AudioManager : MonoBehaviour
         audioMixer.SetFloat(fadeOutGroup, -40f);
         audioMixer.SetFloat(fadeInGroup, 0f);
     }
+
+    #region Music Methods
+    #endregion
+
+    #region SFX Methods
+
+
+    #endregion
 }

@@ -4724,6 +4724,16 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.23529412
       objectReference: {fileID: 0}
+    - target: {fileID: 1467921612429956264, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1467921612429956264, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1655634131036168375, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
         type: 3}
       propertyPath: m_Camera
@@ -4923,6 +4933,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6747268296535201596, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6747268296535201596, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6861955252077660314, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
         type: 3}
@@ -5385,6 +5405,7 @@ MonoBehaviour:
   fakeFlames: {fileID: 265288446}
   originalFlames: {fileID: 1349076705}
   openDoor: {fileID: 0}
+  firstDoor: {fileID: 0}
 --- !u!1 &455866786
 GameObject:
   m_ObjectHideFlags: 0
@@ -5726,6 +5747,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -9.934945
       objectReference: {fileID: 0}
+    - target: {fileID: 1583499941930851920, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f79e3feea11a19d478155839a5a56c2d, type: 2}
     - target: {fileID: 1797895077245833028, guid: dab20a2e74947bb49a933693ce281211,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -6046,6 +6072,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -9.928002
       objectReference: {fileID: 0}
+    - target: {fileID: 4989581739620289574, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c81d1596e5fd5464db46b050b661fd76, type: 2}
     - target: {fileID: 5040106837878091037, guid: dab20a2e74947bb49a933693ce281211,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -6076,6 +6107,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5923479784250868095, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bd5f3fb22ca37bb4e89b425d9ee4d21b, type: 2}
     - target: {fileID: 6075094641144589723, guid: dab20a2e74947bb49a933693ce281211,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -32090,7 +32126,7 @@ PrefabInstance:
         type: 3}
       propertyPath: vfx_Burned
       value: 
-      objectReference: {fileID: 1553755615571759164}
+      objectReference: {fileID: 0}
     - target: {fileID: 2311027644739631254, guid: ac6d7ee7801770f4ba48ab0cbb20c4de,
         type: 3}
       propertyPath: alertRadius
@@ -32602,12 +32638,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6494690222506604289}
   m_SourcePrefab: {fileID: 100100000, guid: ac6d7ee7801770f4ba48ab0cbb20c4de, type: 3}
---- !u!2083052967 &1553755615571759164 stripped
-VisualEffect:
-  m_CorrespondingSourceObject: {fileID: 1488323462710220797, guid: ac6d7ee7801770f4ba48ab0cbb20c4de,
-    type: 3}
-  m_PrefabInstance: {fileID: 1553755615571759163}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1870316710701596253
 Transform:
   m_ObjectHideFlags: 0

@@ -54,24 +54,9 @@ public class P_Character_HookGrab : MonoBehaviour
     void AlignWithHook()
     {
         grabbedObjectRB.isKinematic = true;
-
-        Collider objectCollider = grabbedObjectRB.GetComponent<Collider>();
-
-        if (objectCollider != null)
-        {
-            objectCollider.enabled = false;
-        }
-
-        grabbedObjectRB.velocity = Vector3.zero;
-        grabbedObjectRB.angularVelocity = Vector3.zero;
         grabbedObjectRB.transform.position = hookOrigin.position;
         grabbedObjectRB.transform.rotation = hookOrigin.rotation;
         grabbedObjectRB.transform.SetParent(hookOrigin);
-
-        if (objectCollider != null)
-        {
-            objectCollider.enabled = true;
-        }
     }
 
     public void GrabObject(InputAction.CallbackContext context)

@@ -1542,10 +1542,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c689c44002ed544bff510f4102a414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicSource: {fileID: 0}
-  sfxSource: {fileID: 0}
-  musicArray: []
-  sfxArray: []
+  ambienceMusic: {fileID: 0}
+  combatMusic: {fileID: 0}
+  organMusic: {fileID: 0}
+  metalMusic: {fileID: 0}
+  audioMixer: {fileID: 0}
+  isInCombat: 0
+  basiliskInCombat: 0
+  isInRangeB: 0
   globalSFXVolume: 1
 --- !u!4 &1753437329
 Transform:
@@ -1859,7 +1863,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -180, y: 85}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &581315688225272355
 CanvasRenderer:
@@ -3977,7 +3981,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 092c6f03be1b448448078a6580495a74, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5000,7 +5004,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 86fcb8fdb5b00a748b2cfd0b986b1ab6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9e6109aa620cccc45942b2f55f7d26df, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5063,7 +5067,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 139, y: -2}
+  m_AnchoredPosition: {x: 116.4, y: -2}
   m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8232563431782628222
@@ -5200,6 +5204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7986126680027800645}
   - component: {fileID: 6986881544477765225}
+  - component: {fileID: 8412747463875304560}
   - component: {fileID: 5596566395360626371}
   m_Layer: 5
   m_Name: ImageGeneral
@@ -5208,6 +5213,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8412747463875304560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8412747463875304559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd90cfeb3bd0381468b497c403d38226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 092c6f03be1b448448078a6580495a74, type: 3}
+  - {fileID: 21300000, guid: 01f1460dc0b756b49b496575c1b0ca3b, type: 3}
+  - {fileID: 21300000, guid: 48920e86ae51b6e4cade60e9d495bc0c, type: 3}
+  frameRate: 0.2
 --- !u!224 &8493624524575870603
 RectTransform:
   m_ObjectHideFlags: 0
