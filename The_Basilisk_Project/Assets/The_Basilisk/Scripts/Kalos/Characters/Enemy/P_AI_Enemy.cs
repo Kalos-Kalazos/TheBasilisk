@@ -463,13 +463,14 @@ public class P_AI_Enemy : MonoBehaviour
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange, PlayerLayer))
+        if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange))
         {
-            if(hit.transform == target)
+            if (hit.transform != target)
             {
-                return true;
+                return false; // Algo bloquea la visión
             }
-            //else return false;
+
+            return true; // No hay obstáculos, se ve al jugador
         }
 
         return false;

@@ -12,7 +12,7 @@ public class P_Azazel_Talk : MonoBehaviour
 
     [SerializeField] PlayableDirector tml;
 
-    [SerializeField] GameObject dialoguePanelUI, combatUI;
+    [SerializeField] GameObject dialoguePanelUI, combatUI, interactImage;
 
     [SerializeField] TMP_Text dialogueText;
 
@@ -122,6 +122,10 @@ public class P_Azazel_Talk : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             onRange = true;
+            if (!ended)
+            {
+                interactImage.SetActive(true);                
+            }
         }
     }
 
@@ -130,6 +134,7 @@ public class P_Azazel_Talk : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             onRange = false;
+            interactImage.SetActive(false);
         }
     }
 }
