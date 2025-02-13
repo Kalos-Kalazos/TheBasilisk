@@ -23,9 +23,6 @@ public class WeaponSwitch : MonoBehaviour
         position1 = image1.anchoredPosition;
         position2 = image2.anchoredPosition;
 
-
-
-
     }
 
     // Update is called once per frame
@@ -33,7 +30,6 @@ public class WeaponSwitch : MonoBehaviour
     {
         
         // Cambiar de arma con las
-
 
     }
 }

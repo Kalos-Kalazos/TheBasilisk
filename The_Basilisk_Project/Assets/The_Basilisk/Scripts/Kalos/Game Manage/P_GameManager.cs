@@ -135,9 +135,13 @@ public class P_GameManager : MonoBehaviour
         switch (actualScene)
         {
             case 2:
-                if (deadCount >= 1)
+                if (player.GetComponent<P_Character_Combat>().enabled == true)
                 {
                     elevatorDoor.canBeOpenned = true;
+                    for (int i = 0; i < doorsToOpen.Length; i++)
+                    {
+                        doorsToOpen[i].TriggerDoors();
+                    }
                 }
                 break;
             case 3:

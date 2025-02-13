@@ -27,7 +27,10 @@ public class P_Enviroment_DD : MonoBehaviour
         {
             player = other.gameObject;
             checkStatus = true;
-            interactImage.SetActive(true);
+            if (canBeOpenned)
+            {
+                interactImage.SetActive(true);
+            }
         }
         /* LOS ENEMIGOS ABREN PUERTAS:
          * 
@@ -95,7 +98,10 @@ public class P_Enviroment_DD : MonoBehaviour
     public void TriggerDoors()
     {
         if (!openned && canBeOpenned)
+        {
+            StopAllCoroutines();
             StartCoroutine(nameof(OpenTheDoor));
+        }
     }
     public void TriggerSingleDoor()
     {
@@ -112,6 +118,8 @@ public class P_Enviroment_DD : MonoBehaviour
     private IEnumerator OpenTheDoor()
     {
         openned = true;
+
+        elapsedTime = 0f;
 
         //The First movement (Anticipation) position
         Vector3 firstPositionR = startPositionR + doorR.transform.right * firstDistance;
