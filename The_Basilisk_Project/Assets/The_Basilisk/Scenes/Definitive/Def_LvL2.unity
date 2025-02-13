@@ -7139,6 +7139,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas del menu
       objectReference: {fileID: 0}
+    - target: {fileID: 6637461984572038136, guid: 74adc094c8e2def47a5fba1d31b69dfc,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9598e157e2120ee4eac7cedca065cf63, type: 2}
+    - target: {fileID: 8089219652989429706, guid: 74adc094c8e2def47a5fba1d31b69dfc,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: d8dd71d2065d51949818a76e61ebc2c1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8371,6 +8381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 5810251793686901402}
+  fadeIn: {fileID: 0}
 --- !u!1 &758902042
 GameObject:
   m_ObjectHideFlags: 0
@@ -17510,6 +17521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 5810251793686901402}
+  fadeIn: {fileID: 0}
 --- !u!65 &1857689025
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31833,6 +31845,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8333376779956303386, guid: e5a625584c1200a48af32e7301483fc5,
+        type: 3}
+      propertyPath: volume
+      value: 
+      objectReference: {fileID: 8264724509285560752}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31844,6 +31861,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8264724509285560749}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8264724509285560752 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2328148702692911704, guid: e5a625584c1200a48af32e7301483fc5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8264724509285560749}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8397651438049894580
 Transform:
   m_ObjectHideFlags: 0

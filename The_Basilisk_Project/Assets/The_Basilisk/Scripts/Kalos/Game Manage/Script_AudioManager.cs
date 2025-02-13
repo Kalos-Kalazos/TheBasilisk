@@ -37,7 +37,6 @@ public class Script_AudioManager : MonoBehaviour
     public bool basiliskInCombat = false;
     public bool isInRangeB = false;
 
-    [Range(0f, 1f)] public float globalSFXVolume = 1.0f;
 
     private void Start()
     {
@@ -127,39 +126,6 @@ public class Script_AudioManager : MonoBehaviour
     }
 
     #region Music Methods
-
-
-    private void PlayOrganMusic()
-    {
-        // Toca la música del órgano si el Basilisco está cerca y no está en combate
-        audioMixer.SetFloat("OrganMusic", 0f);
-        organMusic.Play();
-        audioMixer.SetFloat("BasiliskMusic", -80f);  // Baja la música del combate si suena órgano
-    }
-
-    private void PlayMetalMusic()
-    {
-        // Toca la música del metal si el Basilisco está en combate
-        audioMixer.SetFloat("CombatMusic", -40f);  // Baja la música de combate si suena metal
-        audioMixer.SetFloat("BasiliskMusic", 0f);  // Sube la música del Basilisco
-        metalMusic.Play();
-    }
-
-    private void PlayCombatMusic()
-    {
-        // Si estamos en combate, toca la música de combate
-        audioMixer.SetFloat("CombatMusic", 0f);
-        combatMusic.Play();
-        audioMixer.SetFloat("OrganMusic", -80f);  // Baja la música del órgano si hay combate
-    }
-
-    private void PlayAmbienceMusic()
-    {
-        // Si no hay combate ni Basilisco cerca, toca música ambiental
-        audioMixer.SetFloat("BasiliskMusic", -80f);
-        audioMixer.SetFloat("OrganMusic", -40f);  // Baja el volumen de la música del órgano
-        ambienceMusic.Play();
-    }
     #endregion
 
     #region SFX Methods
