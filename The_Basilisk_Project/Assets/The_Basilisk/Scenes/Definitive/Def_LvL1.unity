@@ -1465,11 +1465,6 @@ PrefabInstance:
       objectReference: {fileID: 426611273}
     - target: {fileID: 5735696598867567082, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
-      propertyPath: speed
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 5735696598867567082, guid: 2a763df89e688ba43b122f8ecca189dd,
-        type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -12320,12 +12315,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 521651948}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &822860892 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1442006900413673687, guid: 74adc094c8e2def47a5fba1d31b69dfc,
-    type: 3}
-  m_PrefabInstance: {fileID: 874840146}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &829958521 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8534476802270543722, guid: 13471520282f5f147a8f45765f8bdcfe,
@@ -13261,21 +13250,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5528724473419944456, guid: 74adc094c8e2def47a5fba1d31b69dfc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5606316909010035143, guid: 74adc094c8e2def47a5fba1d31b69dfc,
         type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1371334568}
-    - target: {fileID: 6155127108065929904, guid: 74adc094c8e2def47a5fba1d31b69dfc,
-        type: 3}
-      propertyPath: fadeOut
-      value: 
-      objectReference: {fileID: 822860892}
     - target: {fileID: 6301640283762592357, guid: 74adc094c8e2def47a5fba1d31b69dfc,
         type: 3}
       propertyPath: gameManager
