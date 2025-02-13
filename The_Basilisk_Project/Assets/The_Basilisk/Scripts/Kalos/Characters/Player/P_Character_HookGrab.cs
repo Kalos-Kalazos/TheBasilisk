@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,6 @@ public class P_Character_HookGrab : MonoBehaviour
 
     public Vector3 grabPoint, targetPosition, hitPoint;
     public Transform hookOrigin;
-    public Transform hookHeadTransform;  // La cabeza del gancho con animación
 
     [SerializeField] LayerMask canGrab;
 
@@ -21,6 +21,8 @@ public class P_Character_HookGrab : MonoBehaviour
 
     public RaycastHit predictionHitObject;
     public Transform predictionPointObject;
+
+    public SpringJoint joint;
 
     [SerializeField] bool inputPressed;
 
@@ -34,6 +36,7 @@ public class P_Character_HookGrab : MonoBehaviour
     {
         if (playerSwing.swinging) return;
 
+        //MoveGrabbedObject();
         CheckForGrabPoints();
 
         if (grabbedObjectRB != null && !grabbed)
@@ -42,20 +45,18 @@ public class P_Character_HookGrab : MonoBehaviour
             if (distanceToHook < 0.5f)
             {
                 StopGrab();
+                AlignWithHook();
                 grabbed = true;
             }
         }
+    }
 
-        // Sincronización con la cabeza del gancho (sin alinear estrictamente el objeto)
-        if (grabbed && grabbedObjectRB != null && hookHeadTransform != null)
-        {
-            grabbedObjectRB.velocity = Vector3.zero;  // Evitar movimientos no deseados
-            grabbedObjectRB.angularVelocity = Vector3.zero;
-
-            // Mantenemos el objeto pegado a la cabeza del gancho, pero no lo alineamos estrictamente
-            grabbedObjectRB.transform.position = hookHeadTransform.position;
-            grabbedObjectRB.transform.rotation = hookHeadTransform.rotation;
-        }
+    void AlignWithHook()
+    {
+        grabbedObjectRB.isKinematic = true;
+        grabbedObjectRB.transform.position = hookOrigin.position;
+        grabbedObjectRB.transform.rotation = hookOrigin.rotation;
+        grabbedObjectRB.transform.SetParent(hookOrigin);
     }
 
     public void GrabObject(InputAction.CallbackContext context)
@@ -64,7 +65,7 @@ public class P_Character_HookGrab : MonoBehaviour
         {
             StartGrab();
         }
-        else if (context.started)
+        else if (context.canceled)
         {
             if (grabbed && playerPA_Hook.retracted && !playerPA_Hook.returning)
                 ReleaseGrab();
@@ -75,51 +76,27 @@ public class P_Character_HookGrab : MonoBehaviour
 
     void ReleaseGrab()
     {
-        if (grabbedObjectRB == null) return;
-
         grabbed = false;
-        grabbedObjectRB.transform.SetParent(null);  // Dejamos de ser hijo de la cabeza del gancho
-
-        // Desactivamos temporalmente las colisiones para evitar que se empuje al soltar
-        Collider grabbedCollider = grabbedObjectRB.GetComponent<Collider>();
-        if (grabbedCollider != null)
+        if (grabbedObjectRB != null)
         {
-            grabbedCollider.enabled = false;
-        }
-
-        // Aguardamos un pequeño tiempo para permitir que el objeto se libere correctamente
-        StartCoroutine(ReleaseAfterDelay(0.1f));
-
-        // Eliminar las restricciones de posición y rotación al soltar el objeto
-        grabbedObjectRB.constraints = RigidbodyConstraints.None;  // Eliminamos las restricciones físicas
-
-        LaunchObject();  // Lanzamos el objeto
-    }
-
-    // Corutina para liberar el objeto después de un pequeño retraso
-    IEnumerator ReleaseAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        // Hacemos que el objeto no se quede atrapado por colisiones inmediatamente después de soltarlo
-        Collider grabbedCollider = grabbedObjectRB.GetComponent<Collider>();
-        if (grabbedCollider != null)
-        {
-            grabbedCollider.enabled = true;
+            playerPA_Hook.hookHead.GetComponent<P_Reference_HeadHook>().isHooked = false;
+            grabbedObjectRB.gameObject.transform.SetParent(null);
+            grabbedObjectRB.isKinematic = false;
+            LaunchObject();
         }
     }
 
     void LaunchObject()
     {
-        if (grabbedObjectRB != null)
-        {
-            grabbedObjectRB.AddForce(playerSwing.cam.forward * launchPower, ForceMode.Impulse);  // Añadimos fuerza al objeto
-        }
+        grabbedObjectRB.AddForce(playerSwing.cam.forward * launchPower, ForceMode.Impulse);
+        Debug.Log("Launching object wow so far ma men");
+        grabbedObjectRB = null;
+
     }
 
     void CheckForGrabPoints()
     {
-        if (grabbed) return;
+        if (joint != null && joint.connectedAnchor == playerSwing.swingPoint) return;
 
         RaycastHit sphereCastHit;
         Physics.SphereCast(playerSwing.cam.position, playerSwing.predictionRadius, playerSwing.cam.forward, out sphereCastHit, playerSwing.maxSwingDistance, canGrab);
@@ -157,9 +134,24 @@ public class P_Character_HookGrab : MonoBehaviour
         if (predictionHitObject.point == Vector3.zero || playerSwing.grapplingCDTimer > 0) return;
 
         playerSwing.hasGrabbed = true;
+
         playerSwing.activeGrapple = true;
+
         grabPoint = predictionHitObject.point;
+
         predictionPointObject.gameObject.SetActive(false);
+
+        joint = gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = grabPoint;
+
+        float distanceFromPoint = Vector3.Distance(transform.position, grabPoint);
+        joint.maxDistance = distanceFromPoint * 0.8f;
+        joint.minDistance = distanceFromPoint * 0.1f;
+
+        joint.spring = 20f;
+        joint.damper = 1f;
+        joint.massScale = 0.1f;
 
         grabbedObjectRB = predictionHitObject.rigidbody;
 
@@ -167,24 +159,38 @@ public class P_Character_HookGrab : MonoBehaviour
         {
             grabbedObjectRB.velocity = Vector3.zero;
 
-            grabbedObjectRB.transform.SetParent(hookHeadTransform);  // Lo hacemos hijo de la cabeza del gancho
-            grabbedObjectRB.useGravity = true;  // Dejamos la gravedad activada
-
-            // Congelamos el movimiento y la rotación mientras está enganchado
-            grabbedObjectRB.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
-
-            grabbed = true;
+            if (Vector3.Distance(targetPosition, grabbedObjectRB.position) < 1f)
+            {
+                grabbedObjectRB.gameObject.transform.SetParent(hookOrigin);
+                grabbedObjectRB.isKinematic = true;
+                grabbed = true;
+            }
         }
 
         playerSwing.grapplingCDTimer = playerSwing.grapplingCD;
     }
 
+    /*
+    void MoveGrabbedObject()
+    {
+        if (grabbedObjectRB != null && !grabbed && joint != null)
+        {
+            joint.connectedAnchor = grabbedObjectRB.position;
+            targetPosition = hookOrigin.position;
+            grabbedObjectRB.position = Vector3.MoveTowards(grabbedObjectRB.position, targetPosition, objectMoveSpeed * Time.deltaTime);
+        }
+    }*/
+
     void StopGrab()
     {
+        //lr.enabled = false;
         playerSwing.activeGrapple = false;
         playerSwing.hasGrabbed = false;
         playerPA_Hook.hookHead.GetComponent<P_Reference_HeadHook>().isHooked = false;
 
-        grabbedObjectRB = null;
+        if (joint != null)
+        {
+            Destroy(joint);
+        }
     }
 }
