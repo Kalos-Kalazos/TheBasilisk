@@ -96,8 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: f9c84071801c9744daaa05b5a8fda92c,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 8c71d6f19baafde478ba1247b9f602c8,
     type: 2}
 --- !u!196 &4
@@ -5301,6 +5300,47 @@ PrefabInstance:
       propertyPath: dialoguePanelUI
       value: 
       objectReference: {fileID: 1584365118}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.data[0]
+      value: 'Be not afraid, I''m not a threat nor enemy.
+
+        For I am Azazel.The
+        brain,the eyes and the ears. I''m the one who watch and the one who listens'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.data[1]
+      value: You have been awaken by my behalf, the time is near for this facility
+        thy falls to crumbles to it's core.
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.data[2]
+      value: All of this may seem overwhelming but you must take it in.
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.data[3]
+      value: There is a way out of this nightmare, reach the exit through the next
+        elevator. Unfortunately the structure gave in an collapsed.
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.data[4]
+      value: You have to reach the generators to make the elevator work again. There
+        are 3 of them, fill them with uranium capsules to reactivate them.
+      objectReference: {fileID: 0}
+    - target: {fileID: 2263985217711690730, guid: dab20a2e74947bb49a933693ce281211,
+        type: 3}
+      propertyPath: dialogueLines.Array.data[5]
+      value: I will open the door for you, best of lucks, you will need it.
+      objectReference: {fileID: 0}
     - target: {fileID: 2294178919339354455, guid: dab20a2e74947bb49a933693ce281211,
         type: 3}
       propertyPath: m_LocalPosition.y
