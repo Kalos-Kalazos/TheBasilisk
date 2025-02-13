@@ -12320,6 +12320,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 521651948}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &822860892 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1442006900413673687, guid: 74adc094c8e2def47a5fba1d31b69dfc,
+    type: 3}
+  m_PrefabInstance: {fileID: 874840146}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &829958521 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8534476802270543722, guid: 13471520282f5f147a8f45765f8bdcfe,
@@ -13265,6 +13271,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1371334568}
+    - target: {fileID: 6155127108065929904, guid: 74adc094c8e2def47a5fba1d31b69dfc,
+        type: 3}
+      propertyPath: fadeOut
+      value: 
+      objectReference: {fileID: 822860892}
     - target: {fileID: 6301640283762592357, guid: 74adc094c8e2def47a5fba1d31b69dfc,
         type: 3}
       propertyPath: gameManager
