@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4127654744053566915}
   - component: {fileID: 2328148702692911704}
-  - component: {fileID: 4805614195832647175}
   m_Layer: 0
   m_Name: CTR Effext Global
   m_TagString: Untagged
@@ -50,24 +49,3 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: f657735bfaa85064fb464d3c41e2b536, type: 2}
---- !u!114 &4805614195832647175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224806593454168946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cf54db17d6efdf408524beaeec18596, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volume: {fileID: 2328148702692911704}
-  minIntensity: 0.3
-  maxIntensity: 0.55
-  minColor: {r: 0, g: 0, b: 0, a: 1}
-  maxColor: {r: 1, g: 0, b: 0, a: 1}
-  batterySystem: {fileID: 0}
-  aberrationMin: 0.1
-  aberrationMax: 0.7
-  aberrationSpeed: 0.25

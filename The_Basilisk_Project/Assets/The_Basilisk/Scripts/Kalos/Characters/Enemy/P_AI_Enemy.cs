@@ -36,6 +36,7 @@ public class P_AI_Enemy : MonoBehaviour
 
     [Header("=== Enemy Animation Settings ===")]
     Animator animator;
+    float animSpeed_Walk = 1;
     bool isPausing = false;
 
     [SerializeField] P_GameManager gm;
@@ -172,7 +173,7 @@ public class P_AI_Enemy : MonoBehaviour
             case EnemyState.Chasing:
                 ChasePlayer();
                 agent.speed = speedChase;
-                animator.SetFloat("Speed_Walk", 1.75f);
+                animator.SetFloat("Speed_Walk", 1.5f);
                 #region --TimeSearching
                 while (timeElapsedChase < searchTime)
                 {
@@ -535,7 +536,7 @@ public class P_AI_Enemy : MonoBehaviour
             Debug.Log("Hit!");
             if (health > 200)
             {
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     batterySystem.LoseBattery();
                 }

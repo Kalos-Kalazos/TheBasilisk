@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -9,13 +10,16 @@ public class P_Azazel_Talk : MonoBehaviour
 
     P_GameManager gm;
 
-    [SerializeField] P_CTR_Control chromaticController;
     [SerializeField] PlayableDirector tml;
+
     [SerializeField] GameObject dialoguePanelUI, combatUI, interactImage;
+
     [SerializeField] TMP_Text dialogueText;
+
     [SerializeField, TextArea(4, 6)] string[] dialogueLines;
 
     public int lineIndex;
+
     float typingTime = 0.05f;
     float w8Time = 0.75f;
 
@@ -44,23 +48,25 @@ public class P_Azazel_Talk : MonoBehaviour
             }
             else canNext = false;
         }
+
+        /*
+        if (lineIndex > dialogueLines.Length)
+        {
+            lineIndex = dialogueLines.Length;
+        }*/
     }
 
     public void AzazelTalks()
     {
         if (!talking || ended) return;
 
-        // Lógica del cambio de cámara
+        //logica del cambio de camara
         tml.Play();
 
-        // Lógica del cuadro de texto
+        //logica del cuadro de texto
         combatUI.SetActive(false);
         dialoguePanelUI.SetActive(true);
         lineIndex = 0;
-
-        chromaticController.StopOscillation();
-        chromaticController.SetAberration(0.15f);
-
         StartCoroutine(StartDialogue());
 
         gm.player.SetActive(false);
@@ -76,7 +82,7 @@ public class P_Azazel_Talk : MonoBehaviour
         else
         {
             talking = false;
-            ended = true;
+            ended = true; 
             AzazelOpens();
         }
     }
@@ -84,6 +90,7 @@ public class P_Azazel_Talk : MonoBehaviour
     private IEnumerator StartDialogue()
     {
         dialogueText.text = string.Empty;
+
         foreach (char ch in dialogueLines[lineIndex])
         {
             dialogueText.text += ch;
@@ -100,16 +107,12 @@ public class P_Azazel_Talk : MonoBehaviour
     {
         gm.player.SetActive(true);
 
-        // Lógica del cambio de cámara de vuelta
+        //logica del cambio de camara de vuelta
         tml.Play();
 
-        // Lógica del cuadro de texto de vuelta
+        //logica del cuadro de texto de vuelta
         combatUI.SetActive(true);
         dialoguePanelUI.SetActive(false);
-
-        chromaticController.StopOscillation();
-        chromaticController.SetAberration(0.6f);
-        chromaticController.StartOscillation(); // Reanudar oscilación
 
         gm.CheckToOpen();
     }
@@ -121,7 +124,7 @@ public class P_Azazel_Talk : MonoBehaviour
             onRange = true;
             if (!ended)
             {
-                interactImage.SetActive(true);
+                interactImage.SetActive(true);                
             }
         }
     }
