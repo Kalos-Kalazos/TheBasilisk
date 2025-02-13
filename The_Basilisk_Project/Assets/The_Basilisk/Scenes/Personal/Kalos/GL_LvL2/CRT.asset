@@ -81,6 +81,34 @@ MonoBehaviour:
   rounded:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-3264702432669549380
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: 
+  active: 0
+  postExposure:
+    m_OverrideState: 0
+    m_Value: 0
+  contrast:
+    m_OverrideState: 0
+    m_Value: 0
+  colorFilter:
+    m_OverrideState: 1
+    m_Value: {r: 0.70127267, g: 0.9716981, b: 0.7036878, a: 1}
+  hueShift:
+    m_OverrideState: 0
+    m_Value: 0
+  saturation:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,8 +128,13 @@ MonoBehaviour:
   - {fileID: 1434013980287045987}
   - {fileID: -8322855311691238086}
   - {fileID: -3527610664616605884}
+<<<<<<< Updated upstream
   - {fileID: 3904842718709649617}
   - {fileID: 2618195430797622299}
+=======
+  - {fileID: -3264702432669549380}
+  - {fileID: 5753328297073967148}
+>>>>>>> Stashed changes
 --- !u!114 &493037717022940848
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -165,7 +198,11 @@ MonoBehaviour:
   intensity:
     m_OverrideState: 1
     m_Value: 0.6
+<<<<<<< Updated upstream
 --- !u!114 &2618195430797622299
+=======
+--- !u!114 &5753328297073967148
+>>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
   active: 1
   shadows:
     m_OverrideState: 1
@@ -187,6 +225,18 @@ MonoBehaviour:
   highlights:
     m_OverrideState: 1
     m_Value: {x: 0.78878427, y: 1, z: 0.65126896, w: 0}
+=======
+  active: 0
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 0.28430915, y: 0.2505802, z: 1, w: 0}
+  midtones:
+    m_OverrideState: 1
+    m_Value: {x: 0.15390098, y: 1, z: 0.7173286, w: 0}
+  highlights:
+    m_OverrideState: 1
+    m_Value: {x: 0.2351185, y: 1, z: 0.13024032, w: 0}
+>>>>>>> Stashed changes
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -199,6 +249,7 @@ MonoBehaviour:
   highlightsEnd:
     m_OverrideState: 0
     m_Value: 1
+<<<<<<< Updated upstream
 --- !u!114 &3904842718709649617
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -227,6 +278,8 @@ MonoBehaviour:
   saturation:
     m_OverrideState: 0
     m_Value: 0
+=======
+>>>>>>> Stashed changes
 --- !u!114 &6749240323978731100
 MonoBehaviour:
   m_ObjectHideFlags: 3
