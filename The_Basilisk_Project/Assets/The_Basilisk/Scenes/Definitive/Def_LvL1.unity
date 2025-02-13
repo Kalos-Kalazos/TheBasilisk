@@ -11096,6 +11096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gm: {fileID: 5810251793686901402}
+  fadeIn: {fileID: 874840148}
 --- !u!1001 &745068157
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13254,6 +13255,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5528724473419944456, guid: 74adc094c8e2def47a5fba1d31b69dfc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5606316909010035143, guid: 74adc094c8e2def47a5fba1d31b69dfc,
         type: 3}
       propertyPath: m_Camera
@@ -13277,6 +13283,12 @@ PrefabInstance:
 --- !u!224 &874840147 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4785199762218856788, guid: 74adc094c8e2def47a5fba1d31b69dfc,
+    type: 3}
+  m_PrefabInstance: {fileID: 874840146}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &874840148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5528724473419944456, guid: 74adc094c8e2def47a5fba1d31b69dfc,
     type: 3}
   m_PrefabInstance: {fileID: 874840146}
   m_PrefabAsset: {fileID: 0}
@@ -18892,7 +18904,7 @@ PrefabInstance:
     - target: {fileID: 8549582446250045097, guid: 756cf1dbd7ed0074e857f5d57a6361f5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.358
+      value: 26.52
       objectReference: {fileID: 0}
     - target: {fileID: 8549582446250045097, guid: 756cf1dbd7ed0074e857f5d57a6361f5,
         type: 3}
@@ -23388,12 +23400,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 119978355}
   m_LocalEulerAnglesHint: {x: 0, y: -165, z: 0}
---- !u!1 &1748457036 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3801700149645467914, guid: 762c0d7ef799c514eb2226ba6a7dbe23,
-    type: 3}
-  m_PrefabInstance: {fileID: 426611272}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1750653697
 GameObject:
   m_ObjectHideFlags: 0
@@ -23840,6 +23846,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259623317766890610, guid: 96841cce0e5a0a64587ba43ae20160ee,
+        type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -32176,7 +32187,7 @@ PrefabInstance:
         type: 3}
       propertyPath: UI_GameOver
       value: 
-      objectReference: {fileID: 1748457036}
+      objectReference: {fileID: 0}
     - target: {fileID: 7393282072626573518, guid: 8e1ed710098a9be4ca7686fc3786205a,
         type: 3}
       propertyPath: basiliskDoor
