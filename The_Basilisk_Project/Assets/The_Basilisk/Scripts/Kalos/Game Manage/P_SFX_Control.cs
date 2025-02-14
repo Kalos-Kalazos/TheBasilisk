@@ -12,7 +12,7 @@ public class P_SFX_Control : MonoBehaviour
     [Header("Audio Clips")]
     public AudioClip[] footstepSounds;
     public AudioClip[] singleDoor;
-    public AudioClip[] soubleDoor;
+    public AudioClip[] doubleDoor;
     public AudioClip[] gunshotSounds;
     public AudioClip[] impactSounds;
 
@@ -118,7 +118,7 @@ public class P_SFX_Control : MonoBehaviour
     {
         if (footstepSounds.Length > 0)
         {
-            AudioClip clip = footstepSounds[Random.Range(0, footstepSounds.Length)];
+            AudioClip clip = doubleDoor[Random.Range(0, doubleDoor.Length)];
             PlaySound(clip, position, 1f, 0.8f);
         }
     }
