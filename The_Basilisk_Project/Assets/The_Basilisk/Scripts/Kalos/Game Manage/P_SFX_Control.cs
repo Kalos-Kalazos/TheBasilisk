@@ -14,15 +14,15 @@ public class P_SFX_Control : MonoBehaviour
     public AudioClip[] gunshotSounds;
     public AudioClip[] impactSounds;
 
-    private AudioClip lastFootstep;
-    private float footstepCooldown = 0.2f;
-    private float lastFootstepTime = 0f;
+    private Queue<AudioSource> audioPool = new Queue<AudioSource>();
+    private int poolSize = 10;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            InitializePool();
         }
         else
         {
@@ -30,33 +30,77 @@ public class P_SFX_Control : MonoBehaviour
         }
     }
 
+    private void InitializePool()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject audioObject = new GameObject("PooledAudio");
+            AudioSource source = audioObject.AddComponent<AudioSource>();
+            source.spatialBlend = 1f; // 3D Sound
+            source.playOnAwake = false;
+            audioObject.transform.SetParent(transform);
+            audioPool.Enqueue(source);
+            audioObject.SetActive(false);
+        }
+    }
+
+    private AudioSource GetAudioSource()
+    {
+        if (audioPool.Count > 0)
+        {
+            AudioSource source = audioPool.Dequeue();
+            source.gameObject.SetActive(true);
+            return source;
+        }
+        else
+        {
+            // Si se necesitan más sonidos, se crean adicionales (pero evita spam infinito)
+            GameObject audioObject = new GameObject("ExtraAudio");
+            AudioSource source = audioObject.AddComponent<AudioSource>();
+            source.spatialBlend = 1f;
+            return source;
+        }
+    }
+
+    private void ReturnAudioSource(AudioSource source)
+    {
+        source.Stop();
+        source.gameObject.SetActive(false);
+        if (audioPool.Count < poolSize) // Evitar sobrecargar el pool
+        {
+            audioPool.Enqueue(source);
+        }
+        else
+        {
+            Destroy(source.gameObject); // Si hay demasiados, eliminamos los extra
+        }
+    }
+
     public void PlaySound(AudioClip clip, Vector3 position, float volume = 1f, float pitchVariation = 0f)
     {
         if (clip == null) return;
-        GameObject audioObject = new GameObject("TempAudio");
-        AudioSource source = audioObject.AddComponent<AudioSource>();
+
+        AudioSource source = GetAudioSource();
+        source.transform.position = position;
         source.clip = clip;
         source.volume = volume * globalVolume;
         source.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
-        source.spatialBlend = 1f; // 3D Sound
         source.Play();
-        Destroy(audioObject, clip.length);
+
+        StartCoroutine(ReturnToPool(source, clip.length));
+    }
+
+    private IEnumerator ReturnToPool(AudioSource source, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ReturnAudioSource(source);
     }
 
     public void PlayFootstep(Vector3 position)
     {
-        if (Time.time - lastFootstepTime < footstepCooldown) return;
-
         if (footstepSounds.Length > 0)
         {
-            AudioClip clip;
-            do
-            {
-                clip = footstepSounds[Random.Range(0, footstepSounds.Length)];
-            } while (clip == lastFootstep);
-
-            lastFootstep = clip;
-            lastFootstepTime = Time.time;
+            AudioClip clip = footstepSounds[Random.Range(0, footstepSounds.Length)];
             PlaySound(clip, position, 0.7f, 0.1f);
         }
     }

@@ -101,9 +101,26 @@ public class P_Character_Move_v2 : MonoBehaviour
         myCC.Move(movementVector * Time.deltaTime);
     }
 
+    private float footstepTimer = 0f;
+    private float footstepInterval = 0.4f; // Ajusta según la velocidad del personaje
+
     private void CheckForWalking()
     {
         isWalking = myCC.velocity.magnitude > 0.1f;
+
+        if (isWalking && isGrounded)
+        {
+            footstepTimer -= Time.deltaTime;
+            if (footstepTimer <= 0f)
+            {
+                P_SFX_Control.Instance.PlayFootstep(transform.position);
+                footstepTimer = footstepInterval;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
     }
 
     private void ApplyGravity()
