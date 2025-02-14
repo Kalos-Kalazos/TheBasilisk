@@ -5,7 +5,7 @@ using UnityEngine;
 public class P_Enviroment_DD : MonoBehaviour
 {
     [SerializeField] GameObject doorR, doorL;
-        
+
     [Header("=== Door Settings ===")]
     [SerializeField] bool openned = false;
     public bool canBeOpenned = false;
@@ -32,16 +32,8 @@ public class P_Enviroment_DD : MonoBehaviour
                 interactImage.SetActive(true);
             }
         }
-        /* LOS ENEMIGOS ABREN PUERTAS:
-         * 
-        if (other.CompareTag("Enemy"))
-        {
-            //StopCoroutine(nameof(CloseTheDoor));
-            startPositionR = doorR.transform.position;
-            startPositionL = doorL.transform.position;
-            TriggerDoors();
-        }*/
     }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -67,13 +59,11 @@ public class P_Enviroment_DD : MonoBehaviour
             }
             else
             {
-                //StopCoroutine(nameof(CloseTheDoor));
                 startPositionR = doorR.transform.position;
                 startPositionL = doorL.transform.position;
                 TriggerDoors();
                 checkStatus = false;
             }
-
         }
     }
 
@@ -82,49 +72,33 @@ public class P_Enviroment_DD : MonoBehaviour
         interacted = player.GetComponent<P_DoorInteraction>().performed;
     }
 
-    /*
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            StopCoroutine(nameof(OpenTheDoor));
-            startPositionR = doorR.transform.position;
-            startPositionL = doorL.transform.position;
-            AwayFromDoors();
-        }
-    }
-    */
-
     public void TriggerDoors()
     {
         if (!openned && canBeOpenned)
         {
-            StopAllCoroutines();
+            P_SFX_Control.Instance.PlaySingleDoorSound(transform.position);
+
             StartCoroutine(nameof(OpenTheDoor));
         }
     }
+
     public void TriggerSingleDoor()
     {
         if (!openned && canBeOpenned)
+        {
+            P_SFX_Control.Instance.PlayDoubleDoorSound(transform.position);
+
             StartCoroutine(nameof(OpenTheDoorSingle));
+        }
     }
-    /*
-    void AwayFromDoors()
-    {
-        if (openned && canBeOpenned)
-            StartCoroutine(nameof(CloseTheDoor));
-    }
-    */
+
     private IEnumerator OpenTheDoor()
     {
         openned = true;
-
         elapsedTime = 0f;
 
-        //The First movement (Anticipation) position
         Vector3 firstPositionR = startPositionR + doorR.transform.right * firstDistance;
         Vector3 firstPositionL = startPositionL - doorL.transform.right * firstDistance;
-        //The final movement positions
         Vector3 finalPositionR = firstPositionR + doorR.transform.right * finalDistance;
         Vector3 finalPositionL = firstPositionL - doorL.transform.right * finalDistance;
 
@@ -154,7 +128,6 @@ public class P_Enviroment_DD : MonoBehaviour
         openned = true;
         float forwardDistance = 0.1f;
         float leftDistance = 1.5f;
-        float duration = 4f;
         float elapsedTime = 0f;
 
         Vector3 startPosition = transform.position;
@@ -179,37 +152,4 @@ public class P_Enviroment_DD : MonoBehaviour
             yield return null;
         }
     }
-
-    /*
-    private IEnumerator CloseTheDoor()
-    {
-        openned = false;
-
-        //The First movement (Anticipation) position
-        Vector3 firstPositionR = startPositionR - doorR.transform.right * finalDistance;
-        Vector3 firstPositionL = startPositionL + doorL.transform.right * finalDistance;
-        //The final movement positions
-        Vector3 finalPositionR = firstPositionR - doorR.transform.right * firstDistance;
-        Vector3 finalPositionL = firstPositionL + doorL.transform.right * firstDistance;
-
-        while (elapsedTime < duration / 2f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / (duration / 2f);
-            doorR.transform.position = Vector3.Lerp(startPositionR, firstPositionR, t);
-            doorL.transform.position = Vector3.Lerp(startPositionL, firstPositionL, t);
-            yield return null;
-        }
-
-        elapsedTime = 0f;
-
-        while (elapsedTime < duration / 2f)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / (duration / 2f);
-            doorR.transform.position = Vector3.Lerp(firstPositionR, finalPositionR, t);
-            doorL.transform.position = Vector3.Lerp(firstPositionL, finalPositionL, t);
-            yield return null;
-        }
-    }*/
 }

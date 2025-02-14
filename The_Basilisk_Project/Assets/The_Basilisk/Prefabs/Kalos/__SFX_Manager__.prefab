@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 803584893592637584}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 32.238167, y: 1.2553624, z: 13.177939}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44,8 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a837cdfe42288d489b64b5206a69850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalVolume: 0.165
+  globalVolume: 0.4
   footstepSounds:
   - {fileID: 8300000, guid: a4321885051ccd5468424d06b4eba9ab, type: 3}
-  gunshotSounds: []
+  singleDoor:
+  - {fileID: 8300000, guid: 8edef74f4ad649046857aa198fbbda82, type: 3}
+  soubleDoor:
+  - {fileID: 8300000, guid: 914213b9c125a0448a907d9a799f8c3d, type: 3}
+  gunshotSounds:
+  - {fileID: 8300000, guid: b51aa1cc3a5f9c843aeb33696edd3810, type: 3}
   impactSounds: []

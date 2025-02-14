@@ -68,7 +68,7 @@ public class ButtonsPause : MonoBehaviour
     {
 
         Debug.Log("Saliendo del Juego...");//funciona al copilar el juego
-        QuitGame();
+        Application.Quit();
     }
 
 }

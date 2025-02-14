@@ -402,9 +402,7 @@ public class P_AI_Enemy : MonoBehaviour
         if (currentState == EnemyState.Dead) return;
 
         if (agent.enabled) agent.isStopped = true; 
-        
-        animator.SetTrigger("Iddle");
-               
+                       
         Invoke(nameof(ReturnToPatrol), 2f);
     }
 

@@ -132,6 +132,8 @@ public class P_Character_Combat : MonoBehaviour
                 Destroy(muzzleTemp, 1.5f);
             }
 
+            P_SFX_Control.Instance.PlayGunshot(transform.position);
+
             SoundEmitter();
 
             currentAmmoSingle--;
