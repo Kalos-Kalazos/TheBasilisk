@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
-public class P_Intro_Control : MonoBehaviour
+public class VideoSceneChanger : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
-    public string nextSceneName = "NombreDeLaSiguienteEscena"; // Cambia esto por el nombre de la escena
+    public string nextSceneName = "Def_LvL1";
+    public GameObject fadeObject;
+    public float fadeDuration = 1.5f;
 
     private void Start()
     {
@@ -16,12 +16,22 @@ public class P_Intro_Control : MonoBehaviour
             videoPlayer = GetComponent<VideoPlayer>();
         }
 
-        // Suscribirse al evento que se ejecuta cuando el video termina
         videoPlayer.loopPointReached += OnVideoEnd;
     }
 
     private void OnVideoEnd(VideoPlayer vp)
     {
+        StartCoroutine(PlayFadeAndChangeScene());
+    }
+
+    private System.Collections.IEnumerator PlayFadeAndChangeScene()
+    {
+        if (fadeObject != null)
+        {
+            fadeObject.SetActive(true);
+            yield return new WaitForSeconds(fadeDuration);
+        }
+
         SceneManager.LoadScene(nextSceneName);
     }
 }
