@@ -655,6 +655,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   batterySystem: {fileID: 1215897100}
+  pickupEffect: {fileID: 7430083700750850447, guid: 8110ea74b4377884c8797247792e7f4e,
+    type: 3}
 --- !u!135 &45004015
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -8168,7 +8170,7 @@ MonoBehaviour:
   musicSlider: {fileID: 2064028253}
   effectAudioSource: {fileID: 0}
   musicAudioSource: {fileID: 0}
-  mainMenu: {fileID: 299757487}
+  masterMixer: {fileID: 0}
   optionsMenu: {fileID: 926956994}
 --- !u!43 &944717594
 Mesh:
@@ -8891,6 +8893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9350a52e811a2c946b7b7fddd2b23000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteAnimator: {fileID: 0}
   sprites:
   - {fileID: 21300000, guid: 4353e4c9282ae18498d6a04e1dec9968, type: 3}
   - {fileID: 21300000, guid: f4b3fdc7cafbda7478831492b45ebf7f, type: 3}
@@ -12785,6 +12788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9350a52e811a2c946b7b7fddd2b23000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteAnimator: {fileID: 0}
   sprites:
   - {fileID: 21300000, guid: 4353e4c9282ae18498d6a04e1dec9968, type: 3}
   - {fileID: 21300000, guid: f4b3fdc7cafbda7478831492b45ebf7f, type: 3}
@@ -12914,7 +12918,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03deba941288c304b97ecf060896b5d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 2069779471}
+  menu: {fileID: 0}
+  gameOverMenu: {fileID: 0}
+  playerInput: {fileID: 0}
+  mouseController: {fileID: 0}
+  playerHealth: {fileID: 0}
+  musicManager: {fileID: 0}
+  gm: {fileID: 0}
 --- !u!1 &1548000846
 GameObject:
   m_ObjectHideFlags: 0
@@ -14694,6 +14704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9350a52e811a2c946b7b7fddd2b23000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteAnimator: {fileID: 0}
   sprites:
   - {fileID: 21300000, guid: 4353e4c9282ae18498d6a04e1dec9968, type: 3}
   - {fileID: 21300000, guid: f4b3fdc7cafbda7478831492b45ebf7f, type: 3}
