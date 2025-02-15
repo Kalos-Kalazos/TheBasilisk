@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 39e37e919c86e6947a5cf59b5bb71ffd,
+  m_LightingDataAsset: {fileID: 112000000, guid: fc1b7e2edc97e064295a47cf54989164,
     type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 8c71d6f19baafde478ba1247b9f602c8,
     type: 2}
@@ -7430,8 +7430,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 4, z: 4}
-  m_Center: {x: -1, y: 0, z: 0.46}
+  m_Size: {x: 2, y: 4, z: 2.08}
+  m_Center: {x: -0.76, y: 0, z: 0.13}
 --- !u!1 &439949357
 GameObject:
   m_ObjectHideFlags: 0
@@ -21571,6 +21571,16 @@ PrefabInstance:
       propertyPath: globalVolume
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 22120596306556697, guid: 0a1ced5c1dd62ee4fa6c7f75e9b2a7d1,
+        type: 3}
+      propertyPath: impactSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22120596306556697, guid: 0a1ced5c1dd62ee4fa6c7f75e9b2a7d1,
+        type: 3}
+      propertyPath: impactSounds.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9747d71831900b048a51da830291694a, type: 3}
     - target: {fileID: 803584893592637584, guid: 0a1ced5c1dd62ee4fa6c7f75e9b2a7d1,
         type: 3}
       propertyPath: m_Name
@@ -26228,9 +26238,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_ActionId
+      value: 37a93677-56d5-4a6a-a401-12fcbf206bd3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_ActionName
+      value: Azazel/Interact[/Keyboard/f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
       propertyPath: m_ActionEvents.Array.data[21].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 996413190}
+    - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2454628663326441322, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[21].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -26247,6 +26287,11 @@ PrefabInstance:
       value: 0.2313
       objectReference: {fileID: 0}
     - target: {fileID: 2705867135760613748, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2777449056962566834, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -26274,12 +26319,17 @@ PrefabInstance:
     - target: {fileID: 4114651461272240560, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: playerSpeed
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4345871837883684899, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
       propertyPath: m_Name
       value: Player_Full_v2.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345871837883684899, guid: 2a763df89e688ba43b122f8ecca189dd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4455183056764108645, guid: 2a763df89e688ba43b122f8ecca189dd,
         type: 3}
@@ -31093,8 +31143,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 4, z: 4}
-  m_Center: {x: -1, y: 0, z: 0.46}
+  m_Size: {x: 2, y: 4, z: 2.08}
+  m_Center: {x: -0.76, y: 0, z: 0.13}
 --- !u!1 &1568552785
 GameObject:
   m_ObjectHideFlags: 0
@@ -32167,8 +32217,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 4, z: 4}
-  m_Center: {x: -1, y: 0, z: 0.46}
+  m_Size: {x: 2, y: 4, z: 2.08}
+  m_Center: {x: -0.76, y: 0, z: 0.13}
 --- !u!1 &1659047419
 GameObject:
   m_ObjectHideFlags: 0
@@ -37712,6 +37762,11 @@ PrefabInstance:
       propertyPath: musicManager
       value: 
       objectReference: {fileID: 841893577}
+    - target: {fileID: 5025135179090061411, guid: b1981bfb33b586a46a3b64f0b854b04c,
+        type: 3}
+      propertyPath: stuckTimeThreshold
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5025135179090061411, guid: b1981bfb33b586a46a3b64f0b854b04c,
         type: 3}
       propertyPath: patrolPoints.Array.size
@@ -52864,9 +52919,19 @@ PrefabInstance:
       objectReference: {fileID: 52502395}
     - target: {fileID: 2311027644739631254, guid: ac6d7ee7801770f4ba48ab0cbb20c4de,
         type: 3}
+      propertyPath: speedChase
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2311027644739631254, guid: ac6d7ee7801770f4ba48ab0cbb20c4de,
+        type: 3}
       propertyPath: musicManager
       value: 
       objectReference: {fileID: 841893577}
+    - target: {fileID: 2311027644739631254, guid: ac6d7ee7801770f4ba48ab0cbb20c4de,
+        type: 3}
+      propertyPath: stuckTimeThreshold
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 2311027644739631254, guid: ac6d7ee7801770f4ba48ab0cbb20c4de,
         type: 3}
       propertyPath: patrolPoints.Array.data[0]

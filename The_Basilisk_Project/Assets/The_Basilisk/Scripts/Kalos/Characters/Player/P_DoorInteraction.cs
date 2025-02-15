@@ -5,10 +5,7 @@ using UnityEngine.InputSystem;
 
 public class P_DoorInteraction : MonoBehaviour
 {
-    public InputsPlayer playerInputs;
-
     public bool performed;
-
 
     public void Interact(InputAction.CallbackContext context)
     {

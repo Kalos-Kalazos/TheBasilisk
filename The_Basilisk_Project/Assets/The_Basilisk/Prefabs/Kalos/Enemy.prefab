@@ -70,12 +70,14 @@ MonoBehaviour:
   alertRadius: 40
   attackRate: 1
   attackCD: 1
-  attackRange: 3.5
+  attackRange: 2
   gm: {fileID: 0}
   ui: {fileID: 0}
   vfx_Burned: {fileID: 4748638268407666789}
   stuckTimeThreshold: 3
   minDistanceThreshold: 0.2
+  onCombat: 0
+  musicManager: {fileID: 0}
   searchRadius: 20
   searchTime: 15
   batterySystem: {fileID: 0}

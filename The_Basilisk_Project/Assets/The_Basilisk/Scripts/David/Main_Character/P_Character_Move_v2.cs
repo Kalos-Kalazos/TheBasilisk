@@ -63,8 +63,8 @@ public class P_Character_Move_v2 : MonoBehaviour
             return;
         }
 
-        if (isGrounded) playerSpeed = 6;
-        else playerSpeed = 4;
+        if (isGrounded) playerSpeed = 4.5f;
+        else playerSpeed = 3;
 
         Move();
         ApplyGravity();

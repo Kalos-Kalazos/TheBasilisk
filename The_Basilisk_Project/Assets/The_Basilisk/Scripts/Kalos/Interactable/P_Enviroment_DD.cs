@@ -27,7 +27,7 @@ public class P_Enviroment_DD : MonoBehaviour
         {
             player = other.gameObject;
             checkStatus = true;
-            if (canBeOpenned)
+            if (canBeOpenned && !openned)
             {
                 interactImage.SetActive(true);
             }

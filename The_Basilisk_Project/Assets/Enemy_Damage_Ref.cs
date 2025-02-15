@@ -15,4 +15,8 @@ public class Enemy_Damage_Ref : MonoBehaviour
     {
         enemyRef.TryApplyDamage();
     }
+    public void DoSounds()
+    {
+        enemyRef.SFXAttack();
+    }
 }

@@ -13,7 +13,7 @@ public class MainMenu : MonoBehaviour
     {
         Cursor.visible = true;
 
-        //Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.None;
     }
     public void StartGame() //Metodo para iniciar el juego
     {

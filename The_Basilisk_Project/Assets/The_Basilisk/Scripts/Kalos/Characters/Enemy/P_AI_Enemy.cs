@@ -231,15 +231,33 @@ public class P_AI_Enemy : MonoBehaviour
         #region --PJ on Stealth
         if (player.GetComponent<P_Character_Move_v2>().isCrouched)
         {
-            detectionRange = 7;
-            maxDetectionAngle = 30;
-            searchTime = 20;
+            if (health > 200)
+            {
+                detectionRange = 10;
+                maxDetectionAngle = 45;
+                searchTime = 30;
+            }
+            else
+            {
+                detectionRange = 7;
+                maxDetectionAngle = 30;
+                searchTime = 20;
+            }
         }
         else
         {
-            detectionRange = 14;
-            maxDetectionAngle = 60;
-            searchTime = 30;
+            if (health > 200)
+            {
+                detectionRange = 20;
+                maxDetectionAngle = 70;
+                searchTime = 50;
+            }
+            else
+            {
+                detectionRange = 14;
+                maxDetectionAngle = 60;
+                searchTime = 30;
+            }
         }
         #endregion
     }
@@ -522,6 +540,11 @@ public class P_AI_Enemy : MonoBehaviour
             if (agent.enabled) agent.isStopped = false;
         }
         
+    }
+
+    public void SFXAttack()
+    {
+        P_SFX_Control.Instance.PlayImpact(transform.position);
     }
 
 
