@@ -20,7 +20,7 @@ public class P_Azazel_Talk : MonoBehaviour
 
     public int lineIndex;
 
-    float typingTime = 0.05f;
+    public float typingTime = 0.05f;
     float w8Time = 0.75f;
 
     private void Start()
@@ -44,7 +44,7 @@ public class P_Azazel_Talk : MonoBehaviour
             if (w8Time <= 0)
             {
                 canNext = true;
-                w8Time = 0.75f;
+                w8Time = 1f;
             }
             else canNext = false;
         }

@@ -248,6 +248,10 @@ public class P_Character_HookSwing : MonoBehaviour
 
         hC.UseHook();
 
+        // Inicia el gancho con sonido: disparo + loop
+        P_SFX_Control.Instance.PlayGunshotHook(transform.position);
+        P_SFX_Control.Instance.PlayLoopHook(transform.position);
+
         Invoke(nameof(ExecuteGrapple), 0.2f);
 
         pc.SoundEmitter();
@@ -296,6 +300,9 @@ public class P_Character_HookSwing : MonoBehaviour
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
 
         JumpToPosition(grapplePoint, highestPointOnArc);
+
+        // Reproduce sonido de impacto del hook al conectar
+        P_SFX_Control.Instance.PlayImpactHook(transform.position);
         Invoke(nameof(ResetRestrictions), 1f);
     }
 
@@ -362,6 +369,9 @@ public class P_Character_HookSwing : MonoBehaviour
         {
             Destroy(joint);
         }
+
+        // Detener el loop del sonido del hook al finalizar el swing
+        P_SFX_Control.Instance.StopLoopHook();
         StopCoroutine(ReenableCharacterController());
     }
 

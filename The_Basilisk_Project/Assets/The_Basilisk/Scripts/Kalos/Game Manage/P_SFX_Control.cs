@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class P_SFX_Control : MonoBehaviour
 {
@@ -103,7 +104,7 @@ public class P_SFX_Control : MonoBehaviour
         if (footstepSounds.Length > 0)
         {
             AudioClip clip = footstepSounds[Random.Range(0, footstepSounds.Length)];
-            PlaySound(clip, position, 0.7f, 0.1f);
+            PlaySound(clip, position, 0.7f, 0.8f);
         }
     }
     public void PlaySingleDoorSound(Vector3 position)
@@ -111,24 +112,43 @@ public class P_SFX_Control : MonoBehaviour
         if (footstepSounds.Length > 0)
         {
             AudioClip clip = singleDoor[Random.Range(0, singleDoor.Length)];
-            PlaySound(clip, position, 1f, 0.8f);
+            PlaySound(clip, position, 1f, 0.1f);
         }
     }
     public void PlayDoubleDoorSound(Vector3 position)
     {
         if (footstepSounds.Length > 0)
         {
-            AudioClip clip = doubleDoor[Random.Range(0, doubleDoor.Length)];
-            PlaySound(clip, position, 1f, 0.8f);
+            StartCoroutine(SoundDelay(position));
         }
+    }
+
+    private IEnumerator SoundDelay(Vector3 position)
+    {
+        AudioClip clip1 = doubleDoor[Random.Range(0, doubleDoor.Length)];
+        PlaySound(clip1, position);
+
+        yield return new WaitForSeconds(1.2f);
+
+        AudioClip clip2 = doubleDoor[Random.Range(0, doubleDoor.Length)];
+        PlaySound(clip2, position);
     }
 
     public void PlayGunshot(Vector3 position)
     {
         if (gunshotSounds.Length > 0)
         {
-            AudioClip clip = gunshotSounds[Random.Range(0, gunshotSounds.Length)];
-            PlaySound(clip, position, 1f);
+            AudioClip clip = gunshotSounds[0];
+            PlaySound(clip, position, 1f, 0.3f);
+        }
+    }
+
+    public void PlayRecharge(Vector3 position)
+    {
+        if (gunshotSounds.Length > 0)
+        {
+            AudioClip clip = gunshotSounds[3];
+            PlaySound(clip, position, 1f, 0.3f);
         }
     }
 
@@ -137,7 +157,68 @@ public class P_SFX_Control : MonoBehaviour
         if (impactSounds.Length > 0)
         {
             AudioClip clip = impactSounds[Random.Range(0, impactSounds.Length)];
-            PlaySound(clip, position, 0.8f);
+            PlaySound(clip, position, 0.8f, 0.3f);
+        }
+    }
+
+    private AudioSource hookLoopSource; // Guardamos el sonido en loop
+
+    public void PlayGunshotHook(Vector3 position)
+    {
+        if (gunshotSounds.Length > 1)
+        {
+            AudioClip clip = gunshotSounds[1];
+            PlaySound(clip, position, 1f, 0.3f);
+        }
+    }
+
+    public void PlayLoopHook(Vector3 position)
+    {
+        if (gunshotSounds.Length > 2)
+        {
+            AudioClip clip = gunshotSounds[2];
+            hookLoopSource = GetAudioSource(); // Guardamos el source
+            hookLoopSource.transform.position = position;
+            hookLoopSource.clip = clip;
+            hookLoopSource.volume = 1f * globalVolume;
+            hookLoopSource.loop = true; // Activamos loop
+            hookLoopSource.Play();
+        }
+    }
+
+    public void StopLoopHook()
+    {
+        if (hookLoopSource != null)
+        {
+            hookLoopSource.Stop();
+            hookLoopSource.loop = false;
+            ReturnAudioSource(hookLoopSource); // Devolvemos el source al pool
+            hookLoopSource = null;
+        }
+    }
+
+    public void PlayImpactHook(Vector3 position)
+    {
+        if (impactSounds.Length > 1)
+        {
+            AudioClip clip = impactSounds[1];
+            PlaySound(clip, position, 1f, 0.3f);
+        }
+    }
+
+    public void PlayRechargeHook(Vector3 position)
+    {
+        if (impactSounds.Length > 2)
+        {
+            AudioClip clip = impactSounds[2];
+            PlaySound(clip, position, 1f, 0.3f);
+        }
+    }
+    public void UpdateLoopHookPosition(Vector3 position)
+    {
+        if (hookLoopSource != null)
+        {
+            hookLoopSource.transform.position = position;
         }
     }
 }

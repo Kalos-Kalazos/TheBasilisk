@@ -21,6 +21,15 @@ public class P_Enviroment_DD : MonoBehaviour
     GameObject player;
     [SerializeField] GameObject interactImage;
 
+    private void Start()
+    {
+        if (CompareTag("Door"))
+        {
+            startPositionR = doorR.transform.position;
+            startPositionL = doorL.transform.position;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -76,7 +85,7 @@ public class P_Enviroment_DD : MonoBehaviour
     {
         if (!openned && canBeOpenned)
         {
-            P_SFX_Control.Instance.PlaySingleDoorSound(transform.position);
+            P_SFX_Control.Instance.PlayDoubleDoorSound(transform.position);
 
             StartCoroutine(nameof(OpenTheDoor));
         }
@@ -86,7 +95,7 @@ public class P_Enviroment_DD : MonoBehaviour
     {
         if (!openned && canBeOpenned)
         {
-            P_SFX_Control.Instance.PlayDoubleDoorSound(transform.position);
+            P_SFX_Control.Instance.PlaySingleDoorSound(transform.position);
 
             StartCoroutine(nameof(OpenTheDoorSingle));
         }
